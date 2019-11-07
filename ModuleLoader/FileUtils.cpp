@@ -30,6 +30,36 @@ string FileUtils::GetExtension(std::string& filePath)
 	return result;
 }
 
+std::string FileUtils::GetName(std::string& fileLocation)
+{
+	if (fileLocation.length() < 1)
+	{
+		return fileLocation;
+	}
+
+	string result = "";
+
+	bool foundDot = false;
+	for (size_t i = fileLocation.length(); i > 0; i--)
+	{
+		if (foundDot)
+		{
+			result = fileLocation[i - 1] + result;
+		}
+		else if (fileLocation[i - 1] == '.')
+		{
+			foundDot = true;
+		}
+	}
+
+	if (result == "")
+	{
+		return fileLocation;
+	}
+
+	return result;
+}
+
 string FileUtils::ReadFile(string fileLocation)
 {
 	ifstream stream(fileLocation);
