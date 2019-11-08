@@ -51,7 +51,7 @@ private:
 	void BindTriangles(const std::vector<GLuint>& triangles);
 	void BindColours(const std::vector<GLfloat>& colours);
 	void BindTextureCoords(const std::vector<GLfloat>& textureCoords);
-	void BindTexture(Texture& texture);
+	void BindTexture(std::vector<Texture> textures);
 
 	void UseMVP(mat4 mvp);
 };

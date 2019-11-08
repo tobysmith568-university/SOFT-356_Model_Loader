@@ -24,7 +24,7 @@ int main(int argc, char** argv)
 	ConsoleUtil consoleUtil = ConsoleUtil(fileUtils);
 	ConfigUtil configUtil = ConfigUtil(fileUtils);
 	InputManager inputManager = InputManager(configUtil);
-	ModelLoaderFactory modelLoaderFactory = ModelLoaderFactory(fileUtils);
+	ModelLoaderFactory modelLoaderFactory = ModelLoaderFactory(fileUtils, consoleUtil);
 	GLFWUtil glfwUtil = GLFWUtil(configUtil, inputManager);
 	GLEWUtil glewUtil = GLEWUtil();
 

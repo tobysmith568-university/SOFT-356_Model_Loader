@@ -43,3 +43,13 @@ void Model::SetTextureCoords(std::vector<GLfloat> _textureCoords)
 {
 	textureCoords = _textureCoords;
 }
+
+std::vector<Texture> Model::GetTextures()
+{
+	return textures;
+}
+
+void Model::SetTextures(std::vector<Texture> _textures)
+{
+	textures = _textures;
+}

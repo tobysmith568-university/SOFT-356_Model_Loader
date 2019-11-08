@@ -7,10 +7,12 @@
 #include <stdexcept>
 #include <limits>
 
+#include "stb_image.h"
+
 using namespace std;
 
-BasicModelLoader::BasicModelLoader(FileUtils _fileUtils)
-								 : fileUtils(_fileUtils)
+BasicModelLoader::BasicModelLoader(FileUtils _fileUtils, ConsoleUtil _consoleUtil)
+								 : fileUtils(_fileUtils), consoleUtil(_consoleUtil)
 {
 }
 
@@ -27,8 +29,6 @@ Model& BasicModelLoader::GetModel(string fileLocation)
 
 	try
 	{
-		
-
 		model.SetVertices(GetFloatsFromSpacedSepString(lines[0], numeric_limits<GLfloat>::max()));
 		model.SetTriangles(GetIntsFromSpacedSepString(lines[1], model.GetVertices().size()));
 		model.SetColours(GetFloatsFromSpacedSepString(lines[2], 1.0f));
@@ -37,6 +37,19 @@ Model& BasicModelLoader::GetModel(string fileLocation)
 	catch (const std::runtime_error& ex)
 	{
 		throw InvalidModelFileException(fileLocation.c_str(), ex);
+	}
+
+	string textureLocation = GetTextureName(fileLocation);
+
+	if (textureLocation != "")
+	{
+		Texture texture = LoadTexture(textureLocation);
+		vector<Texture> textures = vector<Texture>
+		{
+			texture
+		};
+
+		model.SetTextures(textures);
 	}
 
 	return model;
@@ -86,4 +99,35 @@ std::vector<GLuint> BasicModelLoader::GetIntsFromSpacedSepString(std::string& sp
 	}
 
 	return results;
+}
+
+std::string BasicModelLoader::GetTextureName(string& fileLocation)
+{
+	string baseFileName = fileUtils.GetName(fileLocation);
+
+	for (size_t i = 0; i < textureExtentions.size(); i++)
+	{
+		string textureLocationToTest = baseFileName + dot + textureExtentions[i];
+		if (fileUtils.DoesFileExist(textureLocationToTest))
+		{
+			return textureLocationToTest;
+		}
+	}
+
+	return consoleUtil.GetInput("Could not automatically detect a texture, enter texture location");
+}
+
+Texture BasicModelLoader::LoadTexture(std::string textureLocation)
+{
+	GLint width, height, nrChannels;
+	stbi_set_flip_vertically_on_load(true);
+	unsigned char* data = stbi_load(textureLocation.c_str(), &width, &height, &nrChannels, 0);
+
+	if (!data)
+	{
+		//TODO Error handling
+	}
+
+	Texture texture = Texture(width, height, nrChannels, data);
+	return texture;
 }
