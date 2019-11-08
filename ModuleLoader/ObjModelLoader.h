@@ -13,7 +13,13 @@ public:
 private:
 	FileUtils fileUtils;
 
+	std::string verticesRegex = "^v (-?[0-9]+\\.[0-9]+) (-?[0-9]+\\.[0-9]+) (-?[0-9]+\\.[0-9]+)";
+	std::string textureCoordsRegex = "^vt (-?[0-9]+\\.[0-9]+) (-?[0-9]+\\.[0-9]+)";
+	std::string normalRegex = "^vn (-?[01]\\.0+) (-?[01]\\.0+) (-?[01]\\.0+)";
+
 	std::vector<GLfloat> ReadVertices(std::string data);
 	std::vector<GLfloat> ReadTextureCoords(std::string data);
 	std::vector<GLfloat> ReadNormals(std::string data);
+
+	std::vector<GLfloat> ReadFloats(std::string& data, std::string& regexString);
 };

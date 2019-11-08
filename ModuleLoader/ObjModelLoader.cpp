@@ -21,48 +21,33 @@ Model& ObjModelLoader::GetModel(std::string fileLocation)
 
 std::vector<GLfloat> ObjModelLoader::ReadVertices(std::string data)
 {
-	vector<GLfloat> vertices = vector<GLfloat>();
-	const regex floatRegex("^v (-?[0-9]+\\.[0-9]+) (-?[0-9]+\\.[0-9]+) (-?[0-9]+\\.[0-9]+)");
-	smatch sm;
-
-	while (regex_search(data, sm, floatRegex)) {
-		for (int i = 1; i < sm.size(); i++) {
-			vertices.push_back(stof(sm[i]));
-		}
-		data = sm.suffix();
-	}
-
-	return vertices;
+	return ReadFloats(data, verticesRegex);
 }
 
 std::vector<GLfloat> ObjModelLoader::ReadTextureCoords(std::string data)
 {
-	vector<GLfloat> textureCoords = vector<GLfloat>();
-	const regex floatRegex("^vt (-?[0-9]+\\.[0-9]+) (-?[0-9]+\\.[0-9]+)");
-	smatch sm;
-
-	while (regex_search(data, sm, floatRegex)) {
-		for (int i = 1; i < sm.size(); i++) {
-			textureCoords.push_back(stof(sm[i]));
-		}
-		data = sm.suffix();
-	}
-
-	return textureCoords;
+	return ReadFloats(data, textureCoordsRegex);
 }
 
 std::vector<GLfloat> ObjModelLoader::ReadNormals(std::string data)
 {
-	vector<GLfloat> normals = vector<GLfloat>();
-	const regex floatRegex("^vn (-?[01]\\.0+) (-?[01]\\.0+) (-?[01]\\.0+)");
+	return ReadFloats(data, normalRegex);
+}
+
+std::vector<GLfloat> ObjModelLoader::ReadFloats(std::string& data, std::string& regexString)
+{
+	vector<GLfloat> floats = vector<GLfloat>();
+	const regex floatRegex(regexString);
 	smatch sm;
 
-	while (regex_search(data, sm, floatRegex)) {
-		for (int i = 1; i < sm.size(); i++) {
-			normals.push_back(stof(sm[i]));
+	while (regex_search(data, sm, floatRegex))
+	{
+		for (int i = 1; i < sm.size(); i++)
+		{
+			floats.push_back(stof(sm[i]));
 		}
 		data = sm.suffix();
 	}
 
-	return normals;
+	return floats;
 }
