@@ -22,7 +22,7 @@ IModelLoader& ModelLoaderFactory::GetLoaderForFile(std::string fileLocation)
 	}
 	else if (fileExtension == "obj")
 	{
-		static ObjModelLoader o = ObjModelLoader();
+		static ObjModelLoader o = ObjModelLoader(fileUtils);
 		return o;
 	}
 	else

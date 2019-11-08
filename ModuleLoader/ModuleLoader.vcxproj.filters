@@ -87,6 +87,9 @@
     <None Include="Cube.basic">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="media\Creeper.mtl">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TexturedCube.cpp">
@@ -145,5 +148,13 @@
     <Image Include="media\textures\smile.jpg">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="media\Texture.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="media\Creeper.obj">
+      <Filter>Resource Files</Filter>
+    </Object>
   </ItemGroup>
 </Project>

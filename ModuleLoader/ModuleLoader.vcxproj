@@ -194,12 +194,19 @@
   <ItemGroup>
     <None Include="Cube.basic" />
     <None Include="media\config.dat" />
+    <None Include="media\Creeper.mtl" />
     <None Include="media\triangles.frag" />
     <None Include="media\triangles.vert" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="media\Texture.png" />
     <Image Include="media\textures\smile.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="media\Creeper.obj">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </Object>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
