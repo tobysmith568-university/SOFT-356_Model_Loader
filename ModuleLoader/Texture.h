@@ -11,6 +11,7 @@ public:
 	GLint GetHeight();
 	GLint GetNrChannels();
 	unsigned char* GetData();
+	void FreeData();
 
 private:
 	GLint width, height, nrChannels;

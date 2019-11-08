@@ -32,8 +32,6 @@ Scene::Scene(ConfigUtil& _configUtil, FileUtils& _fileUtils, InputManager& _inpu
 	BindTextureCoords(model.GetTextureCoords());
 	BindTexture(model.GetTextures());
 
-	glUniform1i(glGetUniformLocation(program, "texture1"), 0);
-
 	mvpBuilder = MVPBuilder()
 		.AddScale(1.0f, 1.0f, 1.0f)
 		.AddTranslation(0.0f, 0.0f, 0.0f);
@@ -185,16 +183,12 @@ void Scene::BindTexture(vector<Texture> textures)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	if (textures[0].GetData())
-	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textures[0].GetWidth(), textures[0].GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, textures[0].GetData());
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else
-	{
-		std::cout << "Failed to load texture" << std::endl;
-	}
-	stbi_image_free(textures[0].GetData());
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textures[0].GetWidth(), textures[0].GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, textures[0].GetData());
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	textures[0].FreeData();
+
+	glUniform1i(glGetUniformLocation(program, "texture1"), 0);
 }
 
 void Scene::UseMVP(mat4 mvp)
