@@ -66,6 +66,9 @@
     <ClInclude Include="InvalidModelFileException.h">
       <Filter>Header Files\ModelLoading</Filter>
     </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Header Files\ModelLoading</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="media\triangles.frag">
@@ -126,6 +129,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="InvalidModelFileException.cpp">
+      <Filter>Source Files\ModelLoading</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
       <Filter>Source Files\ModelLoading</Filter>
     </ClCompile>
   </ItemGroup>

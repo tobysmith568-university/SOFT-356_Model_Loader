@@ -6,6 +6,7 @@
 #include "ConfigUtil.h"
 #include "Model.h"
 #include "InputManager.h"
+#include "Texture.h"
 
 #include <glm/glm.hpp> //includes GLM
 #include <vector>
@@ -31,8 +32,8 @@ private:
 	GLuint vertexBuffer;
 	GLuint triangleBuffer;
 	GLuint colourBuffer;
+	GLuint textureCoordsBuffer;
 	GLuint textureBuffer;
-	GLuint texture1;
 
 	GLuint program;
 
@@ -50,6 +51,7 @@ private:
 	void BindTriangles(const std::vector<GLuint>& triangles);
 	void BindColours(const std::vector<GLfloat>& colours);
 	void BindTextureCoords(const std::vector<GLfloat>& textureCoords);
+	void BindTexture(Texture& texture);
 
 	void UseMVP(mat4 mvp);
 };

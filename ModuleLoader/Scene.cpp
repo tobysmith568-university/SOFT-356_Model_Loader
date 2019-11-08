@@ -31,34 +31,13 @@ Scene::Scene(ConfigUtil& _configUtil, FileUtils& _fileUtils, InputManager& _inpu
 	BindColours(model.GetColours());
 	BindTextureCoords(model.GetTextureCoords());
 
-	// load and create a texture 
-	// -------------------------
-
-	// texture 1
-	// ---------
-	glGenTextures(1, &texture1);
-	glBindTexture(GL_TEXTURE_2D, texture1);
-	// set the texture wrapping parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	// set texture filtering parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	// load image, create texture and generate mipmaps
+	stbi_set_flip_vertically_on_load(true);
 	GLint width, height, nrChannels;
-	stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
 	unsigned char* data = stbi_load("media/textures/awesomeface.png", &width, &height, &nrChannels, 0);
-	if (data)
-	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-		glGenerateMipmap(GL_TEXTURE_2D);
-	}
-	else
-	{
-		std::cout << "Failed to load texture" << std::endl;
-	}
-	stbi_image_free(data);
 
+	Texture texture = Texture(width, height, nrChannels, data);
+
+	BindTexture(texture);
 
 	glUniform1i(glGetUniformLocation(program, "texture1"), 0);
 
@@ -89,7 +68,7 @@ void Scene::Update()
 	glEnable(GL_CULL_FACE);
 
 	glBindVertexArray(VAO);
-	glBindTexture(GL_TEXTURE_2D, texture1);
+	glBindTexture(GL_TEXTURE_2D, textureBuffer);
 	glDrawElements(GL_TRIANGLES, NumVertices, GL_UNSIGNED_INT, 0);
 }
 
@@ -192,13 +171,36 @@ void Scene::BindColours(const vector<GLfloat>& colours)
 
 void Scene::BindTextureCoords(const vector<GLfloat>& textureCoords)
 {
-	glGenBuffers(1, &textureBuffer);
+	glGenBuffers(1, &textureCoordsBuffer);
 
-	glBindBuffer(GL_ARRAY_BUFFER, textureBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, textureCoordsBuffer);
 	glBufferData(GL_ARRAY_BUFFER, textureCoords.size() * sizeof(GLfloat), &textureCoords[0], GL_STATIC_DRAW);
 
 	glVertexAttribPointer(tPosition, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
 	glEnableVertexAttribArray(tPosition);
+}
+
+void Scene::BindTexture(Texture& texture)
+{
+	glGenTextures(1, &textureBuffer);
+	glBindTexture(GL_TEXTURE_2D, textureBuffer);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	if (texture.GetData())
+	{
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texture.GetWidth(), texture.GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, texture.GetData());
+		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+	else
+	{
+		std::cout << "Failed to load texture" << std::endl;
+	}
+	stbi_image_free(texture.GetData());
 }
 
 void Scene::UseMVP(mat4 mvp)

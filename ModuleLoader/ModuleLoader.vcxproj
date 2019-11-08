@@ -168,6 +168,7 @@
     <ClCompile Include="MVPBuilder.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="ShaderProgramBuilder.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TexturedCube.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -186,6 +187,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ShaderProgramBuilder.h" />
     <ClInclude Include="stb_image.h" />
+    <ClInclude Include="Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Cube.basic" />
