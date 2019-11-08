@@ -5,6 +5,8 @@
 #include "IModelLoader.h"
 
 #include <string>
+#include <map>
+#include <memory>
 
 class ModelLoaderFactory
 {

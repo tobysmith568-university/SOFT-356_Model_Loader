@@ -1,5 +1,6 @@
 #include "ModelLoaderFactory.h"
 #include "BasicModelLoader.h"
+#include "ObjModelLoader.h"
 
 #include <stdexcept>
 
@@ -13,11 +14,16 @@ ModelLoaderFactory::ModelLoaderFactory(FileUtils& _fileUtils, ConsoleUtil _conso
 IModelLoader& ModelLoaderFactory::GetLoaderForFile(std::string fileLocation)
 {
 	string fileExtension = fileUtils.GetExtension(fileLocation);
-
+	
 	if (fileExtension == "basic")
 	{
-		static BasicModelLoader b(fileUtils, consoleUtil);
+		static BasicModelLoader b = BasicModelLoader(fileUtils, consoleUtil);
 		return b;
+	}
+	else if (fileExtension == "obj")
+	{
+		static ObjModelLoader o = ObjModelLoader();
+		return o;
 	}
 	else
 	{

@@ -166,6 +166,7 @@
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModelLoaderFactory.cpp" />
     <ClCompile Include="MVPBuilder.cpp" />
+    <ClCompile Include="ObjModelLoader.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="ShaderProgramBuilder.cpp" />
     <ClCompile Include="Texture.cpp" />
@@ -184,6 +185,7 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelLoaderFactory.h" />
     <ClInclude Include="MVPBuilder.h" />
+    <ClInclude Include="ObjModelLoader.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ShaderProgramBuilder.h" />
     <ClInclude Include="stb_image.h" />
