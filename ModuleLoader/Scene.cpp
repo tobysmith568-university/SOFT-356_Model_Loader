@@ -28,9 +28,9 @@ Scene::Scene(ConfigUtil& _configUtil, FileUtils& _fileUtils, InputManager& _inpu
 
 	BindVertices(model.GetVertices());
 	BindTriangles(model.GetTriangles());
-	BindColours(model.GetColours());
+	/*BindColours(model.GetColours());
 	BindTextureCoords(model.GetTextureCoords());
-	BindTexture(model.GetTextures());
+	BindTexture(model.GetTextures());*/
 
 	mvpBuilder = MVPBuilder()
 		.AddScale(1.0f, 1.0f, 1.0f)
