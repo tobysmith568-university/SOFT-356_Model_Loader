@@ -28,11 +28,11 @@ Model& BasicModelLoader::GetModel(string fileLocation)
 	static Model model;
 
 	try
-	{
+	{/*
 		model.SetVertices(GetFloatsFromSpacedSepString(lines[0], numeric_limits<GLfloat>::max()));
 		model.SetTriangles(GetIntsFromSpacedSepString(lines[1], model.GetVertices().size()));
 		model.SetColours(GetFloatsFromSpacedSepString(lines[2], 1.0f));
-		model.SetTextureCoords(GetFloatsFromSpacedSepString(lines[3], 1.0f));
+		model.SetTextureCoords(GetFloatsFromSpacedSepString(lines[3], 1.0f));*/
 	}
 	catch (const std::runtime_error& ex)
 	{
@@ -49,7 +49,7 @@ Model& BasicModelLoader::GetModel(string fileLocation)
 			texture
 		};
 
-		model.SetTextures(textures);
+		//model.SetTextures(textures);
 	}
 
 	return model;

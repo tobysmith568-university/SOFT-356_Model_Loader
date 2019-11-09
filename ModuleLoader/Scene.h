@@ -30,14 +30,12 @@ private:
 	
 	GLuint VAO;
 	GLuint vertexBuffer;
-	GLuint triangleBuffer;
-	GLuint colourBuffer;
-	GLuint textureCoordsBuffer;
+	GLuint indicesBuffer;
+	/*GLuint colourBuffer;
+	GLuint textureCoordsBuffer;*/
 	GLuint textureBuffer;
 
 	GLuint program;
-
-	const GLuint NumVertices = 36;
 
 	MVPBuilder mvpBuilder;
 	glm::mat4 mvp;
@@ -47,10 +45,8 @@ private:
 	void BindBackgroundColours();
 	float NormalizeColour(float colour);
 	void CreateAndBindShaderProgram();
-	void BindVertices(const std::vector<GLfloat>& vertices);
-	void BindTriangles(const std::vector<GLuint>& triangles);
-	void BindColours(const std::vector<GLfloat>& colours);
-	void BindTextureCoords(const std::vector<GLfloat>& textureCoords);
+	void BindVertices(const std::vector<Vertex>& vertices);
+	void BindIndices(const std::vector<GLuint>& indices);
 	void BindTexture(std::vector<Texture> textures);
 
 	void UseMVP(mat4 mvp);

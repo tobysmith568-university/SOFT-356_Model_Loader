@@ -27,7 +27,7 @@ Scene::Scene(ConfigUtil& _configUtil, FileUtils& _fileUtils, InputManager& _inpu
 	BindBackgroundColours();
 
 	BindVertices(model.GetVertices());
-	BindTriangles(model.GetTriangles());
+	BindIndices(model.GetIndicies());
 	/*BindColours(model.GetColours());
 	BindTextureCoords(model.GetTextureCoords());
 	BindTexture(model.GetTextures());*/
@@ -130,25 +130,28 @@ void Scene::CreateAndBindShaderProgram()
 		.BuildAndUse();
 }
 
-void Scene::BindVertices(const vector<GLfloat>& vertices)
+void Scene::BindVertices(const vector<Vertex>& vertices)
 {
 	glGenBuffers(1, &vertexBuffer);
 
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), &vertices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
 }
 
-void Scene::BindTriangles(const vector<GLuint>& triangles)
+void Scene::BindIndices(const vector<GLuint>& indices)
 {
-	glGenBuffers(1, &triangleBuffer);
+	glGenBuffers(1, &indicesBuffer);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, triangleBuffer);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, triangles.size() * sizeof(GLuint), &triangles[0], GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
 
-	glVertexAttribPointer(vPosition, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
+	glVertexAttribPointer(vPosition, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(offsetof(Vertex, position)));
 	glEnableVertexAttribArray(vPosition);
-}
 
+	glVertexAttribPointer(tPosition, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(offsetof(Vertex, texture)));
+	glEnableVertexAttribArray(tPosition);
+}
+/*
 void Scene::BindColours(const vector<GLfloat>& colours)
 {
 	glGenBuffers(1, &colourBuffer);
@@ -169,7 +172,7 @@ void Scene::BindTextureCoords(const vector<GLfloat>& textureCoords)
 
 	glVertexAttribPointer(tPosition, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
 	glEnableVertexAttribArray(tPosition);
-}
+}*/
 
 //	Currently only loads one texture
 void Scene::BindTexture(vector<Texture> textures)

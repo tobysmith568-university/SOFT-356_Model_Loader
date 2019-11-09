@@ -15,7 +15,6 @@ public:
 	void SetTexture(GLfloat x, GLfloat y);
 	void SetNormal(GLfloat x, GLfloat y, GLfloat z);
 
-private:
 	vec3 position;
 	vec2 texture;
 	vec3 normal;

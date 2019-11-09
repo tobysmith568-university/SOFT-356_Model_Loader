@@ -4,44 +4,24 @@ Model::Model()
 {
 }
 
-std::vector<GLfloat> Model::GetVertices()
+std::vector<Vertex> Model::GetVertices()
 {
 	return vertices;
 }
 
-void Model::SetVertices(std::vector<GLfloat> _vertices)
+void Model::SetVertices(std::vector<Vertex> _vertices)
 {
 	vertices = _vertices;
 }
 
-std::vector<GLuint> Model::GetTriangles()
+std::vector<GLuint> Model::GetIndicies()
 {
-	return triangles;
+	return indicies;
 }
 
-void Model::SetTriangles(std::vector<GLuint> _triangles)
+void Model::SetIndicies(std::vector<GLuint> _indicies)
 {
-	triangles = _triangles;
-}
-
-std::vector<GLfloat> Model::GetColours()
-{
-	return colours;
-}
-
-void Model::SetColours(std::vector<GLfloat> _colours)
-{
-	colours = _colours;
-}
-
-std::vector<GLfloat> Model::GetTextureCoords()
-{
-	return textureCoords;
-}
-
-void Model::SetTextureCoords(std::vector<GLfloat> _textureCoords)
-{
-	textureCoords = _textureCoords;
+	indicies = _indicies;
 }
 
 std::vector<Texture> Model::GetTextures()

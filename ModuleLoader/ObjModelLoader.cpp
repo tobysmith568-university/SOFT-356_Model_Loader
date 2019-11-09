@@ -49,8 +49,18 @@ Model& ObjModelLoader::GetModel(std::string fileLocation)
 			vertices.push_back(vertex);
 		}
 	}
+
+	vector<GLuint> indices = vector<GLuint>();
+
+	GLuint offset = 0;
+	for (size_t i = 0; i < faces.size(); i++)
+	{
+		offset = faces[i].GetOffset(indices, offset);
+	}
 	
 	static Model model;
+	model.SetVertices(vertices);
+	model.SetIndicies(indices);
 	return model;
 }
 
