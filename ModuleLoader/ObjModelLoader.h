@@ -20,7 +20,7 @@ private:
 	std::string normalRegex = "^vn (-?[01]\\.0+) (-?[01]\\.0+) (-?[01]\\.0+)";
 	std::string indiciesRegex = "^f ([0-9]+)\\/([0-9]+)\\/([0-9]+) ([0-9]+)\\/([0-9]+)\\/([0-9]+) ([0-9]+)\\/([0-9]+)\\/([0-9]+)(?: ([0-9]+)\\/([0-9]+)\\/([0-9]+))?";
 
-	std::vector<GLfloat> ReadVertices(std::string data);
+	void ReadVertex(std::vector<GLfloat>& vertices, std::string& line);
 	std::vector<GLfloat> ReadTextureCoords(std::string data);
 	std::vector<GLfloat> ReadNormals(std::string data);
 

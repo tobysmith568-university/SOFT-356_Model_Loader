@@ -12,10 +12,19 @@ ObjModelLoader::ObjModelLoader(FileUtils& _fileUtils)
 Model& ObjModelLoader::GetModel(std::string fileLocation)
 {
 	string fileContent = fileUtils.ReadFile(fileLocation);
+	vector<string> fileLines = fileUtils.ReadFileAsLines(fileLocation);
 
-	vector<GLfloat> vertexValues = ReadVertices(fileContent);
+	vector<GLfloat> vertexValues = vector<GLfloat>();
 	vector<GLfloat> textureCoordValues = ReadTextureCoords(fileContent);
 	vector<GLfloat> normalValues = ReadNormals(fileContent);
+
+	for (size_t i = 0; i < fileLines.size(); i++)
+	{
+		if (strncmp(fileLines[i].c_str(), "v ", 2) == 0)
+		{
+			ReadVertex(vertexValues, fileLines[i]);
+		}
+	}
 
 	vector<Face> faces = ReadIndicies(fileContent);
 
@@ -78,9 +87,17 @@ Model& ObjModelLoader::GetModel(std::string fileLocation)
 	return model;
 }
 
-std::vector<GLfloat> ObjModelLoader::ReadVertices(std::string data)
+void ObjModelLoader::ReadVertex(vector<GLfloat>& vertices, string& line)
 {
-	return ReadFloats(data, verticesRegex);
+	char* word;
+	char* remaining;
+	word = strtok_s((char*)line.c_str(), " ", &remaining);
+	word = strtok_s(remaining, " ", &remaining);
+	while (word != NULL)
+	{
+		vertices.push_back(stof(word));
+		word = strtok_s(remaining, " ", &remaining);
+	}
 }
 
 std::vector<GLfloat> ObjModelLoader::ReadTextureCoords(std::string data)
