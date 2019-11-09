@@ -15,18 +15,17 @@ public:
 private:
 	FileUtils fileUtils;
 
-	std::string verticesRegex = "^v (-?[0-9]+\\.[0-9]+) (-?[0-9]+\\.[0-9]+) (-?[0-9]+\\.[0-9]+)";
-	std::string textureCoordsRegex = "^vt (-?[0-9]+\\.[0-9]+) (-?[0-9]+\\.[0-9]+)";
-	std::string normalRegex = "^vn (-?[01]\\.0+) (-?[01]\\.0+) (-?[01]\\.0+)";
-	std::string indiciesRegex = "^f ([0-9]+)\\/([0-9]+)\\/([0-9]+) ([0-9]+)\\/([0-9]+)\\/([0-9]+) ([0-9]+)\\/([0-9]+)\\/([0-9]+)(?: ([0-9]+)\\/([0-9]+)\\/([0-9]+))?";
+	void ReadSpaceSepFloats(std::vector<GLfloat>& values, std::string& line);
+	void ReadFace(std::vector<Face>& faces, std::string& line);
+	void ReadIndex(Face& face, char* index);
 
-	void ReadVertex(std::vector<GLfloat>& vertices, std::string& line);
-	std::vector<GLfloat> ReadTextureCoords(std::string data);
-	std::vector<GLfloat> ReadNormals(std::string data);
-
-	std::vector<Face> ReadIndicies(std::string& data);
-
-	std::vector<GLfloat> ReadFloats(std::string& data, std::string& regexString);
+	void SetVertices(Model& model,
+		std::vector<GLfloat>& vertexValues,
+		std::vector<GLfloat>& textureCoordValues,
+		std::vector<GLfloat>& normalValues,
+		std::vector<Face>& faceValues);
+	void SetIndices(Model& model, std::vector<Face>& faces);
+	void SetTextures(Model& model, std::string& fileLocation);
 
 	std::string GetTextureName(std::string& fileLocation);
 	Texture LoadTexture(std::string textureLocation);

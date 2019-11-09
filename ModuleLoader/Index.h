@@ -5,9 +5,9 @@
 class Index
 {
 public:
-	Index(GLuint _vertexIndex, GLuint _textureIndex, GLuint _normalIndex);
+	Index();
 
-	GLuint vertexIndex;
-	GLuint textureIndex;
-	GLuint normalIndex;
+	GLuint vertexIndex = 0;
+	GLuint textureIndex = 0;
+	GLuint normalIndex = 0;
 };

@@ -11,28 +11,113 @@ ObjModelLoader::ObjModelLoader(FileUtils& _fileUtils)
 
 Model& ObjModelLoader::GetModel(std::string fileLocation)
 {
-	string fileContent = fileUtils.ReadFile(fileLocation);
-	vector<string> fileLines = fileUtils.ReadFileAsLines(fileLocation);
-
 	vector<GLfloat> vertexValues = vector<GLfloat>();
-	vector<GLfloat> textureCoordValues = ReadTextureCoords(fileContent);
-	vector<GLfloat> normalValues = ReadNormals(fileContent);
+	vector<GLfloat> textureCoordValues = vector<GLfloat>();
+	vector<GLfloat> normalValues = vector<GLfloat>();
+	vector<Face> faceValues = vector<Face>();
+
+	vector<string> fileLines = fileUtils.ReadFileAsLines(fileLocation);
 
 	for (size_t i = 0; i < fileLines.size(); i++)
 	{
-		if (strncmp(fileLines[i].c_str(), "v ", 2) == 0)
+		char* line = (char*)fileLines[i].c_str();
+		if (strncmp(line, "v ", 2) == 0)
 		{
-			ReadVertex(vertexValues, fileLines[i]);
+			ReadSpaceSepFloats(vertexValues, fileLines[i]);
+		}
+		else if (strncmp(line, "vt ", 3) == 0)
+		{
+			ReadSpaceSepFloats(textureCoordValues, fileLines[i]);
+		}
+		else if (strncmp(line, "vn ", 3) == 0)
+		{
+			ReadSpaceSepFloats(normalValues, fileLines[i]);
+		}
+		else if (strncmp(line, "f ", 2) == 0)
+		{
+			ReadFace(faceValues, fileLines[i]);
 		}
 	}
 
-	vector<Face> faces = ReadIndicies(fileContent);
+	static Model model;
+	SetVertices(model, vertexValues, textureCoordValues, normalValues, faceValues);
+	SetIndices(model, faceValues);
+	SetTextures(model, fileLocation);
+	return model;
+}
 
+void ObjModelLoader::ReadSpaceSepFloats(vector<GLfloat>& values, string& line)
+{
+	char* word;
+	char* remaining;
+	word = strtok_s((char*)line.c_str(), " ", &remaining);
+	word = strtok_s(remaining, " ", &remaining);
+	while (word != NULL)
+	{
+		values.push_back(stof(word));
+		word = strtok_s(remaining, " ", &remaining);
+	}
+}
+
+void ObjModelLoader::ReadFace(std::vector<Face>& faces, std::string& line)
+{
+	Face face = Face();
+
+	char* word;
+	char* remaining;
+	word = strtok_s((char*)line.c_str(), " ", &remaining);
+	word = strtok_s(remaining, " ", &remaining);
+	while (word != NULL)// For each group of numbers
+	{
+		ReadIndex(face, word);
+		word = strtok_s(remaining, " ", &remaining);
+	}
+
+	faces.push_back(face);
+}
+
+void ObjModelLoader::ReadIndex(Face& face, char* index)
+{
+	GLuint value = 0;
+
+	Index newIndex = Index();
+
+	char* word;
+	char* remaining;
+	word = strtok_s(index, "/", &remaining);
+	while (word != NULL)// For each number
+	{
+		if (value == 0)
+		{
+			newIndex.vertexIndex = stoi(word);
+		}
+		else if (value == 1)
+		{
+			newIndex.textureIndex = stoi(word);
+		}
+		else if (value == 2)
+		{
+			newIndex.normalIndex = stoi(word);
+		}
+
+		value++;
+		word = strtok_s(remaining, "/", &remaining);
+	}
+
+	face.AddIndex(newIndex);
+}
+
+void ObjModelLoader::SetVertices(Model& model,
+	vector<GLfloat>& vertexValues,
+	vector<GLfloat>& textureCoordValues,
+	vector<GLfloat>& normalValues,
+	vector<Face>& faceValues)
+{
 	vector<Vertex> vertices = vector<Vertex>();
 
-	for (size_t i = 0; i < faces.size(); i++)//	For every face
+	for (size_t i = 0; i < faceValues.size(); i++)//	For every face
 	{
-		vector<Index> indices = faces[i].GetIndices();
+		vector<Index> indices = faceValues[i].GetIndices();
 
 		for (size_t ii = 0; ii < indices.size(); ii++)// For every index
 		{
@@ -60,6 +145,11 @@ Model& ObjModelLoader::GetModel(std::string fileLocation)
 		}
 	}
 
+	model.SetVertices(vertices);
+}
+
+void ObjModelLoader::SetIndices(Model& model, vector<Face>& faces)
+{
 	vector<GLuint> indices = vector<GLuint>();
 
 	GLuint offset = 0;
@@ -68,10 +158,11 @@ Model& ObjModelLoader::GetModel(std::string fileLocation)
 		offset = faces[i].GetOffset(indices, offset);
 	}
 
-	static Model model;
-	model.SetVertices(vertices);
 	model.SetIndicies(indices);
+}
 
+void ObjModelLoader::SetTextures(Model& model, std::string& fileLocation)
+{
 	string textureLocation = GetTextureName(fileLocation);
 	if (textureLocation != "")
 	{
@@ -83,79 +174,6 @@ Model& ObjModelLoader::GetModel(std::string fileLocation)
 
 		model.SetTextures(textures);
 	}
-
-	return model;
-}
-
-void ObjModelLoader::ReadVertex(vector<GLfloat>& vertices, string& line)
-{
-	char* word;
-	char* remaining;
-	word = strtok_s((char*)line.c_str(), " ", &remaining);
-	word = strtok_s(remaining, " ", &remaining);
-	while (word != NULL)
-	{
-		vertices.push_back(stof(word));
-		word = strtok_s(remaining, " ", &remaining);
-	}
-}
-
-std::vector<GLfloat> ObjModelLoader::ReadTextureCoords(std::string data)
-{
-	return ReadFloats(data, textureCoordsRegex);
-}
-
-std::vector<GLfloat> ObjModelLoader::ReadNormals(std::string data)
-{
-	return ReadFloats(data, normalRegex);
-}
-
-std::vector<Face> ObjModelLoader::ReadIndicies(std::string& data)
-{
-	vector<Face> faces = vector<Face>();
-
-	vector<GLuint> ints = vector<GLuint>();
-	const regex floatRegex(indiciesRegex);
-	smatch sm;
-
-	while (regex_search(data, sm, floatRegex))//For each line
-	{
-		Face face = Face();
-		for (int i = 1; i < sm.size(); i = i + 3)//For each 3 groups
-		{
-			if (!sm[i].matched || !sm[i + 1].matched || !sm[i + 2].matched)
-			{
-				continue;
-			}
-
-			Index index = Index(stoi(sm[i]), stoi(sm[i + 1]), stoi(sm[i + 2]));
-			face.AddIndex(index);
-		}
-
-		faces.push_back(face);
-
-		data = sm.suffix();
-	}
-
-	return faces;
-}
-
-std::vector<GLfloat> ObjModelLoader::ReadFloats(std::string& data, std::string& regexString)
-{
-	vector<GLfloat> floats = vector<GLfloat>();
-	const regex floatRegex(regexString);
-	smatch sm;
-
-	while (regex_search(data, sm, floatRegex))
-	{
-		for (int i = 1; i < sm.size(); i++)
-		{
-			floats.push_back(stof(sm[i]));
-		}
-		data = sm.suffix();
-	}
-
-	return floats;
 }
 
 std::string ObjModelLoader::GetTextureName(std::string& fileLocation)

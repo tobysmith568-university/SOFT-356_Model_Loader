@@ -8,7 +8,7 @@ class Face
 {
 public:
 	void AddIndex(Index index);
-	std::vector<Index> GetIndices();
+	std::vector<Index>& GetIndices();
 	GLuint GetOffset(std::vector<GLuint>& positions, GLuint offset);
 
 private:
