@@ -1,5 +1,6 @@
 #include "ObjModelLoader.h"
 #include "Vertex.h"
+#include "stb_image.h"
 
 using namespace std;
 
@@ -57,10 +58,23 @@ Model& ObjModelLoader::GetModel(std::string fileLocation)
 	{
 		offset = faces[i].GetOffset(indices, offset);
 	}
-	
+
 	static Model model;
 	model.SetVertices(vertices);
 	model.SetIndicies(indices);
+
+	string textureLocation = GetTextureName(fileLocation);
+	if (textureLocation != "")
+	{
+		Texture texture = LoadTexture(textureLocation);
+		vector<Texture> textures = vector<Texture>
+		{
+			texture
+		};
+
+		model.SetTextures(textures);
+	}
+
 	return model;
 }
 
@@ -92,6 +106,11 @@ std::vector<Face> ObjModelLoader::ReadIndicies(std::string& data)
 		Face face = Face();
 		for (int i = 1; i < sm.size(); i = i + 3)//For each 3 groups
 		{
+			if (!sm[i].matched || !sm[i + 1].matched || !sm[i + 2].matched)
+			{
+				continue;
+			}
+
 			Index index = Index(stoi(sm[i]), stoi(sm[i + 1]), stoi(sm[i + 2]));
 			face.AddIndex(index);
 		}
@@ -120,4 +139,24 @@ std::vector<GLfloat> ObjModelLoader::ReadFloats(std::string& data, std::string& 
 	}
 
 	return floats;
+}
+
+std::string ObjModelLoader::GetTextureName(std::string& fileLocation)
+{
+	return "media/Texture.png";
+}
+
+Texture ObjModelLoader::LoadTexture(std::string textureLocation)
+{
+	GLint width, height, nrChannels;
+	stbi_set_flip_vertically_on_load(true);
+	unsigned char* data = stbi_load(textureLocation.c_str(), &width, &height, &nrChannels, 0);
+
+	if (!data)
+	{
+		//TODO Error handling
+	}
+
+	Texture texture = Texture(width, height, nrChannels, data);
+	return texture;
 }

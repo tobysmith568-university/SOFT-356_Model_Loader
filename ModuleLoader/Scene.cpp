@@ -29,8 +29,8 @@ Scene::Scene(ConfigUtil& _configUtil, FileUtils& _fileUtils, InputManager& _inpu
 	BindVertices(model.GetVertices());
 	BindIndices(model.GetIndicies());
 	/*BindColours(model.GetColours());
-	BindTextureCoords(model.GetTextureCoords());
-	BindTexture(model.GetTextures());*/
+	BindTextureCoords(model.GetTextureCoords());*/
+	BindTexture(model.GetTextures());
 
 	mvpBuilder = MVPBuilder()
 		.AddScale(1.0f, 1.0f, 1.0f)
@@ -60,7 +60,7 @@ void Scene::Update()
 
 	glBindVertexArray(VAO);
 	glBindTexture(GL_TEXTURE_2D, textureBuffer);
-	glDrawElements(GL_TRIANGLES, NumVertices, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, model.GetIndicies().size(), GL_UNSIGNED_INT, 0);
 }
 
 void Scene::CreateAndUseVAO()
@@ -145,10 +145,10 @@ void Scene::BindIndices(const vector<GLuint>& indices)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
 
-	glVertexAttribPointer(vPosition, 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(offsetof(Vertex, position)));
+	glVertexAttribPointer(vPosition, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(offsetof(Vertex, position)));
 	glEnableVertexAttribArray(vPosition);
 
-	glVertexAttribPointer(tPosition, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(offsetof(Vertex, texture)));
+	glVertexAttribPointer(tPosition, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(offsetof(Vertex, texture)));
 	glEnableVertexAttribArray(tPosition);
 }
 /*

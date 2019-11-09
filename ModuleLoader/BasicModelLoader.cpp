@@ -49,7 +49,7 @@ Model& BasicModelLoader::GetModel(string fileLocation)
 			texture
 		};
 
-		//model.SetTextures(textures);
+		model.SetTextures(textures);
 	}
 
 	return model;

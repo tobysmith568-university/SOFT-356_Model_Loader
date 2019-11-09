@@ -27,4 +27,7 @@ private:
 	std::vector<Face> ReadIndicies(std::string& data);
 
 	std::vector<GLfloat> ReadFloats(std::string& data, std::string& regexString);
+
+	std::string GetTextureName(std::string& fileLocation);
+	Texture LoadTexture(std::string textureLocation);
 };
