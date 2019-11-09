@@ -72,6 +72,15 @@
     <ClInclude Include="ObjModelLoader.h">
       <Filter>Header Files\ModelLoading</Filter>
     </ClInclude>
+    <ClInclude Include="Vertex.h">
+      <Filter>Header Files\ModelLoading</Filter>
+    </ClInclude>
+    <ClInclude Include="Face.h">
+      <Filter>Header Files\ModelLoading</Filter>
+    </ClInclude>
+    <ClInclude Include="Index.h">
+      <Filter>Header Files\ModelLoading</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="media\triangles.frag">
@@ -141,6 +150,15 @@
       <Filter>Source Files\ModelLoading</Filter>
     </ClCompile>
     <ClCompile Include="ObjModelLoader.cpp">
+      <Filter>Source Files\ModelLoading</Filter>
+    </ClCompile>
+    <ClCompile Include="Vertex.cpp">
+      <Filter>Source Files\ModelLoading</Filter>
+    </ClCompile>
+    <ClCompile Include="Face.cpp">
+      <Filter>Source Files\ModelLoading</Filter>
+    </ClCompile>
+    <ClCompile Include="Index.cpp">
       <Filter>Source Files\ModelLoading</Filter>
     </ClCompile>
   </ItemGroup>
