@@ -10,14 +10,14 @@ bool FileUtils::DoesFileExist(std::string& filePath)
 
 string FileUtils::GetExtension(std::string& filePath)
 {
-	if (filePath.length() < 1)
+	if (filePath.size() < 1)
 	{
 		return filePath;
 	}
 
 	string result = "";
 
-	for (size_t i = filePath.length(); i > 0; i--)
+	for (size_t i = filePath.size(); i > 0; i--)
 	{
 		if (filePath[i - 1] == '.')
 		{
@@ -32,7 +32,7 @@ string FileUtils::GetExtension(std::string& filePath)
 
 std::string FileUtils::GetName(std::string& fileLocation)
 {
-	if (fileLocation.length() < 1)
+	if (fileLocation.size() < 1)
 	{
 		return fileLocation;
 	}
@@ -40,7 +40,7 @@ std::string FileUtils::GetName(std::string& fileLocation)
 	string result = "";
 
 	bool foundDot = false;
-	for (size_t i = fileLocation.length(); i > 0; i--)
+	for (size_t i = fileLocation.size(); i > 0; i--)
 	{
 		if (foundDot)
 		{
@@ -49,6 +49,37 @@ std::string FileUtils::GetName(std::string& fileLocation)
 		else if (fileLocation[i - 1] == '.')
 		{
 			foundDot = true;
+		}
+	}
+
+	if (result == "")
+	{
+		return fileLocation;
+	}
+
+	return result;
+}
+
+std::string FileUtils::GetFolder(std::string& fileLocation)
+{
+	if (fileLocation.size() < 1)
+	{
+		return fileLocation;
+	}
+
+	string result = "";
+
+	bool foundSlash = false;
+	for (size_t i = fileLocation.size(); i > 0; i--)
+	{
+		if (!foundSlash && (fileLocation[i - 1] == '/' || fileLocation[i - 1] == '\\'))
+		{
+			foundSlash = true;
+		}
+
+		if (foundSlash)
+		{
+			result = fileLocation[i - 1] + result;
 		}
 	}
 

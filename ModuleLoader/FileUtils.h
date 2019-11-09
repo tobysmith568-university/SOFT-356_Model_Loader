@@ -14,6 +14,8 @@ public:
 	bool DoesFileExist(std::string& fileLocation);
 	std::string GetExtension(std::string& fileLocation);
 	std::string GetName(std::string& fileLocation);
+	std::string GetFolder(std::string& fileLocation);
+
 	std::string ReadFile(std::string fileLocation);
 	std::vector<std::string> ReadFileAsLines(std::string fileLocation);
 };

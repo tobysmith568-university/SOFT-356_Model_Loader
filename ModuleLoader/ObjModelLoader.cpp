@@ -4,8 +4,8 @@
 
 using namespace std;
 
-ObjModelLoader::ObjModelLoader(FileUtils& _fileUtils)
-	: fileUtils(_fileUtils)
+ObjModelLoader::ObjModelLoader(FileUtils& _fileUtils, MtlLoader& _mtlLoader)
+	: fileUtils(_fileUtils), mtlLoader(_mtlLoader)
 {
 }
 
@@ -15,7 +15,9 @@ Model& ObjModelLoader::GetModel(std::string fileLocation)
 	vector<GLfloat> textureCoordValues = vector<GLfloat>();
 	vector<GLfloat> normalValues = vector<GLfloat>();
 	vector<Face> faceValues = vector<Face>();
+	vector<Material> materials = vector<Material>();
 
+	string folder = fileUtils.GetFolder(fileLocation);
 	vector<string> fileLines = fileUtils.ReadFileAsLines(fileLocation);
 
 	for (size_t i = 0; i < fileLines.size(); i++)
@@ -36,6 +38,10 @@ Model& ObjModelLoader::GetModel(std::string fileLocation)
 		else if (strncmp(line, "f ", 2) == 0)
 		{
 			ReadFace(faceValues, fileLines[i]);
+		}
+		else if (strncmp(line, "mtllib ", 7) == 0)
+		{
+			ReadMaterials(materials, fileLines[i], folder);
 		}
 	}
 
@@ -105,6 +111,19 @@ void ObjModelLoader::ReadIndex(Face& face, char* index)
 	}
 
 	face.AddIndex(newIndex);
+}
+
+void ObjModelLoader::ReadMaterials(std::vector<Material>& materials, std::string& line, string& folder)
+{
+	char* materialFileLocation;
+	char* remaining;
+	materialFileLocation = strtok_s((char*)line.c_str(), " ", &remaining);
+	materialFileLocation = strtok_s(remaining, " ", &remaining);
+
+	string materialLocation = folder + materialFileLocation;
+	Material material = mtlLoader.LoadMaterial(materialLocation);
+
+	materials.push_back(material);
 }
 
 void ObjModelLoader::SetVertices(Model& model,

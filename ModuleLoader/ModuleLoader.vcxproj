@@ -154,7 +154,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BasicModelLoader.cpp" />
     <ClCompile Include="ConfigUtil.cpp" />
     <ClCompile Include="ConsoleUtil.cpp" />
     <ClCompile Include="Face.cpp" />
@@ -165,8 +164,10 @@
     <ClCompile Include="Index.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="InvalidModelFileException.cpp" />
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModelLoaderFactory.cpp" />
+    <ClCompile Include="MtlLoader.cpp" />
     <ClCompile Include="MVPBuilder.cpp" />
     <ClCompile Include="ObjModelLoader.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -176,7 +177,6 @@
     <ClCompile Include="Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BasicModelLoader.h" />
     <ClInclude Include="ConfigUtil.h" />
     <ClInclude Include="ConsoleUtil.h" />
     <ClInclude Include="Face.h" />
@@ -187,8 +187,10 @@
     <ClInclude Include="Index.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="InvalidModelFileException.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelLoaderFactory.h" />
+    <ClInclude Include="MtlLoader.h" />
     <ClInclude Include="MVPBuilder.h" />
     <ClInclude Include="ObjModelLoader.h" />
     <ClInclude Include="Scene.h" />
