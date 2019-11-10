@@ -28,8 +28,6 @@ Scene::Scene(ConfigUtil& _configUtil, FileUtils& _fileUtils, InputManager& _inpu
 
 	BindVertices(model.GetVertices());
 	BindIndices(model.GetIndicies());
-	/*BindColours(model.GetColours());
-	BindTextureCoords(model.GetTextureCoords());*/
 	BindTexture(model.GetTextures());
 
 	mvpBuilder = MVPBuilder()
@@ -151,28 +149,6 @@ void Scene::BindIndices(const vector<GLuint>& indices)
 	glVertexAttribPointer(tPosition, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(offsetof(Vertex, texture)));
 	glEnableVertexAttribArray(tPosition);
 }
-/*
-void Scene::BindColours(const vector<GLfloat>& colours)
-{
-	glGenBuffers(1, &colourBuffer);
-
-	glBindBuffer(GL_ARRAY_BUFFER, colourBuffer);
-	glBufferStorage(GL_ARRAY_BUFFER, colours.size() * sizeof(GLfloat), &colours[0], 0);
-
-	glVertexAttribPointer(cPosition, 4, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
-	glEnableVertexAttribArray(cPosition);
-}
-
-void Scene::BindTextureCoords(const vector<GLfloat>& textureCoords)
-{
-	glGenBuffers(1, &textureCoordsBuffer);
-
-	glBindBuffer(GL_ARRAY_BUFFER, textureCoordsBuffer);
-	glBufferData(GL_ARRAY_BUFFER, textureCoords.size() * sizeof(GLfloat), &textureCoords[0], GL_STATIC_DRAW);
-
-	glVertexAttribPointer(tPosition, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
-	glEnableVertexAttribArray(tPosition);
-}*/
 
 //	Currently only loads one texture
 void Scene::BindTexture(vector<Texture> textures)
