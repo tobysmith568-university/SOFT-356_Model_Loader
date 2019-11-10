@@ -10,9 +10,9 @@ MtlLoader::MtlLoader(FileUtils& _fileUtils)
 {
 }
 
-void MtlLoader::LoadMaterials(std::vector<Material>& materials, std::string& fileLocation)
+void MtlLoader::LoadMaterials(Model& model, std::string& fileLocation)
 {
-	GLint currentMaterial = materials.size() - 1;
+	Material* newMaterial = nullptr;
 
 	vector<string> fileLines = fileUtils.ReadFileAsLines(fileLocation);
 
@@ -22,50 +22,58 @@ void MtlLoader::LoadMaterials(std::vector<Material>& materials, std::string& fil
 
 		if (strncmp(line, "newmtl ", 7) == 0)
 		{
-			materials.push_back(Material());
-			currentMaterial = materials.size() - 1;
-			materials[currentMaterial].name = GetSingleString(fileLines[i]);
+			if (newMaterial != nullptr)
+			{
+				model.AddMaterial(*newMaterial);
+			}
+			newMaterial = &Material();
+			newMaterial->name = GetSingleString(fileLines[i]);
 		}
-		else if (currentMaterial < 0)
+		else if (newMaterial == nullptr)
 		{
 			continue;
 		}
 		else if (strncmp(line, "Ns ", 3) == 0)
 		{
-			materials[currentMaterial].specularColourWeight = GetSingleFloat(fileLines[i]);
+			newMaterial->specularColourWeight = GetSingleFloat(fileLines[i]);
 		}
 		else if (strncmp(line, "Ka ", 3) == 0)
 		{
-			materials[currentMaterial].ambientColour = GetVector3(fileLines[i]);
+			newMaterial->ambientColour = GetVector3(fileLines[i]);
 		}
 		else if (strncmp(line, "Kd ", 3) == 0)
 		{
-			materials[currentMaterial].diffuseColour = GetVector3(fileLines[i]);
+			newMaterial->diffuseColour = GetVector3(fileLines[i]);
 		}
 		else if (strncmp(line, "Ks ", 3) == 0)
 		{
-			materials[currentMaterial].specularColour = GetVector3(fileLines[i]);
+			newMaterial->specularColour = GetVector3(fileLines[i]);
 		}
 		else if (strncmp(line, "d ", 2) == 0)
 		{
-			materials[currentMaterial].dissolve = GetSingleFloat(fileLines[i]);
+			newMaterial->dissolve = GetSingleFloat(fileLines[i]);
 		}
 		else if (strncmp(line, "illum ", 6) == 0)
 		{
-			materials[currentMaterial].illuminationModel = GetSingleInt(fileLines[i]);
+			newMaterial->illuminationModel = GetSingleInt(fileLines[i]);
 		}
 		else if (strncmp(line, "map_Ka ", 7) == 0)
 		{
-			materials[currentMaterial].ambientTextureMap = GetSingleString(fileLines[i]);
+			newMaterial->ambientTextureMap = GetSingleString(fileLines[i]);
 		}
 		else if (strncmp(line, "map_Kd ", 7) == 0)
 		{
-			materials[currentMaterial].diffuseTextureMap = GetSingleString(fileLines[i]);
+			newMaterial->diffuseTextureMap = GetSingleString(fileLines[i]);
 		}
 		else if (strncmp(line, "map_d ", 6) == 0)
 		{
-			materials[currentMaterial].alphaTextureMap = GetSingleString(fileLines[i]);
+			newMaterial->alphaTextureMap = GetSingleString(fileLines[i]);
 		}
+	}
+
+	if (newMaterial != nullptr)
+	{
+		model.AddMaterial(*newMaterial);
 	}
 }
 

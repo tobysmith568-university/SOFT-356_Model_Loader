@@ -165,10 +165,12 @@
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="InvalidModelFileException.cpp" />
     <ClCompile Include="Material.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Model.cpp" />
     <ClCompile Include="ModelLoaderFactory.cpp" />
     <ClCompile Include="MtlLoader.cpp" />
     <ClCompile Include="MVPBuilder.cpp" />
+    <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjModelLoader.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="ShaderProgramBuilder.cpp" />
@@ -188,10 +190,12 @@
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="InvalidModelFileException.h" />
     <ClInclude Include="Material.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ModelLoaderFactory.h" />
     <ClInclude Include="MtlLoader.h" />
     <ClInclude Include="MVPBuilder.h" />
+    <ClInclude Include="Object.h" />
     <ClInclude Include="ObjModelLoader.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ShaderProgramBuilder.h" />

@@ -11,45 +11,107 @@ ObjModelLoader::ObjModelLoader(FileUtils& _fileUtils, MtlLoader& _mtlLoader)
 
 Model& ObjModelLoader::GetModel(std::string fileLocation)
 {
+	Model model = Model();
+	Object* object = nullptr;
+	Mesh* mesh = nullptr;
+
 	vector<GLfloat> vertexValues = vector<GLfloat>();
 	vector<GLfloat> textureCoordValues = vector<GLfloat>();
 	vector<GLfloat> normalValues = vector<GLfloat>();
 	vector<Face> faceValues = vector<Face>();
-	vector<Material> materials = vector<Material>();
 
 	string folder = fileUtils.GetFolder(fileLocation);
 	vector<string> fileLines = fileUtils.ReadFileAsLines(fileLocation);
 
 	for (size_t i = 0; i < fileLines.size(); i++)
 	{
-		char* line = (char*)fileLines[i].c_str();
-		if (strncmp(line, "v ", 2) == 0)
+		char* c_line = (char*)fileLines[i].c_str();
+
+		if (strncmp(c_line, "mtllib ", 7) == 0)
+		{
+			ReadMaterials(model, fileLines[i], folder);
+		}
+		else if (strncmp(c_line, "o ", 2) == 0)
+		{
+			if (object != nullptr)
+			{
+				model.AddObject(*object);
+			}
+
+			string name = GetSingleString(fileLines[i]);
+
+			object = &Object();
+			object->SetName(name);
+		}
+		else if (object == nullptr)
+		{
+			continue;
+		}
+		else if (strncmp(c_line, "usemtl ", 2) == 0)
+		{
+			if (mesh != nullptr)
+			{
+				SetVertices(*mesh,
+					vertexValues,
+					textureCoordValues,
+					normalValues,
+					faceValues);
+				SetIndices(*mesh, faceValues);
+
+				object->AddMesh(*mesh);
+			}
+
+			faceValues = vector<Face>();
+			mesh = &Mesh();
+			string materialName = GetSingleString(fileLines[i]);
+			mesh->SetMaterial(model.GetMaterial(materialName));
+		}
+		else if (strncmp(c_line, "v ", 2) == 0)
 		{
 			ReadSpaceSepFloats(vertexValues, fileLines[i]);
 		}
-		else if (strncmp(line, "vt ", 3) == 0)
+		else if (strncmp(c_line, "vt ", 3) == 0)
 		{
 			ReadSpaceSepFloats(textureCoordValues, fileLines[i]);
 		}
-		else if (strncmp(line, "vn ", 3) == 0)
+		else if (strncmp(c_line, "vn ", 3) == 0)
 		{
 			ReadSpaceSepFloats(normalValues, fileLines[i]);
 		}
-		else if (strncmp(line, "f ", 2) == 0)
+		else if (strncmp(c_line, "f ", 2) == 0)
 		{
 			ReadFace(faceValues, fileLines[i]);
 		}
-		else if (strncmp(line, "mtllib ", 7) == 0)
-		{
-			ReadMaterials(materials, fileLines[i], folder);
-		}
 	}
 
-	static Model model;
-	SetVertices(model, vertexValues, textureCoordValues, normalValues, faceValues);
-	SetIndices(model, faceValues);
-	SetTextures(model, fileLocation);
+	if (mesh != nullptr)
+	{
+		SetVertices(*mesh,
+			vertexValues,
+			textureCoordValues,
+			normalValues,
+			faceValues);
+		SetIndices(*mesh, faceValues);
+
+		object->AddMesh(*mesh);
+	}
+
+	if (object != nullptr)
+	{
+		model.AddObject(*object);
+	}
+
 	return model;
+}
+
+char* ObjModelLoader::GetSingleString(std::string& line)
+{
+	char* value;
+	char* remaining;
+	value = strtok_s((char*)line.c_str(), " ", &remaining);
+	value = strtok_s(remaining, " ", &remaining);
+
+	return value;
 }
 
 void ObjModelLoader::ReadSpaceSepFloats(vector<GLfloat>& values, string& line)
@@ -113,7 +175,7 @@ void ObjModelLoader::ReadIndex(Face& face, char* index)
 	face.AddIndex(newIndex);
 }
 
-void ObjModelLoader::ReadMaterials(vector<Material>& materials, string& line, string& folder)
+void ObjModelLoader::ReadMaterials(Model& model, string& line, string& folder)
 {
 	char* materialFileLocation;
 	char* remaining;
@@ -122,10 +184,10 @@ void ObjModelLoader::ReadMaterials(vector<Material>& materials, string& line, st
 
 	string materialLocation = folder + materialFileLocation;
 
-	mtlLoader.LoadMaterials(materials, materialLocation);
+	mtlLoader.LoadMaterials(model, materialLocation);
 }
 
-void ObjModelLoader::SetVertices(Model& model,
+void ObjModelLoader::SetVertices(Mesh& mesh,
 	vector<GLfloat>& vertexValues,
 	vector<GLfloat>& textureCoordValues,
 	vector<GLfloat>& normalValues,
@@ -163,10 +225,10 @@ void ObjModelLoader::SetVertices(Model& model,
 		}
 	}
 
-	model.SetVertices(vertices);
+	mesh.SetVertices(vertices);
 }
 
-void ObjModelLoader::SetIndices(Model& model, vector<Face>& faces)
+void ObjModelLoader::SetIndices(Mesh& mesh, vector<Face>& faces)
 {
 	vector<GLuint> indices = vector<GLuint>();
 
@@ -176,22 +238,7 @@ void ObjModelLoader::SetIndices(Model& model, vector<Face>& faces)
 		offset = faces[i].GetOffset(indices, offset);
 	}
 
-	model.SetIndicies(indices);
-}
-
-void ObjModelLoader::SetTextures(Model& model, std::string& fileLocation)
-{
-	string textureLocation = GetTextureName(fileLocation);
-	if (textureLocation != "")
-	{
-		Texture texture = LoadTexture(textureLocation);
-		vector<Texture> textures = vector<Texture>
-		{
-			texture
-		};
-
-		model.SetTextures(textures);
-	}
+	mesh.SetIndicies(indices);
 }
 
 std::string ObjModelLoader::GetTextureName(std::string& fileLocation)

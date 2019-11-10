@@ -1,27 +1,28 @@
 #pragma once
-#include <vector>
+
 #include "GLFW/glfw3.h"
 
 #include "Texture.h"
 #include "Vertex.h"
+#include "Mesh.h"
+#include "Object.h"
+#include "Material.h"
+
+#include <vector>
+#include <map>
 
 class Model
 {
 public:
 	Model();
 
-	std::vector<Vertex> GetVertices();
-	void SetVertices(std::vector<Vertex> _vertices);
+	void AddObject(Object& object);
+	std::vector<Object>& GetObjects();
 
-	std::vector<GLuint> GetIndicies();
-	void SetIndicies(std::vector<GLuint> _indicies);
-
-	std::vector<Texture> GetTextures();
-	void SetTextures(std::vector<Texture> _textures);
+	void AddMaterial(Material& material);
+	Material& GetMaterial(std::string& name);
 
 private:
-	std::vector<Vertex> vertices;
-	std::vector<GLuint> indicies;
-
-	std::vector<Texture> textures;
+	std::vector<Object> objects;
+	std::map<std::string, Material> materials;
 };

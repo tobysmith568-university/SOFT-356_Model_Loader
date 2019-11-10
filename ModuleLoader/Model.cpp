@@ -4,32 +4,22 @@ Model::Model()
 {
 }
 
-std::vector<Vertex> Model::GetVertices()
+void Model::AddObject(Object& object)
 {
-	return vertices;
+	objects.push_back(object);
 }
 
-void Model::SetVertices(std::vector<Vertex> _vertices)
+std::vector<Object>& Model::GetObjects()
 {
-	vertices = _vertices;
+	return objects;
 }
 
-std::vector<GLuint> Model::GetIndicies()
+void Model::AddMaterial(Material& material)
 {
-	return indicies;
+	materials[material.name] = material;
 }
 
-void Model::SetIndicies(std::vector<GLuint> _indicies)
+Material& Model::GetMaterial(std::string& name)
 {
-	indicies = _indicies;
-}
-
-std::vector<Texture> Model::GetTextures()
-{
-	return textures;
-}
-
-void Model::SetTextures(std::vector<Texture> _textures)
-{
-	textures = _textures;
+	return materials[name];
 }

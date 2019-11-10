@@ -26,9 +26,9 @@ Scene::Scene(ConfigUtil& _configUtil, FileUtils& _fileUtils, InputManager& _inpu
 	CreateAndBindShaderProgram();
 	BindBackgroundColours();
 
-	BindVertices(model.GetVertices());
-	BindIndices(model.GetIndicies());
-	BindTexture(model.GetTextures());
+	//BindVertices(model.GetVertices());
+	//BindIndices(model.GetIndicies());
+	//BindTexture(model.GetTextures());
 
 	mvpBuilder = MVPBuilder()
 		.AddScale(1.0f, 1.0f, 1.0f)
@@ -58,7 +58,7 @@ void Scene::Update()
 
 	glBindVertexArray(VAO);
 	glBindTexture(GL_TEXTURE_2D, textureBuffer);
-	glDrawElements(GL_TRIANGLES, model.GetIndicies().size(), GL_UNSIGNED_INT, 0);
+	//glDrawElements(GL_TRIANGLES, model.GetIndicies().size(), GL_UNSIGNED_INT, 0);
 }
 
 void Scene::CreateAndUseVAO()

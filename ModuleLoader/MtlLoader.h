@@ -2,6 +2,7 @@
 
 #include "Material.h"
 #include "FileUtils.h"
+#include "Model.h"
 
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
@@ -12,7 +13,7 @@ class MtlLoader
 public:
 	MtlLoader(FileUtils& _fileUtils);
 
-	void LoadMaterials(std::vector<Material>& materials, std::string& fileLocation);
+	void LoadMaterials(Model& model, std::string& fileLocation);
 
 private:
 	FileUtils fileUtils;

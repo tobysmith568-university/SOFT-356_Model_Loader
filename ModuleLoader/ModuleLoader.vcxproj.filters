@@ -19,6 +19,12 @@
     <Filter Include="Header Files\ModelLoading">
       <UniqueIdentifier>{83b5adb0-a7e6-41ca-a63d-e9a77ec8c739}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\ModelLoading\Obj">
+      <UniqueIdentifier>{606c879d-df05-449b-bb22-f6b7d543b85f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ModelLoading\Obj">
+      <UniqueIdentifier>{8e99054d-5367-4b53-821e-fa669b045e5e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stb_image.h">
@@ -66,13 +72,7 @@
     <ClInclude Include="Texture.h">
       <Filter>Header Files\ModelLoading</Filter>
     </ClInclude>
-    <ClInclude Include="ObjModelLoader.h">
-      <Filter>Header Files\ModelLoading</Filter>
-    </ClInclude>
     <ClInclude Include="Vertex.h">
-      <Filter>Header Files\ModelLoading</Filter>
-    </ClInclude>
-    <ClInclude Include="Face.h">
       <Filter>Header Files\ModelLoading</Filter>
     </ClInclude>
     <ClInclude Include="Index.h">
@@ -81,7 +81,19 @@
     <ClInclude Include="Material.h">
       <Filter>Header Files\ModelLoading</Filter>
     </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Header Files\ModelLoading</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjModelLoader.h">
+      <Filter>Header Files\ModelLoading\Obj</Filter>
+    </ClInclude>
     <ClInclude Include="MtlLoader.h">
+      <Filter>Header Files\ModelLoading\Obj</Filter>
+    </ClInclude>
+    <ClInclude Include="Face.h">
+      <Filter>Header Files\ModelLoading\Obj</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
       <Filter>Header Files\ModelLoading</Filter>
     </ClInclude>
   </ItemGroup>
@@ -149,13 +161,7 @@
     <ClCompile Include="Texture.cpp">
       <Filter>Source Files\ModelLoading</Filter>
     </ClCompile>
-    <ClCompile Include="ObjModelLoader.cpp">
-      <Filter>Source Files\ModelLoading</Filter>
-    </ClCompile>
     <ClCompile Include="Vertex.cpp">
-      <Filter>Source Files\ModelLoading</Filter>
-    </ClCompile>
-    <ClCompile Include="Face.cpp">
       <Filter>Source Files\ModelLoading</Filter>
     </ClCompile>
     <ClCompile Include="Index.cpp">
@@ -164,7 +170,19 @@
     <ClCompile Include="Material.cpp">
       <Filter>Source Files\ModelLoading</Filter>
     </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Source Files\ModelLoading</Filter>
+    </ClCompile>
     <ClCompile Include="MtlLoader.cpp">
+      <Filter>Source Files\ModelLoading\Obj</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjModelLoader.cpp">
+      <Filter>Source Files\ModelLoading\Obj</Filter>
+    </ClCompile>
+    <ClCompile Include="Face.cpp">
+      <Filter>Source Files\ModelLoading\Obj</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
       <Filter>Source Files\ModelLoading</Filter>
     </ClCompile>
   </ItemGroup>
