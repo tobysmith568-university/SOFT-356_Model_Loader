@@ -1,7 +1,33 @@
 #include "Model.h"
 
-Model::Model()
+Model::Model(GLuint& _program)
+	: program(_program)
 {
+	mvpBuilder = MVPBuilder()
+		.AddScale(1.0f, 1.0f, 1.0f)
+		.AddTranslation(0.0f, 0.0f, 0.0f);
+
+	mvp = mvpBuilder.Build();
+	UseMVP(mvp);
+}
+
+void Model::Init()
+{
+	for (size_t i = 0; i < objects.size(); i++)
+	{
+		objects[i].Init();
+	}
+}
+
+void Model::Update()
+{
+	mvp = mvpBuilder.Build();
+	UseMVP(mvp);
+
+	for (size_t i = 0; i < objects.size(); i++)
+	{
+		objects[i].Update();
+	}
 }
 
 void Model::AddObject(Object& object)
@@ -22,4 +48,15 @@ void Model::AddMaterial(Material& material)
 Material& Model::GetMaterial(std::string& name)
 {
 	return materials[name];
+}
+
+MVPBuilder& Model::GetMVPBuilder()
+{
+	return mvpBuilder;
+}
+
+void Model::UseMVP(mat4 mvp)
+{
+	int mvpLoc = glGetUniformLocation(program, "mvp");
+	glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, glm::value_ptr(mvp));
 }

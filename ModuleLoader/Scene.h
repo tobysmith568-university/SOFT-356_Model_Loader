@@ -7,6 +7,8 @@
 #include "Model.h"
 #include "InputManager.h"
 #include "Texture.h"
+#include "ConsoleUtil.h"
+#include "ModelLoaderFactory.h"
 
 #include <glm/glm.hpp> //includes GLM
 #include <vector>
@@ -14,28 +16,27 @@
 class Scene
 {
 public:
-	Scene(ConfigUtil& _configUtil, FileUtils& _fileUtils, InputManager& _inputManager, Model& _model);
+	Scene(ConfigUtil& _configUtil, FileUtils& _fileUtils, InputManager& _inputManager, ConsoleUtil& _consoleUtil, ModelLoaderFactory& _modelLoaderFactory);
 	void Update();
 
 private:
 	ConfigUtil& configUtil;
 	FileUtils& fileUtils;
 	InputManager& inputManager;
+	ConsoleUtil& consoleUtil;
+	ModelLoaderFactory& modelLoaderFactory;
 
 	enum VAO_IDs { Vertices, Triangles, Colours, Tex };
 	enum Buffer_IDs { ArrayBuffer };
+	bool autoRotate;
 
-	Model& model;
+	std::vector<Model> models;
 
 	GLuint program;
-
-	MVPBuilder mvpBuilder;
-	glm::mat4 mvp;
 
 	void BindMovements();
 	void BindBackgroundColours();
 	float NormalizeColour(float colour);
 	void CreateAndBindShaderProgram();
-	
-	void UseMVP(mat4 mvp);
+	void AddModel();
 };

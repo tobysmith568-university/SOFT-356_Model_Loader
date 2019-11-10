@@ -10,6 +10,10 @@
 class Mesh
 {
 public:
+	Mesh(GLuint& _program);
+	void Init();
+	void Update();
+
 	std::vector<Vertex> GetVertices();
 	void SetVertices(std::vector<Vertex> _vertices);
 
@@ -17,9 +21,6 @@ public:
 	void SetIndicies(std::vector<GLuint> _indicies);
 
 	void SetMaterial(Material& _material);
-
-	void Init();
-	void Update();
 
 	void CreateAndUseVAO();
 	void BindVertices();
@@ -32,6 +33,8 @@ private:
 	Material material;
 
 	enum Attrib_IDs { vPosition = 0, cPosition = 1, tPosition = 2 };
+
+	GLuint& program;
 
 	GLuint VAO;
 

@@ -7,7 +7,9 @@
 class Object
 {
 public:
-	Object();
+	Object(GLuint& _program);
+	void Init();
+	void Update();
 
 	void SetName(std::string& _name);
 	std::string& GetName();
@@ -18,4 +20,6 @@ public:
 private:
 	std::string name;
 	std::vector<Mesh> meshes;
+
+	GLuint& program;
 };

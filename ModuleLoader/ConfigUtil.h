@@ -40,6 +40,7 @@ enum class KeyBinding
 	RotateYNegative,
 	ScaleUp,
 	ScaleDown,
+	NewModel,
 	Reset,
 	Quit
 };

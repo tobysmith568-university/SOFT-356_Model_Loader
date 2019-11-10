@@ -143,6 +143,8 @@ string ConfigUtil::GetKeyBindingValue(KeyBinding keyBinding)
 		return "KeyBinding_ScaleUp";
 	case KeyBinding::ScaleDown:
 		return "KeyBinding_ScaleDown";
+	case KeyBinding::NewModel:
+		return "KeyBinding_NewModel";
 	case KeyBinding::Reset:
 		return "KeyBinding_Reset";
 	case KeyBinding::Quit:

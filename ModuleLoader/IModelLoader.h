@@ -6,5 +6,5 @@
 class IModelLoader
 {
 public:
-	virtual void GetModel(Model& model, std::string fileLocation) = 0;
+	virtual void GetModel(Model& model, std::string fileLocation, GLuint& program) = 0;
 };

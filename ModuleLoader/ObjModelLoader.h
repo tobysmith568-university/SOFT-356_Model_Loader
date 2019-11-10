@@ -10,7 +10,7 @@ class ObjModelLoader : public IModelLoader
 {
 public:
 	ObjModelLoader(FileUtils& _fileUtils, MtlLoader& _mtlLoader);
-	void GetModel(Model& model, std::string fileLocation);
+	void GetModel(Model& model, std::string fileLocation, GLuint& program);
 
 private:
 	FileUtils fileUtils;

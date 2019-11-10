@@ -16,36 +16,30 @@
 
 using namespace std;
 
-Scene::Scene(ConfigUtil& _configUtil, FileUtils& _fileUtils, InputManager& _inputManager, Model& _model) 
-			: configUtil(_configUtil), fileUtils(_fileUtils), inputManager(_inputManager), model(_model)
+Scene::Scene(ConfigUtil& _configUtil, FileUtils& _fileUtils, InputManager& _inputManager, ConsoleUtil& _consoleUtil, ModelLoaderFactory& _modelLoaderFactory)
+			: configUtil(_configUtil), fileUtils(_fileUtils), inputManager(_inputManager), consoleUtil(_consoleUtil), modelLoaderFactory(_modelLoaderFactory)
 {
-	BindMovements();//Keeping
-	//CreateAndUseVAO();//Moved
-	CreateAndBindShaderProgram();//Keeping
-	BindBackgroundColours();//Keeping
+	BindMovements();
+	CreateAndBindShaderProgram();
+	BindBackgroundColours();
 
-	//BindVertices(model.GetVertices());//Moved
-	//BindIndices(model.GetIndicies());//Moved
-	//BindTexture(model.GetTextures());// TODO!
+	autoRotate = configUtil.GetBool(BoolSetting::AutoRotate);
 
-	mvpBuilder = MVPBuilder()
-		.AddScale(1.0f, 1.0f, 1.0f)
-		.AddTranslation(0.0f, 0.0f, 0.0f);
-
-	mvp = mvpBuilder.Build();
-	UseMVP(mvp);
+	AddModel();
 }
 
 void Scene::Update()
 {
-	if (configUtil.GetBool(BoolSetting::AutoRotate))
+	for (size_t i = 0; i < models.size(); i++)
 	{
-		mvpBuilder
-			.AddRotation(0.005f, 0.0f, 1.0f, 0.0f);
-	}
+		if (autoRotate)
+		{
+			models[i].GetMVPBuilder()
+				.AddRotation(0.005f, 0.0f, 1.0f, 0.0f);
+		}
 
-	mvp = mvpBuilder.Build();
-	UseMVP(mvp);
+		models[i].Update();
+	}
 	
 	glClear(GL_COLOR_BUFFER_BIT);
 
@@ -53,31 +47,36 @@ void Scene::Update()
 	glFrontFace(GL_CW);
 	glCullFace(GL_BACK);
 	glEnable(GL_CULL_FACE);
-
 }
 
 void Scene::BindMovements()
 {
 	inputManager.RegisterMapping(KeyBinding::RotateXPositive, [&]() {
-		mvpBuilder.AddRotation(5.0f, 0.0f, 1.0f, 0.0f);
+		models[models.size() - 1].GetMVPBuilder().AddRotation(5.0f, 0.0f, 1.0f, 0.0f);
 	});
 	inputManager.RegisterMapping(KeyBinding::RotateXNegative, [&]() {
-		mvpBuilder.AddRotation(-5.0f, 0.0f, 1.0f, 0.0f);
+		models[models.size() - 1].GetMVPBuilder().AddRotation(-5.0f, 0.0f, 1.0f, 0.0f);
 	});
 	inputManager.RegisterMapping(KeyBinding::RotateYPositive, [&]() {
-		mvpBuilder.AddRotation(5.0f, 1.0f, 0.0f, 0.0f);
+		models[models.size() - 1].GetMVPBuilder().AddRotation(5.0f, 1.0f, 0.0f, 0.0f);
 	});
 	inputManager.RegisterMapping(KeyBinding::RotateYNegative, [&]() {
-		mvpBuilder.AddRotation(-5.0f, 1.0f, 0.0f, 0.0f);
+		models[models.size() - 1].GetMVPBuilder().AddRotation(-5.0f, 1.0f, 0.0f, 0.0f);
 	});
 	inputManager.RegisterMapping(KeyBinding::ScaleUp, [&]() {
-		mvpBuilder.AddScale(1.01f, 1.01f, 1.01f);
+		models[models.size() - 1].GetMVPBuilder().AddScale(1.01f, 1.01f, 1.01f);
 	});
 	inputManager.RegisterMapping(KeyBinding::ScaleDown, [&]() {
-		mvpBuilder.AddScale(0.99f, 0.99f, 0.99f);
+		models[models.size() - 1].GetMVPBuilder().AddScale(0.99f, 0.99f, 0.99f);
+	});
+	inputManager.RegisterMapping(KeyBinding::NewModel, [&]() {
+		AddModel();
 	});
 	inputManager.RegisterMapping(KeyBinding::Reset, [&]() {
-		mvpBuilder = MVPBuilder();
+		for (size_t i = 0; i < models.size(); i++)
+		{
+			models[i].GetMVPBuilder() = MVPBuilder();
+		}
 	});
 }
 
@@ -117,8 +116,11 @@ void Scene::CreateAndBindShaderProgram()
 		.BuildAndUse();
 }
 
-void Scene::UseMVP(mat4 mvp)
+void Scene::AddModel()
 {
-	int mvpLoc = glGetUniformLocation(program, "mvp");
-	glUniformMatrix4fv(mvpLoc, 1, GL_FALSE, glm::value_ptr(mvp));
+	string filename = consoleUtil.GetFileName("Enter a file name for a model");
+	IModelLoader& ml = modelLoaderFactory.GetLoaderForFile(filename);
+	models.push_back(Model(program));
+	ml.GetModel(models[models.size() - 1], filename, program);
+	models[models.size() - 1].Init();
 }

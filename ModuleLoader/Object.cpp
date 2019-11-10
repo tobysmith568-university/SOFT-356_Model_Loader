@@ -1,7 +1,24 @@
 #include "Object.h"
 
-Object::Object()
+Object::Object(GLuint& _program)
+	: program(_program)
 {
+}
+
+void Object::Init()
+{
+	for (size_t i = 0; i < meshes.size(); i++)
+	{
+		meshes[i].Init();
+	}
+}
+
+void Object::Update()
+{
+	for (size_t i = 0; i < meshes.size(); i++)
+	{
+		meshes[i].Update();
+	}
 }
 
 void Object::SetName(std::string& _name)

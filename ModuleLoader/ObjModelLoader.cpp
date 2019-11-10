@@ -8,7 +8,7 @@ ObjModelLoader::ObjModelLoader(FileUtils& _fileUtils, MtlLoader& _mtlLoader)
 {
 }
 
-void ObjModelLoader::GetModel(Model& model, std::string fileLocation)
+void ObjModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& program)
 {
 	Object* object = nullptr;
 	Mesh* mesh = nullptr;
@@ -38,7 +38,7 @@ void ObjModelLoader::GetModel(Model& model, std::string fileLocation)
 
 			string name = GetSingleString(fileLines[i]);
 
-			object = &Object();
+			object = &Object(program);
 			object->SetName(name);
 		}
 		else if (object == nullptr)
@@ -60,7 +60,7 @@ void ObjModelLoader::GetModel(Model& model, std::string fileLocation)
 			}
 
 			faceValues = vector<Face>();
-			mesh = &Mesh();
+			mesh = &Mesh(program);
 			string materialName = GetSingleString(fileLines[i]);
 			mesh->SetMaterial(model.GetMaterial(materialName));
 		}

@@ -5,6 +5,26 @@
 
 using namespace std;
 
+Mesh::Mesh(GLuint& _program)
+	: program(_program)
+{
+}
+
+void Mesh::Init()
+{
+	CreateAndUseVAO();
+	BindVertices();
+	BindIndices();
+	BindTexture();
+}
+
+void Mesh::Update()
+{
+	glBindVertexArray(VAO);
+	glBindTexture(GL_TEXTURE_2D, textureBuffer);
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+}
+
 std::vector<Vertex> Mesh::GetVertices()
 {
 	return vertices;
@@ -28,21 +48,6 @@ void Mesh::SetIndicies(std::vector<GLuint> _indicies)
 void Mesh::SetMaterial(Material& _material)
 {
 	material = _material;
-}
-
-void Mesh::Init()
-{
-	CreateAndUseVAO();
-	BindVertices();
-	BindIndices();
-	//	TODO: BindTexture();
-}
-
-void Mesh::Update()
-{
-	glBindVertexArray(VAO);
-	glBindTexture(GL_TEXTURE_2D, textureBuffer);
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 }
 
 void Mesh::CreateAndUseVAO()
@@ -84,10 +89,8 @@ void Mesh::BindTexture()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textures[0].GetWidth(), textures[0].GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, textures[0].GetData());
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, material.ambientTextureMap.GetWidth(), material.ambientTextureMap.GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, material.ambientTextureMap.GetData());
 	glGenerateMipmap(GL_TEXTURE_2D);
 
-	//textures[0].FreeData();
-
-	//glUniform1i(glGetUniformLocation(program, "texture1"), 0);
+	glUniform1i(glGetUniformLocation(program, "texture1"), 0);
 }

@@ -39,17 +39,11 @@ void RunScene(FileUtils& fileUtils, ConsoleUtil& consoleUtil, ConfigUtil& config
 {
 	consoleUtil.ClearConsole();
 
-	string filename = consoleUtil.GetFileName("Enter a file name for a model");
-
-	IModelLoader& ml = modelLoaderFactory.GetLoaderForFile(filename);
-	Model model = Model();
-	ml.GetModel(model, filename);
-
 	glfwUtil.Init();
 
 	glewUtil.Init();
 	
-	Scene scene = Scene(configUtil, fileUtils, inputManager, model);
+	Scene scene = Scene(configUtil, fileUtils, inputManager, consoleUtil, modelLoaderFactory);
 
 	bool wireframesOnly = configUtil.GetBool(BoolSetting::UseWireframes);
 	while (!glfwUtil.GetShouldClose())
