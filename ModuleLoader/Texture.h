@@ -5,15 +5,23 @@
 class Texture
 {
 public:
-	Texture(GLint _width, GLint _height, GLint _nrChannels, unsigned char* _data);
+	Texture();
 
 	GLint GetWidth();
+	void SetWidth(GLint _width);
+
 	GLint GetHeight();
+	void SetHeight(GLint _height);
+
 	GLint GetNrChannels();
-	unsigned char* GetData();
+	void SetNrChannels(GLint _nrChannels);
+
+	const unsigned char* GetData();
+	void SetData(const unsigned char* _data);
+
 	void FreeData();
 
 private:
 	GLint width, height, nrChannels;
-	unsigned char* data;
+	const unsigned char* data;
 };

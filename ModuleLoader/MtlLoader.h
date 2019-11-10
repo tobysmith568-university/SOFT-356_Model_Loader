@@ -1,12 +1,13 @@
 #pragma once
 
+#include "Model.h"
 #include "Material.h"
 #include "FileUtils.h"
-#include "Model.h"
 
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 #include <string>
+#include "stb_image.h"
 
 class MtlLoader
 {
@@ -22,4 +23,5 @@ private:
 	GLfloat GetSingleFloat(std::string& line);
 	GLuint GetSingleInt(std::string& line);
 	glm::vec3& GetVector3(std::string& line);
+	void GetTexture(Texture& texture, std::string& line, std::string& folder);
 };

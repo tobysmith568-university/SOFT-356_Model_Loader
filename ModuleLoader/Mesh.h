@@ -1,5 +1,6 @@
 #pragma once
 
+#include <GL\glew.h>
 #include <string>
 #include <vector>
 
@@ -9,7 +10,6 @@
 class Mesh
 {
 public:
-
 	std::vector<Vertex> GetVertices();
 	void SetVertices(std::vector<Vertex> _vertices);
 
@@ -18,8 +18,24 @@ public:
 
 	void SetMaterial(Material& _material);
 
+	void Init();
+	void Update();
+
+	void CreateAndUseVAO();
+	void BindVertices();
+	void BindIndices();
+	void BindTexture();
+
 private:
 	std::vector<Vertex> vertices;
-	std::vector<GLuint> indicies;
+	std::vector<GLuint> indices;
 	Material material;
+
+	enum Attrib_IDs { vPosition = 0, cPosition = 1, tPosition = 2 };
+
+	GLuint VAO;
+
+	GLuint vertexBuffer;
+	GLuint indicesBuffer;
+	GLuint textureBuffer;
 };

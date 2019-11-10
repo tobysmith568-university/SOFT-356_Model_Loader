@@ -42,7 +42,8 @@ void RunScene(FileUtils& fileUtils, ConsoleUtil& consoleUtil, ConfigUtil& config
 	string filename = consoleUtil.GetFileName("Enter a file name for a model");
 
 	IModelLoader& ml = modelLoaderFactory.GetLoaderForFile(filename);
-	Model model = ml.GetModel(filename);
+	Model model = Model();
+	ml.GetModel(model, filename);
 
 	glfwUtil.Init();
 

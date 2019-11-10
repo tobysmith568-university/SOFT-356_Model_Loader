@@ -10,7 +10,7 @@ class ObjModelLoader : public IModelLoader
 {
 public:
 	ObjModelLoader(FileUtils& _fileUtils, MtlLoader& _mtlLoader);
-	Model& GetModel(std::string fileLocation);
+	void GetModel(Model& model, std::string fileLocation);
 
 private:
 	FileUtils fileUtils;
@@ -30,5 +30,4 @@ private:
 	void SetIndices(Mesh&, std::vector<Face>& faces);
 
 	std::string GetTextureName(std::string& fileLocation);
-	Texture LoadTexture(std::string textureLocation);
 };

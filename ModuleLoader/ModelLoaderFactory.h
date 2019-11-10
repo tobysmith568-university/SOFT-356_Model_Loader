@@ -1,8 +1,8 @@
 #pragma once
 
+#include "IModelLoader.h"
 #include "FileUtils.h"
 #include "ConsoleUtil.h"
-#include "IModelLoader.h"
 
 #include <string>
 #include <map>

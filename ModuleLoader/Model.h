@@ -1,15 +1,16 @@
 #pragma once
 
+#include "Object.h"
 #include "GLFW/glfw3.h"
 
 #include "Texture.h"
 #include "Vertex.h"
-#include "Mesh.h"
-#include "Object.h"
 #include "Material.h"
 
 #include <vector>
 #include <map>
+
+#include "Mesh.h"
 
 class Model
 {

@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 #include <string>
+#include "Texture.h"
 
 class Material
 {
@@ -21,7 +22,7 @@ public:
 	glm::vec3 diffuseColour;
 	glm::vec3 specularColour;
 	
-	std::string ambientTextureMap;
-	std::string diffuseTextureMap;
-	std::string alphaTextureMap;
+	Texture ambientTextureMap;
+	Texture diffuseTextureMap;
+	Texture alphaTextureMap;
 };

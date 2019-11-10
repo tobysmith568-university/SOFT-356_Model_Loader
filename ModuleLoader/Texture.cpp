@@ -1,8 +1,7 @@
 #include "Texture.h"
 #include "stb_image.h"
 
-Texture::Texture(GLint _width, GLint _height, GLint _nrChannels, unsigned char* _data)
-	: width(_width), height(_height), nrChannels(_nrChannels), data(_data)
+Texture::Texture()
 {
 }
 
@@ -11,9 +10,19 @@ GLint Texture::GetWidth()
 	return width;
 }
 
+void Texture::SetWidth(GLint _width)
+{
+	width = _width;
+}
+
 GLint Texture::GetHeight()
 {
 	return height;
+}
+
+void Texture::SetHeight(GLint _height)
+{
+	height = _height;
 }
 
 GLint Texture::GetNrChannels()
@@ -21,12 +30,22 @@ GLint Texture::GetNrChannels()
 	return nrChannels;
 }
 
-unsigned char* Texture::GetData()
+void Texture::SetNrChannels(GLint _nrChannels)
+{
+	nrChannels = _nrChannels;
+}
+
+const unsigned char* Texture::GetData()
 {
 	return data;
 }
 
+void Texture::SetData(const unsigned char* _data)
+{
+	data = _data;
+}
+
 void Texture::FreeData()
 {
-	stbi_image_free(data);
+	//stbi_image_free(data);
 }

@@ -14,21 +14,19 @@
 #include <iostream>
 #include <functional>
 
-#define BUFFER_OFFSET(a) ((void*)(a))
-
 using namespace std;
 
 Scene::Scene(ConfigUtil& _configUtil, FileUtils& _fileUtils, InputManager& _inputManager, Model& _model) 
 			: configUtil(_configUtil), fileUtils(_fileUtils), inputManager(_inputManager), model(_model)
 {
-	BindMovements();
-	CreateAndUseVAO();
-	CreateAndBindShaderProgram();
-	BindBackgroundColours();
+	BindMovements();//Keeping
+	//CreateAndUseVAO();//Moved
+	CreateAndBindShaderProgram();//Keeping
+	BindBackgroundColours();//Keeping
 
-	//BindVertices(model.GetVertices());
-	//BindIndices(model.GetIndicies());
-	//BindTexture(model.GetTextures());
+	//BindVertices(model.GetVertices());//Moved
+	//BindIndices(model.GetIndicies());//Moved
+	//BindTexture(model.GetTextures());// TODO!
 
 	mvpBuilder = MVPBuilder()
 		.AddScale(1.0f, 1.0f, 1.0f)
@@ -56,15 +54,6 @@ void Scene::Update()
 	glCullFace(GL_BACK);
 	glEnable(GL_CULL_FACE);
 
-	glBindVertexArray(VAO);
-	glBindTexture(GL_TEXTURE_2D, textureBuffer);
-	//glDrawElements(GL_TRIANGLES, model.GetIndicies().size(), GL_UNSIGNED_INT, 0);
-}
-
-void Scene::CreateAndUseVAO()
-{
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
 }
 
 void Scene::BindMovements()
@@ -126,48 +115,6 @@ void Scene::CreateAndBindShaderProgram()
 		.AddVertexShader(vertexShaderLocation)
 		.AddFragmentShader(fragmentShaderLocation)
 		.BuildAndUse();
-}
-
-void Scene::BindVertices(const vector<Vertex>& vertices)
-{
-	glGenBuffers(1, &vertexBuffer);
-
-	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
-}
-
-void Scene::BindIndices(const vector<GLuint>& indices)
-{
-	glGenBuffers(1, &indicesBuffer);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
-
-	glVertexAttribPointer(vPosition, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(offsetof(Vertex, position)));
-	glEnableVertexAttribArray(vPosition);
-
-	glVertexAttribPointer(tPosition, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(offsetof(Vertex, texture)));
-	glEnableVertexAttribArray(tPosition);
-}
-
-//	Currently only loads one texture
-void Scene::BindTexture(vector<Texture> textures)
-{
-	glGenTextures(1, &textureBuffer);
-	glBindTexture(GL_TEXTURE_2D, textureBuffer);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textures[0].GetWidth(), textures[0].GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, textures[0].GetData());
-	glGenerateMipmap(GL_TEXTURE_2D);
-
-	textures[0].FreeData();
-
-	glUniform1i(glGetUniformLocation(program, "texture1"), 0);
 }
 
 void Scene::UseMVP(mat4 mvp)

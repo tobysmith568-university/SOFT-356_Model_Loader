@@ -1,6 +1,5 @@
 #include "ObjModelLoader.h"
 #include "Vertex.h"
-#include "stb_image.h"
 
 using namespace std;
 
@@ -9,9 +8,8 @@ ObjModelLoader::ObjModelLoader(FileUtils& _fileUtils, MtlLoader& _mtlLoader)
 {
 }
 
-Model& ObjModelLoader::GetModel(std::string fileLocation)
+void ObjModelLoader::GetModel(Model& model, std::string fileLocation)
 {
-	Model model = Model();
 	Object* object = nullptr;
 	Mesh* mesh = nullptr;
 
@@ -100,8 +98,6 @@ Model& ObjModelLoader::GetModel(std::string fileLocation)
 	{
 		model.AddObject(*object);
 	}
-
-	return model;
 }
 
 char* ObjModelLoader::GetSingleString(std::string& line)
@@ -244,19 +240,4 @@ void ObjModelLoader::SetIndices(Mesh& mesh, vector<Face>& faces)
 std::string ObjModelLoader::GetTextureName(std::string& fileLocation)
 {
 	return "media/Texture.png";
-}
-
-Texture ObjModelLoader::LoadTexture(std::string textureLocation)
-{
-	GLint width, height, nrChannels;
-	stbi_set_flip_vertically_on_load(true);
-	unsigned char* data = stbi_load(textureLocation.c_str(), &width, &height, &nrChannels, 0);
-
-	if (!data)
-	{
-		//TODO Error handling
-	}
-
-	Texture texture = Texture(width, height, nrChannels, data);
-	return texture;
 }

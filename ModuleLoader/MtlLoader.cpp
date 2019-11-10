@@ -14,6 +14,7 @@ void MtlLoader::LoadMaterials(Model& model, std::string& fileLocation)
 {
 	Material* newMaterial = nullptr;
 
+	std::string folder = fileUtils.GetFolder(fileLocation);
 	vector<string> fileLines = fileUtils.ReadFileAsLines(fileLocation);
 
 	for (size_t i = 0; i < fileLines.size(); i++)
@@ -59,15 +60,15 @@ void MtlLoader::LoadMaterials(Model& model, std::string& fileLocation)
 		}
 		else if (strncmp(line, "map_Ka ", 7) == 0)
 		{
-			newMaterial->ambientTextureMap = GetSingleString(fileLines[i]);
+			GetTexture(newMaterial->ambientTextureMap, fileLines[i], folder);
 		}
 		else if (strncmp(line, "map_Kd ", 7) == 0)
 		{
-			newMaterial->diffuseTextureMap = GetSingleString(fileLines[i]);
+			GetTexture(newMaterial->diffuseTextureMap, fileLines[i], folder);
 		}
 		else if (strncmp(line, "map_d ", 6) == 0)
 		{
-			newMaterial->alphaTextureMap = GetSingleString(fileLines[i]);
+			GetTexture(newMaterial->alphaTextureMap, fileLines[i], folder);
 		}
 	}
 
@@ -127,4 +128,24 @@ glm::vec3& MtlLoader::GetVector3(std::string& line)
 	}
 
 	return newVec3;
+}
+
+void MtlLoader::GetTexture(Texture& texture, std::string& line, std::string& folder)
+{
+	string textureName = GetSingleString(line);
+	string texturePath = folder + textureName;
+
+	GLint width, height, nrChannels;
+	stbi_set_flip_vertically_on_load(true);
+	unsigned char* c_data = stbi_load(texturePath.c_str(), &width, &height, &nrChannels, 0);
+
+	if (!c_data)
+	{
+		//TODO Error handling
+	}
+
+	texture.SetWidth(width);
+	texture.SetHeight(height);
+	texture.SetNrChannels(nrChannels);
+	texture.SetData(c_data);
 }
