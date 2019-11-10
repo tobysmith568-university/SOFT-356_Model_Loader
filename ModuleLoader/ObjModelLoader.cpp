@@ -113,7 +113,7 @@ void ObjModelLoader::ReadIndex(Face& face, char* index)
 	face.AddIndex(newIndex);
 }
 
-void ObjModelLoader::ReadMaterials(std::vector<Material>& materials, std::string& line, string& folder)
+void ObjModelLoader::ReadMaterials(vector<Material>& materials, string& line, string& folder)
 {
 	char* materialFileLocation;
 	char* remaining;
@@ -121,9 +121,8 @@ void ObjModelLoader::ReadMaterials(std::vector<Material>& materials, std::string
 	materialFileLocation = strtok_s(remaining, " ", &remaining);
 
 	string materialLocation = folder + materialFileLocation;
-	Material material = mtlLoader.LoadMaterial(materialLocation);
 
-	materials.push_back(material);
+	mtlLoader.LoadMaterials(materials, materialLocation);
 }
 
 void ObjModelLoader::SetVertices(Model& model,
