@@ -3,6 +3,7 @@
 #include <vector>
 
 using namespace std;
+using namespace glm;
 
 MtlLoader::MtlLoader(FileUtils& _fileUtils)
 	: fileUtils(_fileUtils)
@@ -33,19 +34,15 @@ void MtlLoader::LoadMaterials(std::vector<Material>& materials, std::string& fil
 		}
 		else if (strncmp(line, "Ka ", 3) == 0)
 		{
-			//	TODO
+			material->ambientColour = GetVector3(fileLines[i]);
 		}
 		else if (strncmp(line, "Kd ", 3) == 0)
 		{
-			//	TODO
+			material->diffuseColour = GetVector3(fileLines[i]);
 		}
 		else if (strncmp(line, "Ks ", 3) == 0)
 		{
-			//	TODO
-		}
-		else if (strncmp(line, "Ke ", 3) == 0)
-		{
-			//	TODO
+			material->specularColour = GetVector3(fileLines[i]);
 		}
 		else if (strncmp(line, "d ", 2) == 0)
 		{
@@ -93,4 +90,36 @@ GLfloat MtlLoader::GetSingleFloat(std::string& line)
 GLuint MtlLoader::GetSingleInt(std::string& line)
 {
 	return stoi(GetSingleString(line));
+}
+
+glm::vec3& MtlLoader::GetVector3(std::string& line)
+{
+	GLuint value = 0;
+
+	vec3 newVec3 = vec3();
+
+	char* word;
+	char* remaining;
+	word = strtok_s((char*)line.c_str(), " ", &remaining);
+	word = strtok_s(remaining, " ", &remaining);
+	while (word != NULL)
+	{
+		if (value == 0)
+		{
+			newVec3.x = stof(word);
+		}
+		else if (value == 1)
+		{
+			newVec3.y = stof(word);
+		}
+		else if (value == 2)
+		{
+			newVec3.z = stof(word);
+		}
+
+		value++;
+		word = strtok_s(remaining, " ", &remaining);
+	}
+
+	return newVec3;
 }
