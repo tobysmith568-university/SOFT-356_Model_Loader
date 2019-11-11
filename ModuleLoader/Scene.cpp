@@ -50,22 +50,22 @@ void Scene::Update()
 
 void Scene::BindMovements()
 {
-	inputManager.RegisterKeyPress(KeyBinding::RotateXPositive, [&]() {
+	inputManager.RegisterKeyRepeat(KeyBinding::RotateXPositive, [&]() {
 		models[models.size() - 1].GetMVPBuilder().AddRotation(5.0f, 0.0f, 1.0f, 0.0f);
 	});
-	inputManager.RegisterKeyPress(KeyBinding::RotateXNegative, [&]() {
+	inputManager.RegisterKeyRepeat(KeyBinding::RotateXNegative, [&]() {
 		models[models.size() - 1].GetMVPBuilder().AddRotation(-5.0f, 0.0f, 1.0f, 0.0f);
 	});
-	inputManager.RegisterKeyPress(KeyBinding::RotateYPositive, [&]() {
+	inputManager.RegisterKeyRepeat(KeyBinding::RotateYPositive, [&]() {
 		models[models.size() - 1].GetMVPBuilder().AddRotation(5.0f, 1.0f, 0.0f, 0.0f);
 	});
-	inputManager.RegisterKeyPress(KeyBinding::RotateYNegative, [&]() {
+	inputManager.RegisterKeyRepeat(KeyBinding::RotateYNegative, [&]() {
 		models[models.size() - 1].GetMVPBuilder().AddRotation(-5.0f, 1.0f, 0.0f, 0.0f);
 	});
-	inputManager.RegisterKeyPress(KeyBinding::ScaleUp, [&]() {
+	inputManager.RegisterKeyRepeat(KeyBinding::ScaleUp, [&]() {
 		models[models.size() - 1].GetMVPBuilder().AddScale(1.01f, 1.01f, 1.01f);
 	});
-	inputManager.RegisterKeyPress(KeyBinding::ScaleDown, [&]() {
+	inputManager.RegisterKeyRepeat(KeyBinding::ScaleDown, [&]() {
 		models[models.size() - 1].GetMVPBuilder().AddScale(0.99f, 0.99f, 0.99f);
 	});
 	inputManager.RegisterKeyPress(KeyBinding::NewModel, [&]() {

@@ -13,6 +13,16 @@ void InputManager::BindWindow(GLFWwindow* window)
 
 		if (action == GLFW_PRESS || action == GLFW_REPEAT)
 		{
+			std::map<int, std::vector<std::function<void()>>> allActions = self.GetKeyRepeats();
+
+			for (auto& callback : allActions[key])
+			{
+				callback();
+			}
+		}
+
+		if (action == GLFW_PRESS)
+		{
 			std::map<int, std::vector<std::function<void()>>> allActions = self.GetKeyPresses();
 
 			for (auto& callback : allActions[key])
@@ -20,7 +30,8 @@ void InputManager::BindWindow(GLFWwindow* window)
 				callback();
 			}
 		}
-		else if (action == GLFW_RELEASE)
+		
+		if (action == GLFW_RELEASE)
 		{
 			std::map<int, std::vector<std::function<void()>>> allActions = self.GetKeyReleases();
 
@@ -38,6 +49,12 @@ void InputManager::RegisterKeyPress(KeyBinding keyBinding, std::function<void()>
 	keyPresses[key].push_back(callback);
 }
 
+void InputManager::RegisterKeyRepeat(KeyBinding keyBinding, std::function<void()> callback)
+{
+	int key = configUtil.GetKeyBinding(keyBinding);
+	keyRepeats[key].push_back(callback);
+}
+
 void InputManager::RegisterKeyRelease(KeyBinding keyBinding, std::function<void()> callback)
 {
 	int key = configUtil.GetKeyBinding(keyBinding);
@@ -47,6 +64,11 @@ void InputManager::RegisterKeyRelease(KeyBinding keyBinding, std::function<void(
 std::map<int, std::vector<std::function<void()>>> InputManager::GetKeyPresses()
 {
 	return keyPresses;
+}
+
+std::map<int, std::vector<std::function<void()>>> InputManager::GetKeyRepeats()
+{
+	return keyRepeats;
 }
 
 std::map<int, std::vector<std::function<void()>>> InputManager::GetKeyReleases()
