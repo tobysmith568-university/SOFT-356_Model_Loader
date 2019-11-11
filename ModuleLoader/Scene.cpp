@@ -41,7 +41,6 @@ void Scene::Update()
 		models[i].Update();
 	}
 	
-
 	// bind textures on corresponding texture units
 	glFrontFace(GL_CW);
 	glCullFace(GL_BACK);
@@ -163,8 +162,12 @@ void Scene::CreateAndBindShaderProgram()
 void Scene::AddModel()
 {
 	string filename = consoleUtil.GetFileName("Enter a file name for a model");
+
 	IModelLoader& ml = modelLoaderFactory.GetLoaderForFile(filename);
 	models.push_back(Model(program));
 	ml.GetModel(models[models.size() - 1], filename, program);
 	models[models.size() - 1].Init();
+	activeModel = models.size() - 1;
+
+	consoleUtil.ClearConsole();
 }
