@@ -42,7 +42,16 @@ enum class KeyBinding
 	ScaleDown,
 	NewModel,
 	Reset,
-	Quit
+	Quit,
+	FirstModel,
+	SecondModel,
+	ThirdModel,
+	FourthModel,
+	FifthModel,
+	SixthModel,
+	SeventhModel,
+	EighthModel,
+	NinthModel
 };
 
 class ConfigUtil

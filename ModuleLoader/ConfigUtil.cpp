@@ -139,16 +139,38 @@ string ConfigUtil::GetKeyBindingValue(KeyBinding keyBinding)
 		return "KeyBinding_RotateYPositive";
 	case KeyBinding::RotateYNegative:
 		return "KeyBinding_RotateYNegative";
+
 	case KeyBinding::ScaleUp:
 		return "KeyBinding_ScaleUp";
 	case KeyBinding::ScaleDown:
 		return "KeyBinding_ScaleDown";
+
 	case KeyBinding::NewModel:
 		return "KeyBinding_NewModel";
 	case KeyBinding::Reset:
 		return "KeyBinding_Reset";
 	case KeyBinding::Quit:
 		return "KeyBinding_Quit";
+
+	case KeyBinding::FirstModel:
+		return "KeyBinding_FirstModel";
+	case KeyBinding::SecondModel:
+		return "KeyBinding_SecondModel";
+	case KeyBinding::ThirdModel:
+		return "KeyBinding_ThirdModel";
+	case KeyBinding::FourthModel:
+		return "KeyBinding_FourthModel";
+	case KeyBinding::FifthModel:
+		return "KeyBinding_FifthModel";
+	case KeyBinding::SixthModel:
+		return "KeyBinding_SixthModel";
+	case KeyBinding::SeventhModel:
+		return "KeyBinding_SeventhModel";
+	case KeyBinding::EighthModel:
+		return "KeyBinding_EighthModel";
+	case KeyBinding::NinthModel:
+		return "KeyBinding_NinthModel";
+
 	default:
 		return "";
 	}

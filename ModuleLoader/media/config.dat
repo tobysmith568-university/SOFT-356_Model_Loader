@@ -14,12 +14,26 @@ autoRotate=0
 vertexShader=media/triangles.vert
 fragmentShader=media/triangles.frag
 
+
+
 KeyBinding_RotateXPositive=262
 KeyBinding_RotateXNegative=263
 KeyBinding_RotateYPositive=264
 KeyBinding_RotateYNegative=265
+
 KeyBinding_ScaleUp=334
 KeyBinding_ScaleDown=333
+
 KeyBinding_NewModel=78
 KeyBinding_Reset=82
 KeyBinding_Quit=81
+
+KeyBinding_FirstModel=49
+KeyBinding_SecondModel=50
+KeyBinding_ThirdModel=51
+KeyBinding_FourthModel=52
+KeyBinding_FifthModel=53
+KeyBinding_SixthModel=54
+KeyBinding_SeventhModel=55
+KeyBinding_EighthModel=56
+KeyBinding_NinthModel=57

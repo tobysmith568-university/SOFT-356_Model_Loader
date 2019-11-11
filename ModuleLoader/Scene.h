@@ -31,6 +31,7 @@ private:
 	bool autoRotate;
 
 	std::vector<Model> models;
+	GLuint activeModel;
 
 	GLuint program;
 

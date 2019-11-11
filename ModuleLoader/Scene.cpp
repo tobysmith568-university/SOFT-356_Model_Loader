@@ -51,31 +51,76 @@ void Scene::Update()
 void Scene::BindMovements()
 {
 	inputManager.RegisterKeyRepeat(KeyBinding::RotateXPositive, [&]() {
-		models[models.size() - 1].GetMVPBuilder().AddRotation(5.0f, 0.0f, 1.0f, 0.0f);
+		if (models.size() > activeModel)
+		{
+			models[activeModel].GetMVPBuilder().AddRotation(5.0f, 0.0f, 1.0f, 0.0f);
+		}
 	});
 	inputManager.RegisterKeyRepeat(KeyBinding::RotateXNegative, [&]() {
-		models[models.size() - 1].GetMVPBuilder().AddRotation(-5.0f, 0.0f, 1.0f, 0.0f);
+		if (models.size() > activeModel)
+		{
+			models[activeModel].GetMVPBuilder().AddRotation(-5.0f, 0.0f, 1.0f, 0.0f);
+		}
 	});
 	inputManager.RegisterKeyRepeat(KeyBinding::RotateYPositive, [&]() {
-		models[models.size() - 1].GetMVPBuilder().AddRotation(5.0f, 1.0f, 0.0f, 0.0f);
+		if (models.size() > activeModel)
+		{
+			models[activeModel].GetMVPBuilder().AddRotation(5.0f, 1.0f, 0.0f, 0.0f);
+		}
 	});
 	inputManager.RegisterKeyRepeat(KeyBinding::RotateYNegative, [&]() {
-		models[models.size() - 1].GetMVPBuilder().AddRotation(-5.0f, 1.0f, 0.0f, 0.0f);
+		if (models.size() > activeModel)
+		{
+			models[activeModel].GetMVPBuilder().AddRotation(-5.0f, 1.0f, 0.0f, 0.0f);
+		}
 	});
 	inputManager.RegisterKeyRepeat(KeyBinding::ScaleUp, [&]() {
-		models[models.size() - 1].GetMVPBuilder().AddScale(1.01f, 1.01f, 1.01f);
+		if (models.size() > activeModel)
+		{
+			models[activeModel].GetMVPBuilder().AddScale(1.01f, 1.01f, 1.01f);
+		}
 	});
 	inputManager.RegisterKeyRepeat(KeyBinding::ScaleDown, [&]() {
-		models[models.size() - 1].GetMVPBuilder().AddScale(0.99f, 0.99f, 0.99f);
+		if (models.size() > activeModel)
+		{
+			models[activeModel].GetMVPBuilder().AddScale(0.99f, 0.99f, 0.99f);
+		}
 	});
 	inputManager.RegisterKeyPress(KeyBinding::NewModel, [&]() {
 		AddModel();
 	});
 	inputManager.RegisterKeyPress(KeyBinding::Reset, [&]() {
-		for (size_t i = 0; i < models.size(); i++)
+		if (models.size() > activeModel)
 		{
-			models[i].GetMVPBuilder() = MVPBuilder();
+			models[activeModel].GetMVPBuilder() = MVPBuilder();
 		}
+	});
+	inputManager.RegisterKeyPress(KeyBinding::FirstModel, [&]() {
+		activeModel = 0;
+	});
+	inputManager.RegisterKeyPress(KeyBinding::SecondModel, [&]() {
+		activeModel = 1;
+	});
+	inputManager.RegisterKeyPress(KeyBinding::ThirdModel, [&]() {
+		activeModel = 2;
+	});
+	inputManager.RegisterKeyPress(KeyBinding::FourthModel, [&]() {
+		activeModel = 3;
+	});
+	inputManager.RegisterKeyPress(KeyBinding::FifthModel, [&]() {
+		activeModel = 4;
+	});
+	inputManager.RegisterKeyPress(KeyBinding::SixthModel, [&]() {
+		activeModel = 5;
+	});
+	inputManager.RegisterKeyPress(KeyBinding::SeventhModel, [&]() {
+		activeModel = 6;
+	});
+	inputManager.RegisterKeyPress(KeyBinding::EighthModel, [&]() {
+		activeModel = 7;
+	});
+	inputManager.RegisterKeyPress(KeyBinding::NinthModel, [&]() {
+		activeModel = 8;
 	});
 }
 
