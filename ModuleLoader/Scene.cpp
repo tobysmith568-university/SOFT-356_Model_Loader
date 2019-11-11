@@ -24,12 +24,12 @@ Scene::Scene(ConfigUtil& _configUtil, FileUtils& _fileUtils, InputManager& _inpu
 	BindBackgroundColours();
 
 	autoRotate = configUtil.GetBool(BoolSetting::AutoRotate);
-
-	AddModel();
 }
 
 void Scene::Update()
 {
+	glClear(GL_COLOR_BUFFER_BIT);
+
 	for (size_t i = 0; i < models.size(); i++)
 	{
 		if (autoRotate)
@@ -41,7 +41,6 @@ void Scene::Update()
 		models[i].Update();
 	}
 	
-	glClear(GL_COLOR_BUFFER_BIT);
 
 	// bind textures on corresponding texture units
 	glFrontFace(GL_CW);

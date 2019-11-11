@@ -9,6 +9,11 @@ void InputManager::BindWindow(GLFWwindow* window)
 	glfwSetWindowUserPointer(window, this);
 	glfwSetKeyCallback(window, [](GLFWwindow * window, int key, int scancode, int action, int mode)
 	{
+		if (action == 0)
+		{
+			return;
+		}
+
 		auto& self = *static_cast<InputManager*>(glfwGetWindowUserPointer(window));
 
 		std::map<int, std::vector<std::function<void()>>> allActions = self.GetActions();

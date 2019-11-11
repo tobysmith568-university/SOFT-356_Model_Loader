@@ -28,10 +28,7 @@ int main(int argc, char** argv)
 	GLFWUtil glfwUtil = GLFWUtil(configUtil, inputManager);
 	GLEWUtil glewUtil = GLEWUtil();
 
-	while (true)
-	{
-		RunScene(fileUtils, consoleUtil, configUtil, inputManager, modelLoaderFactory, glfwUtil, glewUtil);
-	}
+	RunScene(fileUtils, consoleUtil, configUtil, inputManager, modelLoaderFactory, glfwUtil, glewUtil);
 }
 
 void RunScene(FileUtils& fileUtils, ConsoleUtil& consoleUtil, ConfigUtil& configUtil, InputManager& inputManager,
