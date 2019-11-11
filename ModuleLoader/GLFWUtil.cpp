@@ -29,7 +29,7 @@ void GLFWUtil::Init()
 	glfwMakeContextCurrent(window);
 
 	inputManager.BindWindow(window);
-	inputManager.RegisterMapping(KeyBinding::Quit, [&]() { SetShouldClose(true); });
+	inputManager.RegisterKeyPress(KeyBinding::Quit, [&]() { SetShouldClose(true); });
 }
 
 void GLFWUtil::Update()
