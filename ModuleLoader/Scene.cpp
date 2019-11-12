@@ -42,7 +42,7 @@ void Scene::Update()
 	}
 	
 	// bind textures on corresponding texture units
-	glFrontFace(GL_CW);
+	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
 	glEnable(GL_CULL_FACE);
 }

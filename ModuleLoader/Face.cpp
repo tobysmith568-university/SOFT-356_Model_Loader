@@ -16,19 +16,19 @@ GLuint Face::GetOffset(std::vector<GLuint>& positions, GLuint offset)
 {
 	if (indices.size() == 3)
 	{
-		positions.push_back(2 + offset);
-		positions.push_back(1 + offset);
 		positions.push_back(0 + offset);
+		positions.push_back(1 + offset);
+		positions.push_back(2 + offset);
 
 		return offset + 3;
 	}
 
-	positions.push_back(2 + offset);
+	positions.push_back(0 + offset);
 	positions.push_back(1 + offset);
-	positions.push_back(0 + offset);
-	positions.push_back(3 + offset);
 	positions.push_back(2 + offset);
 	positions.push_back(0 + offset);
+	positions.push_back(2 + offset);
+	positions.push_back(3 + offset);
 
 	return offset + 4;
 }
