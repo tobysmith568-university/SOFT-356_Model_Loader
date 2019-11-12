@@ -50,6 +50,11 @@ void Mesh::SetMaterial(Material& _material)
 	material = _material;
 }
 
+Material& Mesh::GetMaterial()
+{
+	return material;
+}
+
 void Mesh::CreateAndUseVAO()
 {
 	glGenVertexArrays(1, &VAO);
@@ -76,6 +81,9 @@ void Mesh::BindIndices()
 
 	glVertexAttribPointer(tPosition, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(offsetof(Vertex, texture)));
 	glEnableVertexAttribArray(tPosition);
+
+	glVertexAttribPointer(cPosition, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), BUFFER_OFFSET(offsetof(Vertex, colour)));
+	glEnableVertexAttribArray(cPosition);
 }
 
 void Mesh::BindTexture()

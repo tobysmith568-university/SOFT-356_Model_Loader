@@ -5,6 +5,7 @@ Vertex::Vertex()
 	position = vec3();
 	texture = vec2();
 	normal = vec3();
+	colour = vec4();
 }
 
 void Vertex::SetPosition(GLfloat x, GLfloat y, GLfloat z)
@@ -25,4 +26,12 @@ void Vertex::SetNormal(GLfloat x, GLfloat y, GLfloat z)
 	normal.x = x;
 	normal.y = y;
 	normal.z = z;
+}
+
+void Vertex::SetColour(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
+{
+	colour.r = r;
+	colour.g = g;
+	colour.b = b;
+	colour.a = a;
 }

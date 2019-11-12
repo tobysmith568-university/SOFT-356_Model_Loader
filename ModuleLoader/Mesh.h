@@ -21,6 +21,7 @@ public:
 	void SetIndicies(std::vector<GLuint> _indicies);
 
 	void SetMaterial(Material& _material);
+	Material& GetMaterial();
 
 	void CreateAndUseVAO();
 	void BindVertices();

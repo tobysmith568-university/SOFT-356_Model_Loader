@@ -217,6 +217,12 @@ void ObjModelLoader::SetVertices(Mesh& mesh,
 				normalValues[normalValue + 1],
 				normalValues[normalValue + 2]);
 
+			vertex.SetColour(
+				mesh.GetMaterial().diffuseColour.r,
+				mesh.GetMaterial().diffuseColour.g,
+				mesh.GetMaterial().diffuseColour.b,
+				mesh.GetMaterial().dissolve);
+
 			vertices.push_back(vertex);
 		}
 	}
