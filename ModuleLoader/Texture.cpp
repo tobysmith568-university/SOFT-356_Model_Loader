@@ -3,6 +3,10 @@
 
 Texture::Texture()
 {
+	data = (const unsigned char*)"ÿÿÿÿıııı¬¼å¿P";
+	height = 1;
+	width = 1;
+	nrChannels = 4;
 }
 
 GLint Texture::GetWidth()
