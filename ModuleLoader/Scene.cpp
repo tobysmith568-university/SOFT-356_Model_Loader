@@ -19,6 +19,7 @@ using namespace std;
 Scene::Scene(ConfigUtil& _configUtil, FileUtils& _fileUtils, InputManager& _inputManager, ConsoleUtil& _consoleUtil, ModelLoaderFactory& _modelLoaderFactory)
 			: configUtil(_configUtil), fileUtils(_fileUtils), inputManager(_inputManager), consoleUtil(_consoleUtil), modelLoaderFactory(_modelLoaderFactory)
 {
+	SetGlobalState();
 	BindMovements();
 	CreateAndBindShaderProgram();
 	BindBackgroundColours();
@@ -28,7 +29,7 @@ Scene::Scene(ConfigUtil& _configUtil, FileUtils& _fileUtils, InputManager& _inpu
 
 void Scene::Update()
 {
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	for (size_t i = 0; i < models.size(); i++)
 	{
@@ -40,11 +41,14 @@ void Scene::Update()
 
 		models[i].Update();
 	}
-	
-	// bind textures on corresponding texture units
+}
+
+void Scene::SetGlobalState()
+{
 	glFrontFace(GL_CCW);
 	glCullFace(GL_BACK);
 	glEnable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
 }
 
 void Scene::BindMovements()

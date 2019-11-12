@@ -12,7 +12,6 @@ void
 main()
 {
     gl_Position = mvp * vec4 (vPosition,1.0);
-	fragColour = vec4(0.5, 0.4, 0.8, 1.0);
 	fragColour = vColour;
 	TexCoord = aTexCoord;
 }

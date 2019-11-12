@@ -35,6 +35,7 @@ private:
 
 	GLuint program;
 
+	void SetGlobalState();
 	void BindMovements();
 	void BindBackgroundColours();
 	float NormalizeColour(float colour);

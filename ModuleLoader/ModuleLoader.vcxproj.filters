@@ -198,5 +198,11 @@
     <Object Include="media\Creeper.obj">
       <Filter>Resource Files</Filter>
     </Object>
+    <Object Include="media\low_poly_boat.obj">
+      <Filter>Resource Files</Filter>
+    </Object>
+    <Object Include="media\pouf.obj">
+      <Filter>Resource Files</Filter>
+    </Object>
   </ItemGroup>
 </Project>
