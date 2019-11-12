@@ -21,12 +21,19 @@ KeyBinding_RotateXNegative=263
 KeyBinding_RotateYPositive=264
 KeyBinding_RotateYNegative=265
 
+KeyBinding_MoveUp=81
+KeyBinding_MoveDown=69
+KeyBinding_MoveForward=87
+KeyBinding_MoveBackward=83
+KeyBinding_MoveLeft=65
+KeyBinding_MoveRight=68
+
 KeyBinding_ScaleUp=334
 KeyBinding_ScaleDown=333
 
 KeyBinding_NewModel=78
 KeyBinding_Reset=82
-KeyBinding_Quit=81
+KeyBinding_Quit=256
 
 KeyBinding_FirstModel=49
 KeyBinding_SecondModel=50

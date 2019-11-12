@@ -77,6 +77,42 @@ void Scene::BindMovements()
 			models[activeModel].GetMVPBuilder().AddRotation(-5.0f, 1.0f, 0.0f, 0.0f);
 		}
 	});
+	inputManager.RegisterKeyRepeat(KeyBinding::MoveUp, [&]() {
+		if (models.size() > activeModel)
+		{
+			models[activeModel].GetMVPBuilder().AddTranslation(0.0f, 0.1f, 0.0f);
+		}
+		});
+	inputManager.RegisterKeyRepeat(KeyBinding::MoveDown, [&]() {
+		if (models.size() > activeModel)
+		{
+			models[activeModel].GetMVPBuilder().AddTranslation(0.0f, -0.1f, 0.0f);
+		}
+		});
+	inputManager.RegisterKeyRepeat(KeyBinding::MoveForward, [&]() {
+		if (models.size() > activeModel)
+		{
+			models[activeModel].GetMVPBuilder().AddTranslation(0.0f, 0.0f, -0.1f);
+		}
+		});
+	inputManager.RegisterKeyRepeat(KeyBinding::MoveBackward, [&]() {
+		if (models.size() > activeModel)
+		{
+			models[activeModel].GetMVPBuilder().AddTranslation(0.0f, 0.0f, 0.1f);
+		}
+		});
+	inputManager.RegisterKeyRepeat(KeyBinding::MoveLeft, [&]() {
+		if (models.size() > activeModel)
+		{
+			models[activeModel].GetMVPBuilder().AddTranslation(-0.1f, 0.0f, 0.0f);
+		}
+	});
+	inputManager.RegisterKeyRepeat(KeyBinding::MoveRight, [&]() {
+		if (models.size() > activeModel)
+		{
+			models[activeModel].GetMVPBuilder().AddTranslation(0.1f, 0.0f, 0.0f);
+		}
+	});
 	inputManager.RegisterKeyRepeat(KeyBinding::ScaleUp, [&]() {
 		if (models.size() > activeModel)
 		{

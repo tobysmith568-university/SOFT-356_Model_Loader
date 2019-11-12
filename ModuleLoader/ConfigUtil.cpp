@@ -140,6 +140,19 @@ string ConfigUtil::GetKeyBindingValue(KeyBinding keyBinding)
 	case KeyBinding::RotateYNegative:
 		return "KeyBinding_RotateYNegative";
 
+	case KeyBinding::MoveUp:
+		return "KeyBinding_MoveUp";
+	case KeyBinding::MoveDown:
+		return "KeyBinding_MoveDown";
+	case KeyBinding::MoveForward:
+		return "KeyBinding_MoveForward";
+	case KeyBinding::MoveBackward:
+		return "KeyBinding_MoveBackward";
+	case KeyBinding::MoveLeft:
+		return "KeyBinding_MoveLeft";
+	case KeyBinding::MoveRight:
+		return "KeyBinding_MoveRight";
+
 	case KeyBinding::ScaleUp:
 		return "KeyBinding_ScaleUp";
 	case KeyBinding::ScaleDown:
