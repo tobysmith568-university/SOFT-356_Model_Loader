@@ -185,6 +185,9 @@
     <ClCompile Include="Object.cpp">
       <Filter>Source Files\ModelLoading</Filter>
     </ClCompile>
+    <ClCompile Include="SceneKeyBindings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="media\textures\smile.jpg">

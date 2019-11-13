@@ -242,8 +242,3 @@ void ObjModelLoader::SetIndices(Mesh& mesh, vector<Face>& faces)
 
 	mesh.SetIndicies(indices);
 }
-
-std::string ObjModelLoader::GetTextureName(std::string& fileLocation)
-{
-	return "media/Texture.png";
-}

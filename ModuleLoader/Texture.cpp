@@ -3,7 +3,7 @@
 
 Texture::Texture()
 {
-	data = (const unsigned char*)"ÿÿÿÿıııı¬¼å¿P";
+	data = (const unsigned char*)"ÿÿÿ";
 	height = 1;
 	width = 1;
 	nrChannels = 4;

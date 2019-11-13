@@ -28,6 +28,4 @@ private:
 		std::vector<GLfloat>& normalValues,
 		std::vector<Face>& faceValues);
 	void SetIndices(Mesh&, std::vector<Face>& faces);
-
-	std::string GetTextureName(std::string& fileLocation);
 };

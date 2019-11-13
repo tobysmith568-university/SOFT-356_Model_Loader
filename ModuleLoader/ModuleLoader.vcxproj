@@ -174,6 +174,7 @@
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="ObjModelLoader.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneKeyBindings.cpp" />
     <ClCompile Include="ShaderProgramBuilder.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TexturedCube.cpp" />
