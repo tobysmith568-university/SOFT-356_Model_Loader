@@ -184,6 +184,9 @@ string ConfigUtil::GetKeyBindingValue(KeyBinding keyBinding)
 	case KeyBinding::NinthModel:
 		return "KeyBinding_NinthModel";
 
+	case KeyBinding::SaveModelAsBasic:
+		return "KeyBinding_SaveModelAsBasic";
+
 	default:
 		return "";
 	}

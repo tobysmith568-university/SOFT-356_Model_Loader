@@ -133,4 +133,11 @@ void Scene::BindMovements()
 	{
 		activeModel = 8;
 	});
+	inputManager.RegisterKeyPress(KeyBinding::SaveModelAsBasic, [&]()
+	{
+		if (models.size() > activeModel)
+		{
+			basicModelExporter.Export(models[activeModel]);
+		}
+	});
 }

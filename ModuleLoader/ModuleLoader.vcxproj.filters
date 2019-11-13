@@ -25,6 +25,12 @@
     <Filter Include="Source Files\ModelLoading\Obj">
       <UniqueIdentifier>{8e99054d-5367-4b53-821e-fa669b045e5e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\ModelLoading\Basic">
+      <UniqueIdentifier>{ea430c11-b4c9-4df3-b191-a3769afba3e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ModelLoading\Basic">
+      <UniqueIdentifier>{796f15d7-2c8b-49b5-98ed-d9694e424218}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stb_image.h">
@@ -95,6 +101,9 @@
     </ClInclude>
     <ClInclude Include="Object.h">
       <Filter>Header Files\ModelLoading</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicModelExporter.h">
+      <Filter>Header Files\ModelLoading\Basic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -187,6 +196,9 @@
     </ClCompile>
     <ClCompile Include="SceneKeyBindings.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicModelExporter.cpp">
+      <Filter>Source Files\ModelLoading\Basic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

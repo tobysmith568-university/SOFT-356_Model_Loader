@@ -57,7 +57,8 @@ enum class KeyBinding
 	SixthModel,
 	SeventhModel,
 	EighthModel,
-	NinthModel
+	NinthModel,
+	SaveModelAsBasic
 };
 
 class ConfigUtil

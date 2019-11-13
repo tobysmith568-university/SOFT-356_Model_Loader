@@ -18,4 +18,6 @@ public:
 
 	std::string ReadFile(std::string fileLocation);
 	std::vector<std::string> ReadFileAsLines(std::string fileLocation);
+
+	void SaveFile(std::string& data, std::string& fileLocation);
 };

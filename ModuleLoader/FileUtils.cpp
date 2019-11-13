@@ -117,3 +117,19 @@ vector<string> FileUtils::ReadFileAsLines(string fileLocation)
 
 	return result;
 }
+
+void FileUtils::SaveFile(std::string& data, std::string& fileLocation)
+{
+	ofstream file;
+	file.open(fileLocation, ios::out | ios::trunc);
+
+	if (!file.is_open())
+	{
+		cout << "Failed to open file!";
+		return;
+	}
+
+	file << data;
+
+	file.close();
+}

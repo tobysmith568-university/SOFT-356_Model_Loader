@@ -9,6 +9,7 @@
 #include "Texture.h"
 #include "ConsoleUtil.h"
 #include "ModelLoaderFactory.h"
+#include "BasicModelExporter.h"
 
 #include <glm/glm.hpp> //includes GLM
 #include <vector>
@@ -16,15 +17,17 @@
 class Scene
 {
 public:
-	Scene(ConfigUtil& _configUtil, FileUtils& _fileUtils, InputManager& _inputManager, ConsoleUtil& _consoleUtil, ModelLoaderFactory& _modelLoaderFactory);
+	Scene(ConfigUtil& _configUtil, FileUtils& _fileUtils, InputManager& _inputManager,
+		ConsoleUtil& _consoleUtil, ModelLoaderFactory& _modelLoaderFactory, BasicModelExporter& _basicModelExporter);
 	void Update();
 
 private:
-	ConfigUtil& configUtil;
-	FileUtils& fileUtils;
+	ConfigUtil configUtil;
+	FileUtils fileUtils;
 	InputManager& inputManager;
-	ConsoleUtil& consoleUtil;
-	ModelLoaderFactory& modelLoaderFactory;
+	ConsoleUtil consoleUtil;
+	ModelLoaderFactory modelLoaderFactory;
+	BasicModelExporter basicModelExporter;
 
 	enum VAO_IDs { Vertices, Triangles, Colours, Tex };
 	enum Buffer_IDs { ArrayBuffer };
