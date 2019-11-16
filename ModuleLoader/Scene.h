@@ -44,4 +44,5 @@ private:
 	float NormalizeColour(float colour);
 	void CreateAndBindShaderProgram();
 	void AddModel();
+	void DeleteModel();
 };

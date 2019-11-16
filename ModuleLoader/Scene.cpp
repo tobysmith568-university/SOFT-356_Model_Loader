@@ -102,3 +102,11 @@ void Scene::AddModel()
 
 	consoleUtil.ClearConsole();
 }
+
+void Scene::DeleteModel()
+{
+	if (models.size() > 0)
+	{
+		models.pop_back();
+	}
+}

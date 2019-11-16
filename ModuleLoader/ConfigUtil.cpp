@@ -160,6 +160,8 @@ string ConfigUtil::GetKeyBindingValue(KeyBinding keyBinding)
 
 	case KeyBinding::NewModel:
 		return "KeyBinding_NewModel";
+	case KeyBinding::DeleteModel:
+		return "KeyBinding_DeleteModel";
 	case KeyBinding::Reset:
 		return "KeyBinding_Reset";
 	case KeyBinding::Quit:

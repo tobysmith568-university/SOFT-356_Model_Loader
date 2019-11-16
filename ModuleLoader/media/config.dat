@@ -32,6 +32,7 @@ KeyBinding_ScaleUp=334
 KeyBinding_ScaleDown=333
 
 KeyBinding_NewModel=78
+KeyBinding_DeleteModel=261
 KeyBinding_Reset=82
 KeyBinding_Quit=256
 

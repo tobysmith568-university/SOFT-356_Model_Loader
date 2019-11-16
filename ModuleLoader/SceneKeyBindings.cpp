@@ -90,6 +90,10 @@ void Scene::BindMovements()
 	{
 		AddModel();
 	});
+	inputManager.RegisterKeyPress(KeyBinding::DeleteModel, [&]()
+	{
+		DeleteModel();
+	});
 	inputManager.RegisterKeyPress(KeyBinding::Reset, [&]()
 	{
 		if (models.size() > activeModel)

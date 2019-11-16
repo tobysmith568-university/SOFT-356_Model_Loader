@@ -11,6 +11,7 @@ struct Vertex
 {
 public:
 	Vertex();
+
 	void SetPosition(GLfloat x, GLfloat y, GLfloat z);
 	void SetTexture(GLfloat x, GLfloat y);
 	void SetNormal(GLfloat x, GLfloat y, GLfloat z);

@@ -47,6 +47,7 @@ enum class KeyBinding
 	ScaleUp,
 	ScaleDown,
 	NewModel,
+	DeleteModel,
 	Reset,
 	Quit,
 	FirstModel,

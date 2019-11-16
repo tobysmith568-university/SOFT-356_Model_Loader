@@ -95,6 +95,7 @@ string FileUtils::ReadFile(string fileLocation)
 {
 	ifstream stream(fileLocation);
 	string content = string(istreambuf_iterator<char>(stream), istreambuf_iterator<char>());
+
 	return content;
 }
 
