@@ -1,11 +1,19 @@
 #include "InvalidModelFileException.h"
 
-InvalidModelFileException::InvalidModelFileException(char const* const fileLocation, char const* const message)
-	: fileLocation(fileLocation), std::runtime_error(message)
+InvalidModelFileException::InvalidModelFileException(std::string fileLocation, std::string message)
+	: fileLocation(fileLocation), message(message)
 {
 }
 
-InvalidModelFileException::InvalidModelFileException(char const* const fileLocation, std::runtime_error inner)
-	: fileLocation(fileLocation), std::runtime_error(inner)
+std::string InvalidModelFileException::What()
 {
+	std::string result = "\n\nThere was a problem with the file:\n"
+		+ fileLocation;
+
+	if (message.size() > 0)
+	{
+		result += "\n\n" + message;
+	}
+
+	return result;
 }

@@ -18,7 +18,7 @@ IModelLoader& ModelLoaderFactory::GetLoaderForFile(std::string fileLocation)
 	if (fileExtension == "obj")
 	{
 		static MtlLoader mtlLoader = MtlLoader(fileUtils);
-		static ObjModelLoader objModelLoader = ObjModelLoader(fileUtils, mtlLoader);
+		static ObjModelLoader objModelLoader = ObjModelLoader(fileUtils, consoleUtil, mtlLoader);
 		return objModelLoader;
 	}
 	else if (fileExtension == "basic")

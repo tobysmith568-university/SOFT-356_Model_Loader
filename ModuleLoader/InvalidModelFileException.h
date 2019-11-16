@@ -2,12 +2,13 @@
 
 #include <stdexcept>
 
-class InvalidModelFileException : public std::runtime_error
+class InvalidModelFileException
 {
 public:
-	InvalidModelFileException(char const* const fileLocation, char const* const message);
-	InvalidModelFileException(char const* const fileLocation, std::runtime_error inner);
+	InvalidModelFileException(std::string fileLocation, std::string message);
 
+	std::string What();
 private:
-	char const* const fileLocation;
+	std::string fileLocation;
+	std::string message;
 };

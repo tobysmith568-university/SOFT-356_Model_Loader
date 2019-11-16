@@ -5,20 +5,22 @@
 #include "Face.h"
 #include "Material.h"
 #include "MtlLoader.h"
+#include "ConsoleUtil.h"
 
 class ObjModelLoader : public IModelLoader
 {
 public:
-	ObjModelLoader(FileUtils& _fileUtils, MtlLoader& _mtlLoader);
+	ObjModelLoader(FileUtils& _fileUtils, ConsoleUtil& _consoleUtil, MtlLoader& _mtlLoader);
 	void GetModel(Model& model, std::string fileLocation, GLuint& program);
 
 private:
 	FileUtils fileUtils;
+	ConsoleUtil consoleUtil;
 	MtlLoader mtlLoader;
 
 	char* GetSingleString(std::string& line);
 	void ReadSpaceSepFloats(std::vector<GLfloat>& values, std::string& line);
-	void ReadFace(std::vector<Face>& faces, std::string& line);
+	void ReadFace(std::vector<Face>& faces, std::string& line, std::string& fileName);
 	void ReadIndex(Face& face, char* index);
 	void ReadMaterials(Model& model, std::string& line, std::string& folder);
 

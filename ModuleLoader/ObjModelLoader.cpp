@@ -1,10 +1,11 @@
 #include "ObjModelLoader.h"
 #include "Vertex.h"
+#include "InvalidModelFileException.h"
 
 using namespace std;
 
-ObjModelLoader::ObjModelLoader(FileUtils& _fileUtils, MtlLoader& _mtlLoader)
-	: fileUtils(_fileUtils), mtlLoader(_mtlLoader)
+ObjModelLoader::ObjModelLoader(FileUtils& _fileUtils, ConsoleUtil& _consoleUtil, MtlLoader& _mtlLoader)
+	: fileUtils(_fileUtils), consoleUtil(_consoleUtil), mtlLoader(_mtlLoader)
 {
 }
 
@@ -33,6 +34,11 @@ void ObjModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& pr
 		{
 			if (object != nullptr)
 			{
+				if (object->GetMeshes().size() == 0)
+				{
+					throw InvalidModelFileException(fileLocation.c_str(), ("The object [" + object->GetName() + "] has no material lines").c_str());
+				}
+
 				model.AddObject(*object);
 			}
 
@@ -78,7 +84,7 @@ void ObjModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& pr
 		}
 		else if (strncmp(c_line, "f ", 2) == 0)
 		{
-			ReadFace(faceValues, fileLines[i]);
+			ReadFace(faceValues, fileLines[i], fileLocation);
 		}
 	}
 
@@ -96,7 +102,17 @@ void ObjModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& pr
 
 	if (object != nullptr)
 	{
+		if (object->GetMeshes().size() == 0)
+		{
+			throw InvalidModelFileException(fileLocation.c_str(), ("The object [" + object->GetName() + "] has no material lines").c_str());
+		}
+
 		model.AddObject(*object);
+	}
+
+	if (model.GetObjects().size() == 0)
+	{
+		throw InvalidModelFileException(fileLocation.c_str(), "The given file has no object lines");
 	}
 }
 
@@ -123,21 +139,49 @@ void ObjModelLoader::ReadSpaceSepFloats(vector<GLfloat>& values, string& line)
 	}
 }
 
-void ObjModelLoader::ReadFace(std::vector<Face>& faces, std::string& line)
+void ObjModelLoader::ReadFace(std::vector<Face>& faces, std::string& line, std::string& fileName)
 {
-	Face face = Face();
-
-	char* word;
-	char* remaining;
-	word = strtok_s((char*)line.c_str(), " ", &remaining);
-	word = strtok_s(remaining, " ", &remaining);
-	while (word != NULL)// For each group of numbers
+	GLuint count = 0;
+	try
 	{
-		ReadIndex(face, word);
+		Face face = Face();
+
+		char* word;
+		char* remaining;
+		word = strtok_s((char*)line.c_str(), " ", &remaining);
 		word = strtok_s(remaining, " ", &remaining);
+		while (word != NULL && count < 4)// For each group of numbers
+		{
+			ReadIndex(face, word);
+			word = strtok_s(remaining, " ", &remaining);
+			count++;
+		}
+
+		if (word != NULL)
+		{
+			string data = word + (string)remaining;
+			consoleUtil.Print("\nFound additional data which cannot be rendered:\n" + data);
+		}
+
+		faces.push_back(face);
+	}
+	catch (...)
+	{
+		//The catch code is the code below.
+		//It needs to be run either way in order to also catch too little data as well as too much
 	}
 
-	faces.push_back(face);
+	while (count % 3 != 0 && count % 4 != 0)
+	{
+		faces[faces.size() - 1].GetIndices().pop_back();
+		consoleUtil.Print("\nInvalid data!\nThe resulting model may be missing some faces");
+		count--;
+	}
+
+	if (faces[faces.size() - 1].GetIndices().size() == 0)
+	{
+		throw InvalidModelFileException(fileName, "One or more faces contains no valid data");
+	}
 }
 
 void ObjModelLoader::ReadIndex(Face& face, char* index)

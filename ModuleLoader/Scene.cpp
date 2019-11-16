@@ -13,6 +13,7 @@
 #include <cstddef>
 #include <iostream>
 #include <functional>
+#include "InvalidModelFileException.h"
 
 using namespace std;
 
@@ -92,15 +93,25 @@ void Scene::CreateAndBindShaderProgram()
 
 void Scene::AddModel()
 {
+	consoleUtil.ClearConsole();
 	string filename = consoleUtil.GetFileName("Enter a file name for a model");
 
-	IModelLoader& ml = modelLoaderFactory.GetLoaderForFile(filename);
-	models.push_back(Model(program));
-	ml.GetModel(models[models.size() - 1], filename, program);
-	models[models.size() - 1].Init();
-	activeModel = models.size() - 1;
+	try
+	{
+		IModelLoader& ml = modelLoaderFactory.GetLoaderForFile(filename);
+		Model newModel = Model(program);
+		ml.GetModel(newModel, filename, program);
+		newModel.Init();
+		models.push_back(newModel);
+		activeModel = models.size() - 1;
 
-	consoleUtil.ClearConsole();
+	}
+	catch (InvalidModelFileException& ex)
+	{
+		string message = ex.What();
+		consoleUtil.Print(message);
+	}
+
 }
 
 void Scene::DeleteModel()
