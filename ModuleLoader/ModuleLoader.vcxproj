@@ -155,7 +155,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BasicModelExporter.cpp" />
+    <ClCompile Include="Base64.cpp" />
+    <ClCompile Include="BasicModelLoader.cpp" />
     <ClCompile Include="ConfigUtil.cpp" />
     <ClCompile Include="ConsoleUtil.cpp" />
     <ClCompile Include="Face.cpp" />
@@ -182,7 +183,8 @@
     <ClCompile Include="Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BasicModelExporter.h" />
+    <ClInclude Include="Base64.h" />
+    <ClInclude Include="BasicModelLoader.h" />
     <ClInclude Include="ConfigUtil.h" />
     <ClInclude Include="ConsoleUtil.h" />
     <ClInclude Include="Face.h" />

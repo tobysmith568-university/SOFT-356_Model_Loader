@@ -12,11 +12,12 @@
 #include "InputManager.h"
 #include "ConsoleUtil.h"
 #include "ModelLoaderFactory.h"
+#include "BasicModelLoader.h"
 
 using namespace std;
 
 void RunScene(FileUtils& fileUtils, ConsoleUtil& consoleUtil, ConfigUtil& configUtil, InputManager& inputManager,
-	ModelLoaderFactory& modelLoaderFactory, GLFWUtil& glfwUtil, GLEWUtil& glewUtil, BasicModelExporter& basicModelExporter);
+	ModelLoaderFactory& modelLoaderFactory, GLFWUtil& glfwUtil, GLEWUtil& glewUtil, BasicModelLoader& basicModelLoader);
 
 int main(int argc, char** argv)
 {
@@ -27,13 +28,13 @@ int main(int argc, char** argv)
 	ModelLoaderFactory modelLoaderFactory = ModelLoaderFactory(fileUtils, consoleUtil);
 	GLFWUtil glfwUtil = GLFWUtil(configUtil, inputManager);
 	GLEWUtil glewUtil = GLEWUtil();
-	BasicModelExporter basicModelExporter = BasicModelExporter(fileUtils);
+	BasicModelLoader basicModelLoader = BasicModelLoader(fileUtils);
 
-	RunScene(fileUtils, consoleUtil, configUtil, inputManager, modelLoaderFactory, glfwUtil, glewUtil, basicModelExporter);
+	RunScene(fileUtils, consoleUtil, configUtil, inputManager, modelLoaderFactory, glfwUtil, glewUtil, basicModelLoader);
 }
 
 void RunScene(FileUtils& fileUtils, ConsoleUtil& consoleUtil, ConfigUtil& configUtil, InputManager& inputManager,
-	ModelLoaderFactory& modelLoaderFactory, GLFWUtil& glfwUtil, GLEWUtil& glewUtil, BasicModelExporter& basicModelExporter)
+	ModelLoaderFactory& modelLoaderFactory, GLFWUtil& glfwUtil, GLEWUtil& glewUtil, BasicModelLoader& basicModelLoader)
 {
 	consoleUtil.ClearConsole();
 
@@ -41,7 +42,7 @@ void RunScene(FileUtils& fileUtils, ConsoleUtil& consoleUtil, ConfigUtil& config
 
 	glewUtil.Init();
 	
-	Scene scene = Scene(configUtil, fileUtils, inputManager, consoleUtil, modelLoaderFactory, basicModelExporter);
+	Scene scene = Scene(configUtil, fileUtils, inputManager, consoleUtil, modelLoaderFactory, basicModelLoader);
 
 	bool wireframesOnly = configUtil.GetBool(BoolSetting::UseWireframes);
 	while (!glfwUtil.GetShouldClose())

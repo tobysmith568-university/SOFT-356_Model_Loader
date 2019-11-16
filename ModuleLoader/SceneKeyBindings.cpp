@@ -137,7 +137,7 @@ void Scene::BindMovements()
 	{
 		if (models.size() > activeModel)
 		{
-			basicModelExporter.Export(models[activeModel]);
+			basicModelLoader.Export(models[activeModel]);
 		}
 	});
 }

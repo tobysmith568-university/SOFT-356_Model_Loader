@@ -102,8 +102,11 @@
     <ClInclude Include="Object.h">
       <Filter>Header Files\ModelLoading</Filter>
     </ClInclude>
-    <ClInclude Include="BasicModelExporter.h">
+    <ClInclude Include="BasicModelLoader.h">
       <Filter>Header Files\ModelLoading\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="Base64.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -197,8 +200,11 @@
     <ClCompile Include="SceneKeyBindings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BasicModelExporter.cpp">
+    <ClCompile Include="BasicModelLoader.cpp">
       <Filter>Source Files\ModelLoading\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="Base64.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

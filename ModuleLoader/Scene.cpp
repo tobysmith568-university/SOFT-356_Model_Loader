@@ -17,9 +17,9 @@
 using namespace std;
 
 Scene::Scene(ConfigUtil& _configUtil, FileUtils& _fileUtils, InputManager& _inputManager,
-	ConsoleUtil& _consoleUtil, ModelLoaderFactory& _modelLoaderFactory, BasicModelExporter& _basicModelExporter)
+	ConsoleUtil& _consoleUtil, ModelLoaderFactory& _modelLoaderFactory, BasicModelLoader& _basicModelLoader)
 			: configUtil(_configUtil), fileUtils(_fileUtils), inputManager(_inputManager),
-	consoleUtil(_consoleUtil), modelLoaderFactory(_modelLoaderFactory), basicModelExporter(_basicModelExporter)
+	consoleUtil(_consoleUtil), modelLoaderFactory(_modelLoaderFactory), basicModelLoader(_basicModelLoader)
 {
 	SetGlobalState();
 	BindMovements();

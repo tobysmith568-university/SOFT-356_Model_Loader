@@ -25,6 +25,7 @@ public:
 
 	void AddMaterial(Material& material);
 	Material& GetMaterial(std::string& name);
+	std::vector<Material> GetMaterials();
 
 	MVPBuilder& GetMVPBuilder();
 

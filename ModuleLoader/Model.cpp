@@ -1,5 +1,7 @@
 #include "Model.h"
 
+using namespace std;
+
 Model::Model(GLuint& _program)
 	: program(_program)
 {
@@ -48,6 +50,18 @@ void Model::AddMaterial(Material& material)
 Material& Model::GetMaterial(std::string& name)
 {
 	return materials[name];
+}
+
+std::vector<Material> Model::GetMaterials()
+{
+	vector<Material> results = vector<Material>();
+
+	for (auto& pair : materials)
+	{
+		results.push_back(pair.second);
+	}
+
+	return results;
 }
 
 MVPBuilder& Model::GetMVPBuilder()
