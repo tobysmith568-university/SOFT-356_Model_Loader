@@ -30,6 +30,7 @@ Scene::Scene(ConfigUtil& _configUtil, FileUtils& _fileUtils, InputManager& _inpu
 	autoRotate = configUtil.GetBool(BoolSetting::AutoRotate);
 }
 
+// To be run each tick
 void Scene::Update()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -42,10 +43,11 @@ void Scene::Update()
 				.AddRotation(0.005f, 0.0f, 1.0f, 0.0f);
 		}
 
-		models[i].Update();
+		models[i].Update();// Updates all models in the scene
 	}
 }
 
+// Sets any config for OpenGL
 void Scene::SetGlobalState()
 {
 	glFrontFace(GL_CCW);
@@ -55,6 +57,7 @@ void Scene::SetGlobalState()
 	glEnable(GL_BLEND);
 }
 
+// Binds the default clear colour for the scene
 void Scene::BindBackgroundColours()
 {
 	float backgroundR = configUtil.GetFloat(FloatSetting::BackgroundR);
@@ -70,6 +73,7 @@ void Scene::BindBackgroundColours()
 	glClearColor(backgroundR, backgroundG, backgroundB, backgroundA);
 }
 
+// Mormalizes an R, G, B, or A value
 float Scene::NormalizeColour(float colour)
 {
 	if (colour > 1)
@@ -80,6 +84,7 @@ float Scene::NormalizeColour(float colour)
 	return colour;
 }
 
+// Creates a shader program, links it, and uses it
 void Scene::CreateAndBindShaderProgram()
 {
 	string vertexShaderLocation = configUtil.GetString(StringSetting::VertexShader);
@@ -91,6 +96,7 @@ void Scene::CreateAndBindShaderProgram()
 		.BuildAndUse();
 }
 
+// Adds a new model to the scene from a file
 void Scene::AddModel()
 {
 	consoleUtil.ClearConsole();
@@ -98,9 +104,9 @@ void Scene::AddModel()
 
 	try
 	{
-		IModelLoader& ml = modelLoaderFactory.GetLoaderForFile(filename);
+		IModelLoader& ml = modelLoaderFactory.GetLoaderForFile(filename);// Gets the correct model loader based on the paths .extension
 		Model newModel = Model(program);
-		ml.GetModel(newModel, filename, program);
+		ml.GetModel(newModel, filename, program);// Loads in model data using that model loader
 		newModel.Init();
 		models.push_back(newModel);
 		activeModel = models.size() - 1;
@@ -114,6 +120,7 @@ void Scene::AddModel()
 
 }
 
+// Removes the most recently added model from the scene
 void Scene::DeleteModel()
 {
 	if (models.size() > 0)

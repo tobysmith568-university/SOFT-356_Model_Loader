@@ -2,49 +2,52 @@
 
 using namespace std;
 
+// Checks if a file exists or not
 bool FileUtils::DoesFileExist(std::string& filePath)
 {
 	ifstream f(filePath.c_str());
 	return f.good();
 }
 
+// Returns the .extension from a file path. The path can include folders and/or drives
 string FileUtils::GetExtension(std::string& filePath)
 {
 	if (filePath.size() < 1)
 	{
-		return filePath;
+		throw invalid_argument("An empty file path was given");
 	}
 
 	string result = "";
 
-	for (size_t i = filePath.size(); i > 0; i--)
+	for (size_t i = filePath.size(); i > 0; i--)// Works through the path from back-to-front
 	{
 		if (filePath[i - 1] == '.')
 		{
 			return result;
 		}
 
-		result = filePath[i - 1] + result;
+		result = filePath[i - 1] + result;// Builds up a result until a . is found
 	}
 
 	return result;
 }
 
+// Returns a file path with the .extension removed
 std::string FileUtils::GetName(std::string& fileLocation)
 {
 	if (fileLocation.size() < 1)
 	{
-		return fileLocation;
+		throw invalid_argument("An empty file path was given");
 	}
 
 	string result = "";
 
 	bool foundDot = false;
-	for (size_t i = fileLocation.size(); i > 0; i--)
+	for (size_t i = fileLocation.size(); i > 0; i--)// Works through the path from back-to-front
 	{
 		if (foundDot)
 		{
-			result = fileLocation[i - 1] + result;
+			result = fileLocation[i - 1] + result;// Builds up a result once a . has been found
 		}
 		else if (fileLocation[i - 1] == '.')
 		{
@@ -54,17 +57,18 @@ std::string FileUtils::GetName(std::string& fileLocation)
 
 	if (result == "")
 	{
-		return fileLocation;
+		throw invalid_argument("An extension was never found in the given path");
 	}
 
 	return result;
 }
 
+// Returns a file path with the file name and the .extension removed
 std::string FileUtils::GetFolder(std::string& fileLocation)
 {
 	if (fileLocation.size() < 1)
 	{
-		return fileLocation;
+		throw invalid_argument("An empty file path was given");
 	}
 
 	string result = "";
@@ -79,18 +83,19 @@ std::string FileUtils::GetFolder(std::string& fileLocation)
 
 		if (foundSlash)
 		{
-			result = fileLocation[i - 1] + result;
+			result = fileLocation[i - 1] + result;// Builds up a result once a / or \ has been found
 		}
 	}
 
 	if (result == "")
 	{
-		return fileLocation;
+		throw invalid_argument("A slash was never found in the given path");
 	}
 
 	return result;
 }
 
+// Reads in a whole file into a single string result
 string FileUtils::ReadFile(string fileLocation)
 {
 	ifstream stream(fileLocation);
@@ -99,6 +104,7 @@ string FileUtils::ReadFile(string fileLocation)
 	return content;
 }
 
+// Reads in a whole file into a vector of lines
 vector<string> FileUtils::ReadFileAsLines(string fileLocation)
 {
 	vector<string> result = vector<string>();
@@ -106,12 +112,11 @@ vector<string> FileUtils::ReadFileAsLines(string fileLocation)
 	ifstream file(fileLocation);
 	if (!file.is_open())
 	{
-		//TODO: Error checking
-		return result;
+		throw runtime_error("Could not open the given file");
 	}
 
 	string readLine;
-	while (getline(file, readLine))
+	while (getline(file, readLine))// Reads in the file line by line
 	{
 		result.push_back(readLine);
 	}
@@ -119,6 +124,7 @@ vector<string> FileUtils::ReadFileAsLines(string fileLocation)
 	return result;
 }
 
+// Saves a file to the machine. IMPORTANT: This will overwrite any existing data at the given file path
 void FileUtils::SaveFile(std::string& data, std::string& fileLocation)
 {
 	ofstream file;
@@ -126,8 +132,7 @@ void FileUtils::SaveFile(std::string& data, std::string& fileLocation)
 
 	if (!file.is_open())
 	{
-		cout << "Failed to open file!";
-		return;
+		throw runtime_error("Could not open the given file");
 	}
 
 	file << data;

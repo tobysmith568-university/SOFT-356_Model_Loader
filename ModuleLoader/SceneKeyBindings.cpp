@@ -1,5 +1,10 @@
 #include "Scene.h"
 
+/*
+	This method is in it's own file due to it's size and the fact that it doesn't relate to any of the other scene content directly
+*/
+
+// Creates lambda functions to be triggered on keypresses
 void Scene::BindMovements()
 {
 	inputManager.RegisterKeyRepeat(KeyBinding::RotateXPositive, [&]()
