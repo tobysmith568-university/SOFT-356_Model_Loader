@@ -1,6 +1,7 @@
 #include "ModelLoaderFactory.h"
 #include "ObjModelLoader.h"
 #include "BasicModelLoader.h"
+#include "DaeModelLoader.h"
 
 #include <stdexcept>
 
@@ -20,6 +21,11 @@ IModelLoader& ModelLoaderFactory::GetLoaderForFile(std::string fileLocation)
 		static MtlLoader mtlLoader = MtlLoader(fileUtils);
 		static ObjModelLoader objModelLoader = ObjModelLoader(fileUtils, consoleUtil, mtlLoader);
 		return objModelLoader;
+	}
+	else if (fileExtension == "dae")
+	{
+		static DaeModelLoader daeModelLoader = DaeModelLoader(fileUtils);
+		return daeModelLoader;
 	}
 	else if (fileExtension == "basic")
 	{

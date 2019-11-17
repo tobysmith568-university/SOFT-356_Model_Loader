@@ -31,6 +31,12 @@
     <Filter Include="Header Files\ModelLoading\Basic">
       <UniqueIdentifier>{796f15d7-2c8b-49b5-98ed-d9694e424218}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\ModelLoading\DAE">
+      <UniqueIdentifier>{2355e961-b901-4ac7-be8f-5f042a37f10a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\ModelLoading\DAE">
+      <UniqueIdentifier>{902e90d7-e91b-407a-bea7-b81003aa14eb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stb_image.h">
@@ -107,6 +113,12 @@
     </ClInclude>
     <ClInclude Include="Base64.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DaeModelLoader.h">
+      <Filter>Header Files\ModelLoading\DAE</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.h">
+      <Filter>Header Files\ModelLoading\DAE</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -205,6 +217,12 @@
     </ClCompile>
     <ClCompile Include="Base64.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DaeModelLoader.cpp">
+      <Filter>Source Files\ModelLoading\DAE</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>Source Files\ModelLoading\DAE</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
