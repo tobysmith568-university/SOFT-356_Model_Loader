@@ -278,6 +278,13 @@ void DaeModelLoader::CreateVertices(std::vector<Vertex>& vertices, std::vector<I
 				newVertex.texture.x = inputs[ii].GetData()[indices[i + ii] * 2];
 				newVertex.texture.y = inputs[ii].GetData()[indices[i + ii] * 2 + 1];
 			}
+			else if (inputs[ii].GetSemantic() == "COLOR")
+			{
+				newVertex.colour.r = inputs[ii].GetData()[indices[i + ii] * 4];
+				newVertex.colour.g = inputs[ii].GetData()[indices[i + ii] * 4 + 1];
+				newVertex.colour.b = inputs[ii].GetData()[indices[i + ii] * 4 + 2];
+				newVertex.colour.a = inputs[ii].GetData()[indices[i + ii] * 4 + 3];
+			}
 		}
 
 		vertices.push_back(newVertex);
