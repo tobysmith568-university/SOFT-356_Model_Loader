@@ -7,6 +7,7 @@
 enum class BoolSetting
 {
 	UseWireframes,
+	BackfaceCull,
 	AutoRotate,
 	FullScreenOnStartup
 };

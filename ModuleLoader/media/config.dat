@@ -9,6 +9,7 @@ backgroundB=240
 backgroundA=1
 
 useWireframes=0
+backfaceCull=0
 autoRotate=0
 
 vertexShader=media/triangles.vert

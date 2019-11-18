@@ -22,12 +22,13 @@ Scene::Scene(ConfigUtil& _configUtil, FileUtils& _fileUtils, InputManager& _inpu
 			: configUtil(_configUtil), fileUtils(_fileUtils), inputManager(_inputManager),
 	consoleUtil(_consoleUtil), modelLoaderFactory(_modelLoaderFactory), basicModelLoader(_basicModelLoader)
 {
+	backfaceCull = configUtil.GetBool(BoolSetting::BackfaceCull);
+	autoRotate = configUtil.GetBool(BoolSetting::AutoRotate);
+
 	SetGlobalState();
 	BindMovements();
 	CreateAndBindShaderProgram();
 	BindBackgroundColours();
-
-	autoRotate = configUtil.GetBool(BoolSetting::AutoRotate);
 }
 
 // To be run each tick
@@ -51,10 +52,14 @@ void Scene::Update()
 void Scene::SetGlobalState()
 {
 	glFrontFace(GL_CCW);
-	glCullFace(GL_BACK);
-	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
+
+	if (backfaceCull)
+	{
+		glCullFace(GL_BACK);
+		glEnable(GL_CULL_FACE);
+	}
 }
 
 // Binds the default clear colour for the scene
