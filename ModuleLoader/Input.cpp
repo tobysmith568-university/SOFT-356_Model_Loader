@@ -54,3 +54,13 @@ void Input::SetData(std::vector<GLfloat> _data)
 {
 	data = _data;
 }
+
+const GLuint Input::GetDataStride()
+{
+	return dataStride;
+}
+
+void Input::SetDataStride(GLuint _stride)
+{
+	dataStride = _stride;
+}

@@ -180,6 +180,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneKeyBindings.cpp" />
     <ClCompile Include="ShaderProgramBuilder.cpp" />
+    <ClCompile Include="Source.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TexturedCube.cpp" />
     <ClCompile Include="Vertex.cpp" />
@@ -209,6 +210,7 @@
     <ClInclude Include="ObjModelLoader.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="ShaderProgramBuilder.h" />
+    <ClInclude Include="Source.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Vertex.h" />

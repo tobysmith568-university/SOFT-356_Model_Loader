@@ -13,7 +13,7 @@ void DaeModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& pr
 	string folder = fileUtils.GetFolder(fileLocation);
 	string fileData = fileUtils.ReadFile(fileLocation);// Reads the file into memory
 
-	map<string, vector<GLfloat>> sources = map<string, vector<GLfloat>>();
+	map<string, Source> sources = map<string, Source>();
 	string vertexID, vertexSource, material;
 	vector<Input> inputs = vector<Input>();
 	vector<GLfloat> faceData = vector<GLfloat>();
@@ -38,27 +38,35 @@ void DaeModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& pr
 	CreateVertices(vertices, inputs, faceData);
 }
 
-void DaeModelLoader::ParseSources(std::map<std::string, std::vector<GLfloat>>& sources, std::string fileData)
+void DaeModelLoader::ParseSources(std::map<std::string, Source>& sources, std::string fileData)
 {
-	const regex sourceRegex("<source.+?id=\"([A-Za-z0-9-_]+?)\">[\\s\\S]*?<float_array.*?>([\\d -.e]+)?<\\/float_array>");
+	const regex sourceRegex("<source [\\s\\S]*?id=\"([A-Za-z0-9-_]+?)\">[\\s\\S]*?<float_array[\\s\\S]*?>([\\d -.e]+)?<\\/float_array>[\\s\\S]*?<technique_common>[\\s\\S]*?<accessor [\\s\\S]*?stride=\"(\\d+)\">");
 	smatch sm;
 
 	while (regex_search(fileData, sm, sourceRegex))// While regex matches are found in the file
 	{
-		if (sm.size() != 3)
+		if (sm.size() != 4)
 		{
 			continue;
 		}
 
-		if (!sm[0].matched || !sm[1].matched || !sm[2].matched)
+		if (!sm[0].matched || !sm[1].matched || !sm[2].matched || !sm[3].matched)
 		{
 			continue;
 		}
 
 		string values = sm[2];
+		string stride = sm[3];
 
-		sources[sm[1]] = vector<GLfloat>();
-		ReadSpaceSepFloats(sources[sm[1]], values);
+		vector<GLfloat> floats;
+		ReadSpaceSepFloats(floats, values);
+
+		Source newSource = Source();
+		newSource.SetData(floats);
+		newSource.SetStride(stoi(stride));
+
+		sources[sm[1]] = newSource;
+
 		fileData = sm.suffix();
 	}
 }
@@ -198,7 +206,7 @@ void DaeModelLoader::ReadSpaceSepFloats(std::vector<GLfloat>& floats, std::strin
 	}
 }
 
-void DaeModelLoader::PairInputsAndSources(std::vector<Input>& inputs, std::map<std::string, std::vector<GLfloat>>& sources)
+void DaeModelLoader::PairInputsAndSources(std::vector<Input>& inputs, std::map<std::string, Source>& sources)
 {
 	for (size_t i = 0; i < inputs.size(); i++)
 	{
@@ -211,7 +219,8 @@ void DaeModelLoader::PairInputsAndSources(std::vector<Input>& inputs, std::map<s
 
 		if (sources.count(key) != 0)
 		{
-			inputs[i].SetData(sources[key]);
+			inputs[i].SetData(sources[key].GetData());
+			inputs[i].SetDataStride(sources[key].GetStride());
 		}
 	}
 }

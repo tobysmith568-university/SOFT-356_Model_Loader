@@ -120,6 +120,9 @@
     <ClInclude Include="Input.h">
       <Filter>Header Files\ModelLoading\DAE</Filter>
     </ClInclude>
+    <ClInclude Include="Source.h">
+      <Filter>Header Files\ModelLoading\DAE</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="media\triangles.frag">
@@ -222,6 +225,9 @@
       <Filter>Source Files\ModelLoading\DAE</Filter>
     </ClCompile>
     <ClCompile Include="Input.cpp">
+      <Filter>Source Files\ModelLoading\DAE</Filter>
+    </ClCompile>
+    <ClCompile Include="Source.cpp">
       <Filter>Source Files\ModelLoading\DAE</Filter>
     </ClCompile>
   </ItemGroup>

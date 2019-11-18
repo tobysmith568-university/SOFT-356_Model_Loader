@@ -23,6 +23,9 @@ public:
 	const std::vector<GLfloat> GetData();
 	void SetData(std::vector<GLfloat> _data);
 
+	const GLuint GetDataStride();
+	void SetDataStride(GLuint _stride);
+
 private:
 	std::string semantic;
 	std::string source;
@@ -30,4 +33,5 @@ private:
 	std::string set;
 
 	std::vector<GLfloat> data;
+	GLuint dataStride;
 };
