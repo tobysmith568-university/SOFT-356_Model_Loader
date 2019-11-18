@@ -1,5 +1,10 @@
 #pragma once
+
 #include <string>
+#include <vector>
+
+#include "GLFW/glfw3.h"
+
 class Input
 {
 public:
@@ -15,9 +20,14 @@ public:
 	const std::string& GetSet();
 	void SetSet(std::string _set);
 
+	const std::vector<GLfloat> GetData();
+	void SetData(std::vector<GLfloat> _data);
+
 private:
 	std::string semantic;
 	std::string source;
 	std::string offset;
 	std::string set;
+
+	std::vector<GLfloat> data;
 };

@@ -18,6 +18,11 @@ const std::string& Input::GetSource()
 void Input::SetSource(std::string _source)
 {
 	source = _source;
+
+	if (source.size() >= 2 && source[0] == '#')
+	{
+		source = source.substr(1, source.size());
+	}
 }
 
 const std::string& Input::GetOffset()
@@ -38,4 +43,14 @@ const std::string& Input::GetSet()
 void Input::SetSet(std::string _set)
 {
 	set = _set;
+}
+
+const std::vector<GLfloat> Input::GetData()
+{
+	return data;	
+}
+
+void Input::SetData(std::vector<GLfloat> _data)
+{
+	data = _data;
 }

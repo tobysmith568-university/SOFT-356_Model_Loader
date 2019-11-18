@@ -14,12 +14,28 @@ void DaeModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& pr
 	string fileData = fileUtils.ReadFile(fileLocation);// Reads the file into memory
 
 	map<string, vector<GLfloat>> sources = map<string, vector<GLfloat>>();
-	map<string, vector<Input>> vertices = map<string, vector<Input>>();
-	vector<Triangle> triangles = vector<Triangle>();
+	string vertexID, vertexSource, material;
+	vector<Input> inputs = vector<Input>();
+	vector<GLfloat> faceData = vector<GLfloat>();
+	vector<Vertex> vertices = vector<Vertex>();
 
 	ParseSources(sources, fileData);
-	ParseVertices(vertices, fileData);
-	ParseTriangles(triangles, fileData);
+	ParseVertexInput(vertexID, vertexSource, fileData);
+	ParseTriangleInputs(inputs, material, fileData);
+
+	for (size_t i = 0; i < inputs.size(); i++)
+	{
+		if (inputs[i].GetSource() == vertexID)
+		{
+			inputs[i].SetSource(vertexSource);
+		}
+	}
+
+	PairInputsAndSources(inputs, sources);
+
+	ParseFaceData(faceData, fileData);
+
+	CreateVertices(vertices, inputs, faceData);
 }
 
 void DaeModelLoader::ParseSources(std::map<std::string, std::vector<GLfloat>>& sources, std::string fileData)
@@ -47,57 +63,72 @@ void DaeModelLoader::ParseSources(std::map<std::string, std::vector<GLfloat>>& s
 	}
 }
 
-void DaeModelLoader::ParseVertices(std::map<std::string, std::vector<Input>>& vertices, std::string fileData)
+void DaeModelLoader::ParseVertexInput(std::string& vertexID, std::string& vertexSource, std::string fileData)
 {
-	const regex sourceRegex("<vertices[\\s\\S]*?id=\"(.*?)\"[\\s\\S]*?>([\\s\\S]+)<\\/vertices>");
+	const regex sourceRegex("<vertices[\\s\\S]*?id=\"(.*?)\"[\\s\\S]*?>[\\s\\S]*?<input [\\s\\S]*?source=\"([\\s\\S]+?)\"[\\s\\S]+?<\\/vertices>");
 	smatch sm;
 
-	while (regex_search(fileData, sm, sourceRegex))// While regex matches are found in the file
+	if (regex_search(fileData, sm, sourceRegex))// If a regex match is found in the file
 	{
 		if (sm.size() != 3)
 		{
-			continue;
+			return;
 		}
 
 		if (!sm[0].matched || !sm[1].matched || !sm[2].matched)
 		{
-			continue;
+			return;
 		}
 
-		vector<Input> inputs = vector <Input>();
-		ReadInputs(inputs, sm[2]);
-
-		vertices[sm[1]] = inputs;
-		fileData = sm.suffix();
+		vertexID = sm[1];
+		vertexSource = sm[2];
 	}
 }
 
-void DaeModelLoader::ParseTriangles(std::vector<Triangle>& triangles, std::string fileData)
+void DaeModelLoader::ParseTriangleInputs(std::vector<Input>& inputs, std::string& material, std::string fileData)
 {
 	const regex sourceRegex("<triangles material=\"([A-Za-z0-9-_]+)\"[\\s\\S]*?>([\\s\\S]*?)<\\/triangles>");
 	smatch sm;
 
-	while (regex_search(fileData, sm, sourceRegex))// While regex matches are found in the file
+	if (regex_search(fileData, sm, sourceRegex))// If a regex match is found in the file
 	{
 		if (sm.size() != 3)
 		{
-			continue;
+			return;
 		}
 
 		if (!sm[0].matched || !sm[1].matched || !sm[2].matched)
 		{
-			continue;
+			return;
 		}
 
-		string material = sm[1];
+		material = sm[1];
 
-		vector<Input> inputs = vector <Input>();
 		ReadInputs(inputs, sm[2]);
 
-		vector<GLfloat> indices = vector<GLfloat>();
-		ReadIndices(indices, sm[2]);
-
 		fileData = sm.suffix();
+	}
+}
+
+void DaeModelLoader::ParseFaceData(vector<GLfloat>& faceData, std::string fileData)
+{
+	const regex sourceRegex("<triangles [\\s\\S]*?>[\\s\\S]+?<p>([\\d ]+?)<\\/p>[\\s\\S]*?<\\/triangles>");
+	smatch sm;
+
+	if (regex_search(fileData, sm, sourceRegex))// If a regex match is found in the file
+	{
+		if (sm.size() != 2)
+		{
+			return;
+		}
+
+		if (!sm[0].matched || !sm[1].matched)
+		{
+			return;
+		}
+
+		string data = sm[1];
+		ReadSpaceSepFloats(faceData, data);
 	}
 }
 
@@ -155,30 +186,6 @@ void DaeModelLoader::ReadInput(Input& input, std::smatch& match)
 	}
 }
 
-void DaeModelLoader::ReadIndices(std::vector<GLfloat> indices, std::string inputData)
-{
-	const regex sourceRegex("<p>([0-9 ]+)<\/p>");
-	smatch sm;
-
-	while (regex_search(inputData, sm, sourceRegex))// While regex matches are found in the file
-	{
-		if (sm.size() != 2)
-		{
-			continue;
-		}
-
-		if (!sm[0].matched || !sm[1].matched)
-		{
-			continue;
-		}
-
-		string data = sm[1];
-		ReadSpaceSepFloats(indices, data);
-
-		inputData = sm.suffix();
-	}
-}
-
 void DaeModelLoader::ReadSpaceSepFloats(std::vector<GLfloat>& floats, std::string& line)
 {
 	char* word;
@@ -189,4 +196,27 @@ void DaeModelLoader::ReadSpaceSepFloats(std::vector<GLfloat>& floats, std::strin
 		floats.push_back(stof(word));
 		word = strtok_s(remaining, " ", &remaining);
 	}
+}
+
+void DaeModelLoader::PairInputsAndSources(std::vector<Input>& inputs, std::map<std::string, std::vector<GLfloat>>& sources)
+{
+	for (size_t i = 0; i < inputs.size(); i++)
+	{
+		string key = inputs[i].GetSource();
+
+		if (key.length() > 0 && key[0] == '#')
+		{
+			key = key.substr(1, key.size());
+		}
+
+		if (sources.count(key) != 0)
+		{
+			inputs[i].SetData(sources[key]);
+		}
+	}
+}
+
+void DaeModelLoader::CreateVertices(std::vector<Vertex>& vertices, std::vector<Input>& inputs, std::vector<GLfloat>& indices)
+{
+
 }
