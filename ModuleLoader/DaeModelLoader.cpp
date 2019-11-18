@@ -35,12 +35,16 @@ void DaeModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& pr
 
 	ParseFaceData(faceData, fileData);
 
+	OrderInputsByOffset(inputs);
+
 	CreateVertices(vertices, inputs, faceData);
+
+	BuildModel(model, vertices, program);
 }
 
 void DaeModelLoader::ParseSources(std::map<std::string, Source>& sources, std::string fileData)
 {
-	const regex sourceRegex("<source [\\s\\S]*?id=\"([A-Za-z0-9-_]+?)\">[\\s\\S]*?<float_array[\\s\\S]*?>([\\d -.e]+)?<\\/float_array>[\\s\\S]*?<technique_common>[\\s\\S]*?<accessor [\\s\\S]*?stride=\"(\\d+)\">");
+	const regex sourceRegex("<source [\\s\\S]*?id=\"([A-Za-z0-9-_]+?)\"[\\s\\S]*?>[\\s\\S]*?<float_array[\\s\\S]*?>([\\d -.e]+)?<\\/float_array>[\\s\\S]*?<technique_common>[\\s\\S]*?<accessor [\\s\\S]*?stride=\"(\\d+)\">");
 	smatch sm;
 
 	while (regex_search(fileData, sm, sourceRegex))// While regex matches are found in the file
@@ -95,7 +99,7 @@ void DaeModelLoader::ParseVertexInput(std::string& vertexID, std::string& vertex
 
 void DaeModelLoader::ParseTriangleInputs(std::vector<Input>& inputs, std::string& material, std::string fileData)
 {
-	const regex sourceRegex("<triangles material=\"([A-Za-z0-9-_]+)\"[\\s\\S]*?>([\\s\\S]*?)<\\/triangles>");
+	const regex sourceRegex("<triangles (?:material=\"([A-Za-z0-9-_]+)\")?[\\s\\S]*?>([\\s\\S]*?)<\\/triangles>");
 	smatch sm;
 
 	if (regex_search(fileData, sm, sourceRegex))// If a regex match is found in the file
@@ -105,12 +109,15 @@ void DaeModelLoader::ParseTriangleInputs(std::vector<Input>& inputs, std::string
 			return;
 		}
 
-		if (!sm[0].matched || !sm[1].matched || !sm[2].matched)
+		if (!sm[0].matched || !sm[2].matched)
 		{
 			return;
 		}
 
-		material = sm[1];
+		if (sm[1].matched)
+		{
+			material = sm[1];
+		}
 
 		ReadInputs(inputs, sm[2]);
 
@@ -225,7 +232,75 @@ void DaeModelLoader::PairInputsAndSources(std::vector<Input>& inputs, std::map<s
 	}
 }
 
+void DaeModelLoader::OrderInputsByOffset(std::vector<Input>& inputs)
+{
+	vector<Input> sortedInputs = vector<Input>();
+
+	for (size_t i = 0; i < inputs.size(); i++)
+	{
+		if (inputs[i].GetOffset() == sortedInputs.size())
+		{
+			sortedInputs.push_back(inputs[i]);
+			i = -1;
+
+			if (sortedInputs.size() == inputs.size())
+			{
+				break;
+			}
+		}
+	}
+
+	inputs = sortedInputs;
+}
+
 void DaeModelLoader::CreateVertices(std::vector<Vertex>& vertices, std::vector<Input>& inputs, std::vector<GLfloat>& indices)
 {
+	for (size_t i = 0; i < indices.size(); i += inputs.size())
+	{
+		Vertex newVertex = Vertex();
 
+		for (size_t ii = 0; ii < inputs.size(); ii++)
+		{
+			if (inputs[ii].GetSemantic() == "VERTEX")
+			{
+				newVertex.position.x = inputs[ii].GetData()[indices[i + ii] * 3];
+				newVertex.position.y = inputs[ii].GetData()[indices[i + ii] * 3 + 1];
+				newVertex.position.z = inputs[ii].GetData()[indices[i + ii] * 3 + 2];
+			}
+			else if (inputs[ii].GetSemantic() == "NORMAL")
+			{
+				newVertex.normal.x = inputs[ii].GetData()[indices[i + ii] * 3];
+				newVertex.normal.y = inputs[ii].GetData()[indices[i + ii] * 3 + 1];
+				newVertex.normal.z = inputs[ii].GetData()[indices[i + ii] * 3 + 2];
+			}
+			else if (inputs[ii].GetSemantic() == "TEXCOORD")
+			{
+				newVertex.texture.x = inputs[ii].GetData()[indices[i + ii] * 2];
+				newVertex.texture.y = inputs[ii].GetData()[indices[i + ii] * 2 + 1];
+			}
+		}
+
+		vertices.push_back(newVertex);
+	}
+}
+
+void DaeModelLoader::BuildModel(Model& model, std::vector<Vertex>& vertices, GLuint& program)
+{
+	Mesh mesh = Mesh(program);
+
+	mesh.SetVertices(vertices);
+	
+	vector<GLuint> indices = vector<GLuint>();
+
+	for (size_t i = 0; i < vertices.size(); i++)
+	{
+		indices.push_back(i);
+	}
+
+	mesh.SetIndicies(indices);
+
+	Object object = Object(program);
+	object.AddMesh(mesh);
+
+	model.AddObject(object);
 }

@@ -14,10 +14,12 @@ public:
 	const std::string& GetSource();
 	void SetSource(std::string _source);
 
-	const std::string& GetOffset();
+	const GLuint GetOffset();
+	void SetOffset(GLuint _offset);
 	void SetOffset(std::string _offset);
 
-	const std::string& GetSet();
+	const GLuint GetSet();
+	void SetSet(GLuint _set);
 	void SetSet(std::string _set);
 
 	const std::vector<GLfloat> GetData();
@@ -29,8 +31,8 @@ public:
 private:
 	std::string semantic;
 	std::string source;
-	std::string offset;
-	std::string set;
+	GLuint offset;
+	GLuint set;
 
 	std::vector<GLfloat> data;
 	GLuint dataStride;

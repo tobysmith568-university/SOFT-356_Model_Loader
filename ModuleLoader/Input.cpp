@@ -25,24 +25,34 @@ void Input::SetSource(std::string _source)
 	}
 }
 
-const std::string& Input::GetOffset()
+const GLuint Input::GetOffset()
 {
 	return offset;
 }
 
-void Input::SetOffset(std::string _offset)
+void Input::SetOffset(GLuint _offset)
 {
 	offset = _offset;
 }
 
-const std::string& Input::GetSet()
+void Input::SetOffset(std::string _offset)
+{
+	offset = stoi(_offset);
+}
+
+const GLuint Input::GetSet()
 {
 	return set;
 }
 
-void Input::SetSet(std::string _set)
+void Input::SetSet(GLuint _set)
 {
 	set = _set;
+}
+
+void Input::SetSet(std::string _set)
+{
+	set = stoi(_set);
 }
 
 const std::vector<GLfloat> Input::GetData()

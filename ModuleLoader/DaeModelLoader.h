@@ -23,10 +23,12 @@ private:
 
 	void ReadInputs(std::vector<Input>& inputs, std::string inputData);
 	void ReadInput(Input& input, std::smatch& match);
-	void ReadIndices(std::vector<GLfloat>& indices, std::string inputData);
 	void ReadSpaceSepFloats(std::vector<GLfloat>& floats, std::string& line);
 
 	void PairInputsAndSources(std::vector<Input>& inputs, std::map<std::string, Source>& sources);
 
+	void OrderInputsByOffset(std::vector<Input>& inputs);
 	void CreateVertices(std::vector<Vertex>& vertices, std::vector<Input>& inputs, std::vector<GLfloat>& indices);
+
+	void BuildModel(Model& model, std::vector<Vertex>& vertices, GLuint& program);
 };
