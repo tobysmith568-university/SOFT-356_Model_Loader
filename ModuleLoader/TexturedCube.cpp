@@ -19,9 +19,10 @@ using namespace std;
 void RunScene(FileUtils& fileUtils, ConsoleUtil& consoleUtil, ConfigUtil& configUtil, InputManager& inputManager,
 	ModelLoaderFactory& modelLoaderFactory, GLFWUtil& glfwUtil, GLEWUtil& glewUtil, BasicModelLoader& basicModelLoader);
 
+// Main method
 int main(int argc, char** argv)
 {
-	FileUtils fileUtils = FileUtils();
+	FileUtils fileUtils = FileUtils();// Init dependencies
 	ConsoleUtil consoleUtil = ConsoleUtil(fileUtils);
 	ConfigUtil configUtil = ConfigUtil(fileUtils);
 	InputManager inputManager = InputManager(configUtil);
@@ -30,7 +31,7 @@ int main(int argc, char** argv)
 	GLEWUtil glewUtil = GLEWUtil();
 	BasicModelLoader basicModelLoader = BasicModelLoader(fileUtils);
 
-	RunScene(fileUtils, consoleUtil, configUtil, inputManager, modelLoaderFactory, glfwUtil, glewUtil, basicModelLoader);
+	RunScene(fileUtils, consoleUtil, configUtil, inputManager, modelLoaderFactory, glfwUtil, glewUtil, basicModelLoader);// Run a scene
 }
 
 void RunScene(FileUtils& fileUtils, ConsoleUtil& consoleUtil, ConfigUtil& configUtil, InputManager& inputManager,
@@ -45,15 +46,15 @@ void RunScene(FileUtils& fileUtils, ConsoleUtil& consoleUtil, ConfigUtil& config
 	Scene scene = Scene(configUtil, fileUtils, inputManager, consoleUtil, modelLoaderFactory, basicModelLoader);
 
 	bool wireframesOnly = configUtil.GetBool(BoolSetting::UseWireframes);
-	while (!glfwUtil.GetShouldClose())
+	while (!glfwUtil.GetShouldClose())// Loop while the window has not been told to close
 	{
 		if (wireframesOnly)
 		{
 			glfwUtil.WireFrameOnly();
 		}
 
-		scene.Update();
-		glfwUtil.Update();
+		scene.Update();// Update the scene
+		glfwUtil.Update();// Update the window
 	}
 
 	glfwUtil.Exit();

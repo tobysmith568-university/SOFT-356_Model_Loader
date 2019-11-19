@@ -7,9 +7,9 @@ ConfigUtil::ConfigUtil(FileUtils& _fileUtils) : fileUtils(_fileUtils)
 {
 	config = map<string, string>();
 
-	vector<string> configFile = fileUtils.ReadFileAsLines("media/config.dat");
+	vector<string> configFile = fileUtils.ReadFileAsLines("media/config.dat");// Read in the config file into lines
 
-	for (int i = 0; i < configFile.size(); i++)
+	for (int i = 0; i < configFile.size(); i++)// For every line in the file
 	{
 		string line = configFile.at(i);
 
@@ -17,56 +17,63 @@ ConfigUtil::ConfigUtil(FileUtils& _fileUtils) : fileUtils(_fileUtils)
 		string value = "";
 		bool atEquals = false;
 
-		for (char& c : line)
+		for (char& c : line)// For every character in the line
 		{
-			if (c == '=' && !atEquals)
+			if (c == '=' && !atEquals)// If it is an equals
 			{
-				atEquals = true;
+				atEquals = true;// Declare that an equals has been found and continue the loop
 				continue;
 			}
 
-			if (!atEquals)
+			if (!atEquals)// Otherwise, either add it to the key
 			{
 				key += c;
 				continue;
 			}
 
-			value += c;
+			value += c;// Or the value
 		}
 
 		config[key] = value;
 	}
 }
 
+// Gets the value of a boolean setting from the config
 bool ConfigUtil::GetBool(BoolSetting boolSetting)
 {
 	string stringValue = config[GetBoolValue(boolSetting)];
 	return stringValue == "1";
 }
 
+// Gets the value of an int setting from the config
 int ConfigUtil::GetInt(IntSetting intSetting)
 {
 	string stringValue = config[GetIntValue(intSetting)];
 	return stoi(stringValue);
 }
 
+// Gets the value of a float setting from the config
 float ConfigUtil::GetFloat(FloatSetting floatSetting)
 {
 	string stringValue = config[GetFloatValue(floatSetting)];
 	return stof(stringValue);
 }
 
+// Gets the value of a string setting from the config
 std::string ConfigUtil::GetString(StringSetting stringSetting)
 {
 	return config[GetStringValue(stringSetting)];
 }
 
+
+// Gets the value of a keybinding from the config
 int ConfigUtil::GetKeyBinding(KeyBinding keybinding)
 {
 	string stringValue = config[GetKeyBindingValue(keybinding)];
 	return stoi(stringValue);
 }
 
+// Returns the matching key in the config file for the passed in bool setting enum
 string ConfigUtil::GetBoolValue(BoolSetting boolSetting)
 {
 	switch (boolSetting)
@@ -84,6 +91,7 @@ string ConfigUtil::GetBoolValue(BoolSetting boolSetting)
 	}
 }
 
+// Returns the matching key in the config file for the passed in int setting enum
 string ConfigUtil::GetIntValue(IntSetting intSetting)
 {
 	switch (intSetting)
@@ -97,6 +105,7 @@ string ConfigUtil::GetIntValue(IntSetting intSetting)
 	}
 }
 
+// Returns the matching key in the config file for the passed in float setting enum
 string ConfigUtil::GetFloatValue(FloatSetting floatSetting)
 {
 	switch (floatSetting)
@@ -114,6 +123,7 @@ string ConfigUtil::GetFloatValue(FloatSetting floatSetting)
 	}
 }
 
+// Returns the matching key in the config file for the passed in string setting enum
 string ConfigUtil::GetStringValue(StringSetting stringSetting)
 {
 	switch (stringSetting)
@@ -129,6 +139,7 @@ string ConfigUtil::GetStringValue(StringSetting stringSetting)
 	}
 }
 
+// Returns the matching key in the config file for the passed in key binding enum
 string ConfigUtil::GetKeyBindingValue(KeyBinding keyBinding)
 {
 	switch (keyBinding)

@@ -6,24 +6,28 @@
 
 using namespace glm;
 
+// Modifies the scale of the MVP
 MVPBuilder& MVPBuilder::AddScale(float x, float y, float z)
 {
 	scaleModel = scale(scaleModel, glm::vec3(x, y, z));
 	return *this;
 }
 
+// Adds a rotation to the MVP
 MVPBuilder& MVPBuilder::AddRotation(float degrees, float x, float y, float z)
 {
 	rotationModel = glm::rotate(rotationModel, radians(degrees), vec3(x, y, z));
 	return *this;
 }
 
+// Adds a translation to the MVP
 MVPBuilder& MVPBuilder::AddTranslation(float x, float y, float z)
 {
 	translationModel = glm::translate(translationModel, vec3(x, y, z));
 	return *this;
 }
 
+// Combines a Projection, a View, and the Translation, Rotation, and Scale matrices
 mat4 MVPBuilder::Build()
 {
 	// creating the view matrix

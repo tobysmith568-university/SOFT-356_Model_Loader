@@ -21,12 +21,12 @@ string FileUtils::GetExtension(std::string& filePath)
 
 	for (size_t i = filePath.size(); i > 0; i--)// Works through the path from back-to-front
 	{
-		if (filePath[i - 1] == '.')
+		if (filePath[i - 1] == '.')// If the char is a . then stop
 		{
 			return result;
 		}
 
-		result = filePath[i - 1] + result;// Builds up a result until a . is found
+		result = filePath[i - 1] + result;// Otherwise, build up a result back-to-front
 	}
 
 	return result;
@@ -49,7 +49,7 @@ std::string FileUtils::GetName(std::string& fileLocation)
 		{
 			result = fileLocation[i - 1] + result;// Builds up a result once a . has been found
 		}
-		else if (fileLocation[i - 1] == '.')
+		else if (fileLocation[i - 1] == '.')// Otherwise, tests to see if a . has been found
 		{
 			foundDot = true;
 		}
@@ -74,9 +74,9 @@ std::string FileUtils::GetFolder(std::string& fileLocation)
 	string result = "";
 
 	bool foundSlash = false;
-	for (size_t i = fileLocation.size(); i > 0; i--)
+	for (size_t i = fileLocation.size(); i > 0; i--)// Works through the path from back-to-front
 	{
-		if (!foundSlash && (fileLocation[i - 1] == '/' || fileLocation[i - 1] == '\\'))
+		if (!foundSlash && (fileLocation[i - 1] == '/' || fileLocation[i - 1] == '\\'))// Declares that a slash is found if the current char is a \ or /
 		{
 			foundSlash = true;
 		}
