@@ -22,7 +22,7 @@ Scene::Scene(ConfigUtil& _configUtil, FileUtils& _fileUtils, InputManager& _inpu
 			: configUtil(_configUtil), fileUtils(_fileUtils), inputManager(_inputManager),
 	consoleUtil(_consoleUtil), modelLoaderFactory(_modelLoaderFactory), basicModelLoader(_basicModelLoader)
 {
-	backfaceCull = configUtil.GetBool(BoolSetting::BackfaceCull);
+	backfaceCull = configUtil.GetBool(BoolSetting::BackfaceCull);// Get some config data
 	autoRotate = configUtil.GetBool(BoolSetting::AutoRotate);
 
 	SetGlobalState();
@@ -31,20 +31,20 @@ Scene::Scene(ConfigUtil& _configUtil, FileUtils& _fileUtils, InputManager& _inpu
 	BindBackgroundColours();
 }
 
-// To be run each tick
+// To be run each game tick
 void Scene::Update()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);// Clears the previous buffers
 
-	for (size_t i = 0; i < models.size(); i++)
+	for (size_t i = 0; i < models.size(); i++)// For every model
 	{
-		if (autoRotate)
+		if (autoRotate)// Rotate it if necessary
 		{
 			models[i].GetMVPBuilder()
 				.AddRotation(0.005f, 0.0f, 1.0f, 0.0f);
 		}
 
-		models[i].Update();// Updates all models in the scene
+		models[i].Update();// Updated the model
 	}
 }
 
@@ -65,20 +65,20 @@ void Scene::SetGlobalState()
 // Binds the default clear colour for the scene
 void Scene::BindBackgroundColours()
 {
-	float backgroundR = configUtil.GetFloat(FloatSetting::BackgroundR);
+	float backgroundR = configUtil.GetFloat(FloatSetting::BackgroundR);// Read in the colour values from config
 	float backgroundG = configUtil.GetFloat(FloatSetting::BackgroundG);
 	float backgroundB = configUtil.GetFloat(FloatSetting::BackgroundB);
 	float backgroundA = configUtil.GetFloat(FloatSetting::BackgroundA);
 
-	backgroundR = NormalizeColour(backgroundR);
+	backgroundR = NormalizeColour(backgroundR);// Set the colour values to be between 0 and 1
 	backgroundG = NormalizeColour(backgroundG);
 	backgroundB = NormalizeColour(backgroundB);
 	backgroundA = NormalizeColour(backgroundA);
 
-	glClearColor(backgroundR, backgroundG, backgroundB, backgroundA);
+	glClearColor(backgroundR, backgroundG, backgroundB, backgroundA);// Set the background colours
 }
 
-// Mormalizes an R, G, B, or A value
+// Normalizes an R, G, B, or A value
 float Scene::NormalizeColour(float colour)
 {
 	if (colour > 1)
@@ -92,10 +92,10 @@ float Scene::NormalizeColour(float colour)
 // Creates a shader program, links it, and uses it
 void Scene::CreateAndBindShaderProgram()
 {
-	string vertexShaderLocation = configUtil.GetString(StringSetting::VertexShader);
+	string vertexShaderLocation = configUtil.GetString(StringSetting::VertexShader);// Get the shader loacations from config
 	string fragmentShaderLocation = configUtil.GetString(StringSetting::FragmentShader);
 
-	program = *ShaderProgramBuilder(fileUtils)
+	program = *ShaderProgramBuilder(fileUtils)// Create and use a shader program
 		.AddVertexShader(vertexShaderLocation)
 		.AddFragmentShader(fragmentShaderLocation)
 		.BuildAndUse();
@@ -105,21 +105,21 @@ void Scene::CreateAndBindShaderProgram()
 void Scene::AddModel()
 {
 	consoleUtil.ClearConsole();
-	string filename = consoleUtil.GetFileName("Enter a file name for a model");
+	string filename = consoleUtil.GetFileName("Enter a file name for a model");// Prompt for a model path
 
 	try
 	{
 		IModelLoader& ml = modelLoaderFactory.GetLoaderForFile(filename);// Gets the correct model loader based on the paths .extension
 		Model newModel = Model(program);
 		ml.GetModel(newModel, filename, program);// Loads in model data using that model loader
-		newModel.Init();
+		newModel.Init();// Inits the OpenGL code within the model
 		models.push_back(newModel);
-		activeModel = models.size() - 1;
+		activeModel = models.size() - 1;// Sets the model as the currently active model
 
 	}
 	catch (InvalidModelFileException& ex)
 	{
-		string message = ex.What();
+		string message = ex.What();// Print to console any errors
 		consoleUtil.Print(message);
 	}
 
@@ -128,7 +128,7 @@ void Scene::AddModel()
 // Removes the most recently added model from the scene
 void Scene::DeleteModel()
 {
-	if (models.size() > 0)
+	if (models.size() > 0)// Removes the model from the back of the list
 	{
 		models.pop_back();
 	}

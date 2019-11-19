@@ -32,7 +32,7 @@ void ObjModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& pr
 		}
 		else if (strncmp(c_line, "o ", 2) == 0)// This line indicates that a new object is needed
 		{
-			if (object != nullptr)
+			if (object != nullptr)// If there is already a current object, add it to the current model assuming it has at least one mesh
 			{
 				if (object->GetMeshes().size() == 0)
 				{
