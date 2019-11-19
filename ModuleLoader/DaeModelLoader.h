@@ -20,6 +20,7 @@ private:
 	void ParseVertexInput(std::string& vertexID, std::string& vertexSource, std::string fileData);
 	void ParseTriangleInputs(std::vector<Input>& inputs, std::string& material, std::string fileData);
 	void ParseFaceData(std::vector<GLfloat>& faceData, std::string fileData);
+	void ParseMaterial(Material& material, std::string fileData, std::string folder);
 
 	void ReadInputs(std::vector<Input>& inputs, std::string inputData);
 	void ReadInput(Input& input, std::smatch& match);
@@ -30,5 +31,6 @@ private:
 	void OrderInputsByOffset(std::vector<Input>& inputs);
 	void CreateVertices(std::vector<Vertex>& vertices, std::vector<Input>& inputs, std::vector<GLfloat>& indices);
 
-	void BuildModel(Model& model, std::vector<Vertex>& vertices, GLuint& program);
+	void BuildModel(Model& model, Material material, std::vector<Vertex>& vertices, GLuint& program);
+	void GetTexture(Texture& texture, std::string texturePath);
 };
