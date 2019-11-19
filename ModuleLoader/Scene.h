@@ -29,8 +29,6 @@ private:
 	ModelLoaderFactory modelLoaderFactory;
 	BasicModelLoader basicModelLoader;
 
-	enum VAO_IDs { Vertices, Triangles, Colours, Tex };
-	enum Buffer_IDs { ArrayBuffer };
 	bool autoRotate;
 	bool backfaceCull;
 

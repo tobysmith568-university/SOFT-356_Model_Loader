@@ -31,11 +31,11 @@
     <Filter Include="Header Files\ModelLoading\Basic">
       <UniqueIdentifier>{796f15d7-2c8b-49b5-98ed-d9694e424218}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\ModelLoading\DAE">
-      <UniqueIdentifier>{2355e961-b901-4ac7-be8f-5f042a37f10a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\ModelLoading\DAE">
+    <Filter Include="Header Files\ModelLoading\Dae">
       <UniqueIdentifier>{902e90d7-e91b-407a-bea7-b81003aa14eb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ModelLoading\Dae">
+      <UniqueIdentifier>{2355e961-b901-4ac7-be8f-5f042a37f10a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -115,13 +115,13 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="DaeModelLoader.h">
-      <Filter>Header Files\ModelLoading\DAE</Filter>
+      <Filter>Header Files\ModelLoading\Dae</Filter>
     </ClInclude>
     <ClInclude Include="Input.h">
-      <Filter>Header Files\ModelLoading\DAE</Filter>
+      <Filter>Header Files\ModelLoading\Dae</Filter>
     </ClInclude>
     <ClInclude Include="Source.h">
-      <Filter>Header Files\ModelLoading\DAE</Filter>
+      <Filter>Header Files\ModelLoading\Dae</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -143,9 +143,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="TexturedCube.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MVPBuilder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -222,13 +219,16 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="DaeModelLoader.cpp">
-      <Filter>Source Files\ModelLoading\DAE</Filter>
+      <Filter>Source Files\ModelLoading\Dae</Filter>
     </ClCompile>
     <ClCompile Include="Input.cpp">
-      <Filter>Source Files\ModelLoading\DAE</Filter>
+      <Filter>Source Files\ModelLoading\Dae</Filter>
     </ClCompile>
     <ClCompile Include="Source.cpp">
-      <Filter>Source Files\ModelLoading\DAE</Filter>
+      <Filter>Source Files\ModelLoading\Dae</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

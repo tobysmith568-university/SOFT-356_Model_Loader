@@ -182,7 +182,7 @@
     <ClCompile Include="ShaderProgramBuilder.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="TexturedCube.cpp" />
+    <ClCompile Include="Main.cpp" />
     <ClCompile Include="Vertex.cpp" />
   </ItemGroup>
   <ItemGroup>

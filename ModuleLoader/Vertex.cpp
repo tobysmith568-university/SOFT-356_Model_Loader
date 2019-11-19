@@ -5,7 +5,7 @@ Vertex::Vertex()
 	position = vec3();
 	texture = vec2();
 	normal = vec3();
-	colour = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	colour = vec4(1.0f);
 }
 
 void Vertex::SetPosition(GLfloat x, GLfloat y, GLfloat z)
