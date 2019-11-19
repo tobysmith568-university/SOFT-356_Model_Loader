@@ -19,8 +19,6 @@ public:
 	const unsigned char* GetData();
 	void SetData(const unsigned char* _data);
 
-	void FreeData();
-
 private:
 	GLint width, height, nrChannels;
 	const unsigned char* data;

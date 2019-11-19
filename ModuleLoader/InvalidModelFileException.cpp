@@ -8,11 +8,11 @@ InvalidModelFileException::InvalidModelFileException(std::string fileLocation, s
 std::string InvalidModelFileException::What()
 {
 	std::string result = "\n\nThere was a problem with the file:\n"
-		+ fileLocation;
+		+ fileLocation;// Create a default message
 
 	if (message.size() > 0)
 	{
-		result += "\n\n" + message;
+		result += "\n\n" + message;// Add the message data if it exists
 	}
 
 	return result;

@@ -53,7 +53,7 @@ void ObjModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& pr
 		}
 		else if (strncmp(c_line, "usemtl ", 2) == 0)// This line indicates that a new mesh is needed
 		{
-			if (mesh != nullptr)
+			if (mesh != nullptr)// If there is already a current mesh, set vertices and indexes, and add it to the object
 			{
 				SetVertices(*mesh,
 					vertexValues,
@@ -65,24 +65,24 @@ void ObjModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& pr
 				object->AddMesh(*mesh);
 			}
 
-			faceValues = vector<Face>();
-			mesh = &Mesh(program);
+			faceValues = vector<Face>();// Reset the faces for a new mesh
+			mesh = &Mesh(program);// Create a new mesh
 			string materialName = GetSingleString(fileLines[i]);
-			mesh->SetMaterial(model.GetMaterial(materialName));
+			mesh->SetMaterial(model.GetMaterial(materialName));// Set the material on the new mesh
 		}
-		else if (strncmp(c_line, "v ", 2) == 0)
+		else if (strncmp(c_line, "v ", 2) == 0)// This line indicates a geometric vertex
 		{
 			ReadSpaceSepFloats(vertexValues, fileLines[i]);
 		}
-		else if (strncmp(c_line, "vt ", 3) == 0)
+		else if (strncmp(c_line, "vt ", 3) == 0)// This line indicates a texture coordinate
 		{
 			ReadSpaceSepFloats(textureCoordValues, fileLines[i]);
 		}
-		else if (strncmp(c_line, "vn ", 3) == 0)
+		else if (strncmp(c_line, "vn ", 3) == 0)// This line indicates a vertex normal
 		{
 			ReadSpaceSepFloats(normalValues, fileLines[i]);
 		}
-		else if (strncmp(c_line, "f ", 2) == 0)
+		else if (strncmp(c_line, "f ", 2) == 0)// This line indicated a face element
 		{
 			ReadFace(faceValues, fileLines[i], fileLocation);
 		}
@@ -121,7 +121,7 @@ char* ObjModelLoader::GetSingleString(std::string& line)
 {
 	char* value;
 	char* remaining;
-	value = strtok_s((char*)line.c_str(), " ", &remaining);
+	value = strtok_s((char*)line.c_str(), " ", &remaining);// Removes the prefix
 	value = strtok_s(remaining, " ", &remaining);
 
 	return value;
@@ -132,9 +132,9 @@ void ObjModelLoader::ReadSpaceSepFloats(vector<GLfloat>& values, string& line)
 {
 	char* word;
 	char* remaining;
-	word = strtok_s((char*)line.c_str(), " ", &remaining);
+	word = strtok_s((char*)line.c_str(), " ", &remaining);// Removes the prefix
 	word = strtok_s(remaining, " ", &remaining);
-	while (word != NULL)
+	while (word != NULL)// While 'words' (numbers) are still being found
 	{
 		values.push_back(stof(word));
 		word = strtok_s(remaining, " ", &remaining);
@@ -151,16 +151,16 @@ void ObjModelLoader::ReadFace(std::vector<Face>& faces, std::string& line, std::
 
 		char* word;
 		char* remaining;
-		word = strtok_s((char*)line.c_str(), " ", &remaining);
+		word = strtok_s((char*)line.c_str(), " ", &remaining);// Removes the prefix
 		word = strtok_s(remaining, " ", &remaining);
 		while (word != NULL && count < 4)// For each group of numbers upto 4
 		{
-			ReadIndex(face, word);
+			ReadIndex(face, word);// Read an index into the face
 			word = strtok_s(remaining, " ", &remaining);
 			count++;
 		}
 
-		if (word != NULL)// If there is more than 4 or any extra data
+		if (word != NULL)// If there are more than 4 faces or any extra data
 		{
 			string data = word + (string)remaining;
 			consoleUtil.Print("\nFound additional data which cannot be rendered:\n" + data);
@@ -224,12 +224,12 @@ void ObjModelLoader::ReadMaterials(Model& model, string& line, string& folder)
 {
 	char* materialFileLocation;
 	char* remaining;
-	materialFileLocation = strtok_s((char*)line.c_str(), " ", &remaining);
+	materialFileLocation = strtok_s((char*)line.c_str(), " ", &remaining);// Removes the prefix
 	materialFileLocation = strtok_s(remaining, " ", &remaining);
 
-	string materialLocation = folder + materialFileLocation;
+	string materialLocation = folder + materialFileLocation;// Combine the current folder with the file name to create a path
 
-	mtlLoader.LoadMaterials(model, materialLocation);
+	mtlLoader.LoadMaterials(model, materialLocation);// Load in the material file at that path
 }
 
 // Generates the vertex data on a mesh using the data read from file
@@ -267,7 +267,7 @@ void ObjModelLoader::SetVertices(Mesh& mesh,
 				normalValues[normalValue + 1],
 				normalValues[normalValue + 2]);
 
-			vertex.SetColour(
+			vertex.SetColour(// The colour data comes from the mesh's material, not read in values
 				mesh.GetMaterial().diffuseColour.r,
 				mesh.GetMaterial().diffuseColour.g,
 				mesh.GetMaterial().diffuseColour.b,
@@ -286,9 +286,9 @@ void ObjModelLoader::SetIndices(Mesh& mesh, vector<Face>& faces)
 	vector<GLuint> indices = vector<GLuint>();
 
 	GLuint offset = 0;
-	for (size_t i = 0; i < faces.size(); i++)
+	for (size_t i = 0; i < faces.size(); i++)// For each face
 	{
-		offset = faces[i].GetOffset(indices, offset);
+		offset = faces[i].GetOffset(indices, offset);// Generate the indices and increment the offset for the next iteration
 	}
 
 	mesh.SetIndicies(indices);

@@ -19,7 +19,7 @@ void Input::SetSource(std::string _source)
 {
 	source = _source;
 
-	if (source.size() >= 2 && source[0] == '#')
+	if (source.size() >= 2 && source[0] == '#')// Remove a hash prefix if there is one
 	{
 		source = source.substr(1, source.size());
 	}

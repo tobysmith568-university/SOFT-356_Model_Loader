@@ -3,7 +3,7 @@
 
 Texture::Texture()
 {
-	data = (const unsigned char*)"ÿÿÿ";
+	data = (const unsigned char*)"ÿÿÿ";// This data represents a single pixel which is 0,0,0,0 RGBA
 	height = 1;
 	width = 1;
 	nrChannels = 4;
@@ -47,9 +47,4 @@ const unsigned char* Texture::GetData()
 void Texture::SetData(const unsigned char* _data)
 {
 	data = _data;
-}
-
-void Texture::FreeData()
-{
-	//stbi_image_free(data);
 }

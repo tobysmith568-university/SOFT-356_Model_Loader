@@ -5,19 +5,21 @@ Object::Object(GLuint& _program)
 {
 }
 
+// OpenGL Setup
 void Object::Init()
 {
-	for (size_t i = 0; i < meshes.size(); i++)
+	for (size_t i = 0; i < meshes.size(); i++)// For every mesh
 	{
-		meshes[i].Init();
+		meshes[i].Init();// Init it
 	}
 }
 
+// To be run every game tick
 void Object::Update()
 {
-	for (size_t i = 0; i < meshes.size(); i++)
+	for (size_t i = 0; i < meshes.size(); i++)// For every mesh
 	{
-		meshes[i].Update();
+		meshes[i].Update();// Update it
 	}
 }
 
