@@ -59,10 +59,18 @@ void ObjModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& pr
 					vertexValues,
 					textureCoordValues,
 					normalValues,
-					faceValues);
+					faceValues,
+					fileLocation);
 				SetIndices(*mesh, faceValues);
 
-				object->AddMesh(*mesh);
+				if (mesh->GetVertices().size() == 0 || mesh->GetIndicies().size() == 0)// Ignore errored meshes
+				{
+					consoleUtil.Print("An error has occurred, faces may be missing!");
+				}
+				else
+				{
+					object->AddMesh(*mesh);
+				}
 			}
 
 			faceValues = vector<Face>();// Reset the faces for a new mesh
@@ -94,10 +102,18 @@ void ObjModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& pr
 			vertexValues,
 			textureCoordValues,
 			normalValues,
-			faceValues);
+			faceValues,
+			fileLocation);
 		SetIndices(*mesh, faceValues);
 
-		object->AddMesh(*mesh);
+		if (mesh->GetVertices().size() == 0 || mesh->GetIndicies().size() == 0)// Ignore errored meshes
+		{
+			consoleUtil.Print("An error has occurred, faces may be missing!");
+		}
+		else
+		{
+			object->AddMesh(*mesh);
+		}
 	}
 
 	if (object != nullptr)// The 'new  object' code above adds meshes to the current model, but at the end of the file, the final one also needs adding
@@ -237,7 +253,8 @@ void ObjModelLoader::SetVertices(Mesh& mesh,
 	vector<GLfloat>& vertexValues,
 	vector<GLfloat>& textureCoordValues,
 	vector<GLfloat>& normalValues,
-	vector<Face>& faceValues)
+	vector<Face>& faceValues,
+	string& fileLocation)
 {
 	vector<Vertex> vertices = vector<Vertex>();
 
@@ -252,6 +269,19 @@ void ObjModelLoader::SetVertices(Mesh& mesh,
 			GLuint vertexValue = ((indices[ii].vertexIndex - 1) * 3);// Get the correct index data
 			GLuint textureValue = ((indices[ii].textureIndex - 1) * 2);// 2 not 3 because a texture coord is only X and Y
 			GLuint normalValue = ((indices[ii].normalIndex - 1) * 3);
+
+			if (vertexValue + 2 > vertexValues.size() - 1)
+			{
+				throw InvalidModelFileException(fileLocation, "There are not enough vertex values");
+			}
+			if (textureValue + 1 > textureCoordValues.size() - 1)
+			{
+				throw InvalidModelFileException(fileLocation, "There are not enough texture values");
+			}
+			if (normalValue + 2 > normalValues.size() - 1)
+			{
+				throw InvalidModelFileException(fileLocation, "There are not enough normal values");
+			}
 
 			vertex.SetPosition(
 				vertexValues[vertexValue + 0],

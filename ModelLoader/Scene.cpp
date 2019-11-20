@@ -122,7 +122,10 @@ void Scene::AddModel()
 		string message = ex.What();// Print to console any errors
 		consoleUtil.Print(message);
 	}
-
+	catch (...)// Catch any additional errors
+	{
+		consoleUtil.Print("An unknown error occurred!");
+	}
 }
 
 // Removes the most recently added model from the scene

@@ -28,6 +28,7 @@ private:
 		std::vector<GLfloat>& vertexValues,
 		std::vector<GLfloat>& textureCoordValues,
 		std::vector<GLfloat>& normalValues,
-		std::vector<Face>& faceValues);
+		std::vector<Face>& faceValues,
+		std::string& fileLocation);
 	void SetIndices(Mesh&, std::vector<Face>& faces);
 };

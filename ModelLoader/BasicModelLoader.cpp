@@ -2,11 +2,10 @@
 
 #include "Vertex.h"
 #include "Base64.h"
+#include "stb_image.h"
 
 #include <sstream>
 #include <iostream>
-#include <ctime>
-#include "stb_image.h"
 
 using namespace std;
 
@@ -15,6 +14,7 @@ BasicModelLoader::BasicModelLoader(FileUtils& _fileUtils, ConsoleUtil& _consoleU
 {
 }
 
+// Exports a model to a .basic file on disk
 void BasicModelLoader::Export(Model& model)
 {
 	consoleUtil.ClearConsole();
@@ -34,7 +34,7 @@ void BasicModelLoader::Export(Model& model)
 
 		material = materials[i];
 
-		string alphaPath = material.alphaTextureMap.GetPath();
+		string alphaPath = material.alphaTextureMap.GetPath();// Get the image location without folders or get "no.png"
 		alphaPath = alphaPath.size() == 0 ? noPNG : fileUtils.GetFileName(alphaPath);
 
 		string ambientPath = material.ambientTextureMap.GetPath();
@@ -93,17 +93,15 @@ void BasicModelLoader::Export(Model& model)
 
 	string data = result.str();
 
-	stringstream stringStream;
-	stringStream << time(nullptr);
-
-	fileUtils.SaveFile(data, saveFileLocation);
+	fileUtils.SaveFile(data, saveFileLocation);// Save the file to disk
 	consoleUtil.ClearConsole();
 }
 
+// Reads in a .basic file from disk
 void BasicModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& program)
 {
 	string folder = fileUtils.GetFolder(fileLocation);
-	string fileData = fileUtils.ReadFile(fileLocation);
+	string fileData = fileUtils.ReadFile(fileLocation);// Read in the file
 
 	vector<Vertex> vertices = vector<Vertex>();
 	vector<GLuint> indices = vector<GLuint>();
@@ -114,11 +112,11 @@ void BasicModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& 
 	GLuint counter = 0;
 	word = GetNextWord(remaining);
 
-	while (word != empty)
+	while (word != empty)// While the data is not empty - this means while there are more materials
 	{
 		Material material = Material();
 		material.name = word;
-		material.ambientColour.r = GetNextWordAsFloat(remaining);
+		material.ambientColour.r = GetNextWordAsFloat(remaining);// Load in most material data from a single line
 		material.ambientColour.g = GetNextWordAsFloat(remaining);
 		material.ambientColour.b = GetNextWordAsFloat(remaining);
 		material.diffuseColour.r = GetNextWordAsFloat(remaining);
@@ -131,7 +129,7 @@ void BasicModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& 
 		material.dissolve = GetNextWordAsFloat(remaining);
 		material.illuminationModel = GetNextLineAsFloat(remaining);
 
-		string textureLine = GetNextLine(remaining);
+		string textureLine = GetNextLine(remaining);// Load in texture paths from their own lines
 		GetTexture(material.alphaTextureMap, textureLine, folder);
 
 		textureLine = GetNextLine(remaining);
@@ -144,6 +142,8 @@ void BasicModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& 
 		word = remaining[0] == newLine ? empty : GetNextWord(remaining);
 	}
 
+	// Now all the materials have been read in, just the meshes remain
+
 	word = GetNextLine(remaining);
 
 	char* line = GetNextLine(remaining);
@@ -154,55 +154,55 @@ void BasicModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& 
 	string name = word;
 	object->SetName(name);
 
-	while (line != NULL)
+	while (line != NULL)// While there are meshes still in the data
 	{
 		mesh = new Mesh(program);
 		vertices = vector<Vertex>();
 		indices = vector<GLuint>();
 		counter = 0;
-		string materialName = GetNextWord(line);
+		string materialName = GetNextWord(line);// Read in the material from it's name
 		Material material = model.GetMaterial(materialName);
 		mesh->SetMaterial(material);
 
-		while (strcmp(line, empty) != 0)
+		while (strcmp(line, empty) != 0)// While there are more 'words' on the line
 		{
 			Vertex vertex = Vertex();
 
-			GLfloat posX = GetNextWordAsFloat(line);
+			GLfloat posX = GetNextWordAsFloat(line);// Read in a position
 			GLfloat posY = GetNextWordAsFloat(line);
 			GLfloat posZ = GetNextWordAsFloat(line);
 
 			vertex.SetPosition(posX, posY, posZ);
 
-			GLfloat normX = GetNextWordAsFloat(line);
+			GLfloat normX = GetNextWordAsFloat(line);// Read in a normal
 			GLfloat normY = GetNextWordAsFloat(line);
 			GLfloat normZ = GetNextWordAsFloat(line);
 
 			vertex.SetNormal(normX, normY, normZ);
 
-			vertex.SetColour(material.diffuseColour.r,
+			vertex.SetColour(material.diffuseColour.r,// Take the colour from the current material
 				material.diffuseColour.g,
 				material.diffuseColour.b,
 				material.dissolve);
 
-			GLfloat texX = GetNextWordAsFloat(line);
+			GLfloat texX = GetNextWordAsFloat(line);// Read in a texture coord
 			GLfloat texY = GetNextWordAsFloat(line);
 
 			vertex.SetTexture(texX, texY);
 
 			vertices.push_back(vertex);
-			indices.push_back(counter);
+			indices.push_back(counter);// Create in index
 			counter++;
 		}
 
-		mesh->SetIndicies(indices);
+		mesh->SetIndicies(indices);// Add the vertices and indices
 		mesh->SetVertices(vertices);
 
-		object->AddMesh(*mesh);
+		object->AddMesh(*mesh);// Add the mesh to the current object
 		
-		if (remaining[0] == newLine)
+		if (remaining[0] == newLine)// If an empty line has been reached
 		{
-			model.AddObject(*object);
+			model.AddObject(*object);// Add the object and create a new one
 			object = new Object(program);
 			string name = GetNextLine(remaining);
 			object->SetName(name);
@@ -237,6 +237,7 @@ GLfloat BasicModelLoader::GetNextLineAsFloat(char*& remaining)
 	return stof(GetNextLine(remaining));
 }
 
+// Loads in a texture
 void BasicModelLoader::GetTexture(Texture& texture, std::string& line, std::string& folder)
 {
 	string texturePath = folder + line;// Combine the line data with the current folder to form a path
