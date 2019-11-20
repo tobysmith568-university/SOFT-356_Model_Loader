@@ -179,7 +179,7 @@ void DaeModelLoader::ParseMaterial(Material& material, string fileData, string f
 		}
 
 		Texture texture = Texture();// Load in a texture using that file path and set it to the diffuse texture
-		GetTexture(texture, fileLocation);
+		GetTexture(texture, sm[1], fileLocation);
 		material.diffuseTextureMap = texture;
 	}
 }
@@ -358,7 +358,7 @@ void DaeModelLoader::BuildModel(Model& model, Material material, std::vector<Ver
 }
 
 // Loads a texture in from file
-void DaeModelLoader::GetTexture(Texture& texture, std::string texturePath)
+void DaeModelLoader::GetTexture(Texture& texture, string textureName, string texturePath)
 {
 	GLint width, height, nrChannels;
 	stbi_set_flip_vertically_on_load(true);
@@ -369,6 +369,7 @@ void DaeModelLoader::GetTexture(Texture& texture, std::string texturePath)
 		//TODO Error handling
 	}
 
+	texture.SetPath(textureName);
 	texture.SetWidth(width);
 	texture.SetHeight(height);
 	texture.SetNrChannels(nrChannels);

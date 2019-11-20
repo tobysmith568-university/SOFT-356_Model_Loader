@@ -16,7 +16,7 @@ BasicModelLoader::BasicModelLoader(FileUtils& _fileUtils)
 
 void BasicModelLoader::Export(Model& model)
 {
-	/*ostringstream result;
+	ostringstream result;
 
 	vector<Material> materials = model.GetMaterials();
 
@@ -38,36 +38,22 @@ void BasicModelLoader::Export(Model& model)
 			<< space << material.specularColourWeight
 			<< space << material.dissolve
 			<< space << material.illuminationModel
-
-			<< endl << material.alphaTextureMap.GetWidth()
-			<< space << material.alphaTextureMap.GetHeight()
-			<< space << material.alphaTextureMap.GetNrChannels()
-			<< space << base64_encode((const unsigned char*)material.alphaTextureMap.GetData().c_str(), strlen(material.alphaTextureMap.GetData().c_str()))
-
-			<< endl << material.ambientTextureMap.GetWidth()
-			<< space << material.ambientTextureMap.GetHeight()
-			<< space << material.ambientTextureMap.GetNrChannels()
-			<< space << base64_encode((const unsigned char*)material.ambientTextureMap.GetData().c_str(), strlen(material.ambientTextureMap.GetData().c_str()))
-
-			<< endl << material.diffuseTextureMap.GetWidth()
-			<< space << material.diffuseTextureMap.GetHeight()
-			<< space << material.diffuseTextureMap.GetNrChannels()
-			<< space << base64_encode((const unsigned char*)material.diffuseTextureMap.GetData().c_str(), strlen(material.diffuseTextureMap.GetData().c_str()))
+			<< endl << (material.alphaTextureMap.GetPath().size() != 0 ? material.alphaTextureMap.GetPath() : "no.png")
+			<< endl << (material.ambientTextureMap.GetPath().size() != 0 ? material.ambientTextureMap.GetPath() : "no.png")
+			<< endl << (material.diffuseTextureMap.GetPath().size() != 0 ? material.diffuseTextureMap.GetPath() : "no.png")
 			<< endl;
 	}
-
-	result << endl;
 
 	vector<Object> objects = model.GetObjects();
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		result << objects[i].GetName() << endl;
+		result << endl << objects[i].GetName();
 
 		vector<Mesh> meshes = objects[i].GetMeshes();
 		for (size_t ii = 0; ii < meshes.size(); ii++)
 		{
 			Mesh& mesh = meshes[ii];
-			result << mesh.GetMaterial().name;
+			result << endl << mesh.GetMaterial().name;
 			
 			vector<Vertex> vertices = mesh.GetVertices();
 			vector<GLuint> indices = mesh.GetIndicies();
@@ -89,9 +75,7 @@ void BasicModelLoader::Export(Model& model)
 				result << space << vertex.texture.x;
 				result << space << vertex.texture.y;
 			}
-			result << endl;
 		}
-		result << endl;
 	}
 
 	string data = result.str();
@@ -100,7 +84,7 @@ void BasicModelLoader::Export(Model& model)
 	stringStream << time(nullptr);
 	string saveFileLocation = "C:/Exports/" + stringStream.str() + ".basic";
 
-	fileUtils.SaveFile(data, saveFileLocation);*/
+	fileUtils.SaveFile(data, saveFileLocation);
 }
 
 void BasicModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& program)
@@ -133,26 +117,11 @@ void BasicModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& 
 		material.dissolve = stof(GetNextWord(remaining));
 		material.illuminationModel = stof(GetNextLine(remaining));
 
-		material.alphaTextureMap.SetWidth(stoi(GetNextWord(remaining)));
-		material.alphaTextureMap.SetHeight(stoi(GetNextWord(remaining)));
-		material.alphaTextureMap.SetNrChannels(stoi(GetNextWord(remaining)));
-		string alphaTexture = base64_decode(GetNextLine(remaining));
-		//const unsigned char* c_alphaTexture = (const unsigned char*)alphaTexture.c_str();
-		material.alphaTextureMap.SetData(alphaTexture);
+		//material.alphaTextureMap
 
-		material.ambientTextureMap.SetWidth(stoi(GetNextWord(remaining)));
-		material.ambientTextureMap.SetHeight(stoi(GetNextWord(remaining)));
-		material.ambientTextureMap.SetNrChannels(stoi(GetNextWord(remaining)));
-		string ambientData = base64_decode(GetNextLine(remaining));
-		//const unsigned char* c_ambientData = (const unsigned char*)ambientData.c_str();
-		material.ambientTextureMap.SetData(ambientData);
+		//material.ambientTextureMap
 
-		material.diffuseTextureMap.SetWidth(stoi(GetNextWord(remaining)));
-		material.diffuseTextureMap.SetHeight(stoi(GetNextWord(remaining)));
-		material.diffuseTextureMap.SetNrChannels(stoi(GetNextWord(remaining)));
-		string diffuseData = base64_decode(GetNextLine(remaining));
-		//const unsigned char* c_diffuseData = (const unsigned char*)diffuseData.c_str();
-		material.diffuseTextureMap.SetData(diffuseData);
+		//material.diffuseTextureMap
 
 		model.AddMaterial(material);
 		word = remaining[0] == '\n' ? empty : GetNextWord(remaining);
@@ -173,7 +142,7 @@ void BasicModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& 
 		while (strcmp(line, "") != 0)
 		{
 			Vertex vertex = Vertex();
-			
+
 			vertex.SetPosition(
 				stof(GetNextWord(line)),
 				stof(GetNextWord(line)),

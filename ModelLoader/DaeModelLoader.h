@@ -32,5 +32,5 @@ private:
 	void CreateVertices(std::vector<Vertex>& vertices, std::vector<Input>& inputs, std::vector<GLfloat>& indices);
 
 	void BuildModel(Model& model, Material material, std::vector<Vertex>& vertices, GLuint& program);
-	void GetTexture(Texture& texture, std::string texturePath);
+	void GetTexture(Texture& texture, std::string textureName, std::string texturePath);
 };

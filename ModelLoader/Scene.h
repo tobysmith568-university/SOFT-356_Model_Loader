@@ -11,7 +11,7 @@
 #include "ModelLoaderFactory.h"
 #include "BasicModelLoader.h"
 
-#include <glm/glm.hpp> //includes GLM
+#include <glm/glm.hpp>
 #include <vector>
 
 class Scene

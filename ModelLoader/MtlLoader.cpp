@@ -149,6 +149,7 @@ void MtlLoader::GetTexture(Texture& texture, std::string& line, std::string& fol
 		//TODO Error handling
 	}
 
+	texture.SetPath(texturePath);
 	texture.SetWidth(width);
 	texture.SetHeight(height);
 	texture.SetNrChannels(nrChannels);

@@ -9,6 +9,16 @@ Texture::Texture()
 	nrChannels = 4;
 }
 
+std::string Texture::GetPath()
+{
+	return path;
+}
+
+void Texture::SetPath(std::string _path)
+{
+	path = _path;
+}
+
 GLint Texture::GetWidth()
 {
 	return width;
