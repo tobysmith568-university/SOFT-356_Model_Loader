@@ -6,6 +6,7 @@
 #include <sstream>
 #include <iostream>
 #include <ctime>
+#include "stb_image.h"
 
 using namespace std;
 
@@ -23,6 +24,11 @@ void BasicModelLoader::Export(Model& model)
 	Material material;
 	for (size_t i = 0; i < materials.size(); i++)
 	{
+		if (i != 0)
+		{
+			result << endl;
+		}
+
 		material = materials[i];
 
 		result << material.name
@@ -40,14 +46,13 @@ void BasicModelLoader::Export(Model& model)
 			<< space << material.illuminationModel
 			<< endl << (material.alphaTextureMap.GetPath().size() != 0 ? material.alphaTextureMap.GetPath() : "no.png")
 			<< endl << (material.ambientTextureMap.GetPath().size() != 0 ? material.ambientTextureMap.GetPath() : "no.png")
-			<< endl << (material.diffuseTextureMap.GetPath().size() != 0 ? material.diffuseTextureMap.GetPath() : "no.png")
-			<< endl;
+			<< endl << (material.diffuseTextureMap.GetPath().size() != 0 ? material.diffuseTextureMap.GetPath() : "no.png");
 	}
 
 	vector<Object> objects = model.GetObjects();
 	for (size_t i = 0; i < objects.size(); i++)
 	{
-		result << endl << objects[i].GetName();
+		result << endl << endl << objects[i].GetName();
 
 		vector<Mesh> meshes = objects[i].GetMeshes();
 		for (size_t ii = 0; ii < meshes.size(); ii++)
@@ -89,7 +94,8 @@ void BasicModelLoader::Export(Model& model)
 
 void BasicModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& program)
 {
-	/*string fileData = fileUtils.ReadFile(fileLocation);
+	string folder = fileUtils.GetFolder(fileLocation);
+	string fileData = fileUtils.ReadFile(fileLocation);
 
 	vector<Vertex> vertices = vector<Vertex>();
 	vector<GLuint> indices = vector<GLuint>();
@@ -104,24 +110,27 @@ void BasicModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& 
 	{
 		Material material = Material();
 		material.name = word;
-		material.ambientColour.r = stof(GetNextWord(remaining));
-		material.ambientColour.g = stof(GetNextWord(remaining));
-		material.ambientColour.b = stof(GetNextWord(remaining));
-		material.diffuseColour.r = stof(GetNextWord(remaining));
-		material.diffuseColour.g = stof(GetNextWord(remaining));
-		material.diffuseColour.b = stof(GetNextWord(remaining));
-		material.specularColour.r = stof(GetNextWord(remaining));
-		material.specularColour.g = stof(GetNextWord(remaining));
-		material.specularColour.b = stof(GetNextWord(remaining));
-		material.specularColourWeight = stof(GetNextWord(remaining));
-		material.dissolve = stof(GetNextWord(remaining));
-		material.illuminationModel = stof(GetNextLine(remaining));
+		material.ambientColour.r = GetNextWordAsFloat(remaining);
+		material.ambientColour.g = GetNextWordAsFloat(remaining);
+		material.ambientColour.b = GetNextWordAsFloat(remaining);
+		material.diffuseColour.r = GetNextWordAsFloat(remaining);
+		material.diffuseColour.g = GetNextWordAsFloat(remaining);
+		material.diffuseColour.b = GetNextWordAsFloat(remaining);
+		material.specularColour.r = GetNextWordAsFloat(remaining);
+		material.specularColour.g = GetNextWordAsFloat(remaining);
+		material.specularColour.b = GetNextWordAsFloat(remaining);
+		material.specularColourWeight = GetNextWordAsFloat(remaining);
+		material.dissolve = GetNextWordAsFloat(remaining);
+		material.illuminationModel = GetNextLineAsFloat(remaining);
 
-		//material.alphaTextureMap
+		string textureLine = GetNextLine(remaining);
+		GetTexture(material.alphaTextureMap, textureLine, folder);
 
-		//material.ambientTextureMap
+		textureLine = GetNextLine(remaining);
+		GetTexture(material.ambientTextureMap, textureLine, folder);
 
-		//material.diffuseTextureMap
+		textureLine = GetNextLine(remaining);
+		GetTexture(material.diffuseTextureMap, textureLine, folder);
 
 		model.AddMaterial(material);
 		word = remaining[0] == '\n' ? empty : GetNextWord(remaining);
@@ -129,57 +138,71 @@ void BasicModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& 
 
 	word = GetNextLine(remaining);
 
-	Object object = Object(program);
-	string name = word;
-	object.SetName(name);
 	char* line = GetNextLine(remaining);
+	Object* object = nullptr;
+	Mesh* mesh = nullptr;
+
+	object = new Object(program);
+	string name = word;
+	object->SetName(name);
+
 	while (line != NULL)
 	{
-		Mesh mesh = Mesh(program);
+		mesh = new Mesh(program);
+		vertices = vector<Vertex>();
+		indices = vector<GLuint>();
 		string materialName = GetNextWord(line);
-		mesh.SetMaterial(model.GetMaterial(materialName));
+		mesh->SetMaterial(model.GetMaterial(materialName));
 
 		while (strcmp(line, "") != 0)
 		{
 			Vertex vertex = Vertex();
 
 			vertex.SetPosition(
-				stof(GetNextWord(line)),
-				stof(GetNextWord(line)),
-				stof(GetNextWord(line)));
+				GetNextWordAsFloat(line),
+				GetNextWordAsFloat(line),
+				GetNextWordAsFloat(line));
 
 			vertex.SetNormal(
-				stof(GetNextWord(line)),
-				stof(GetNextWord(line)),
-				stof(GetNextWord(line)));
+				GetNextWordAsFloat(line),
+				GetNextWordAsFloat(line),
+				GetNextWordAsFloat(line));
 
 			vertex.SetColour(
-				stof(GetNextWord(line)),
-				stof(GetNextWord(line)),
-				stof(GetNextWord(line)),
-				stof(GetNextWord(line)));
+				GetNextWordAsFloat(line),
+				GetNextWordAsFloat(line),
+				GetNextWordAsFloat(line),
+				GetNextWordAsFloat(line));
 
 			vertex.SetTexture(
-				stof(GetNextWord(line)),
-				stof(GetNextWord(line)));
+				GetNextWordAsFloat(line),
+				GetNextWordAsFloat(line));
 
 			vertices.push_back(vertex);
 			indices.push_back(counter);
 			counter++;
 		}
 
-		mesh.SetIndicies(indices);
-		mesh.SetVertices(vertices);
+		mesh->SetIndicies(indices);
+		mesh->SetVertices(vertices);
 
-		object.AddMesh(mesh);
+		object->AddMesh(*mesh);
+		
+		if (remaining[0] == '\n')
+		{
+			model.AddObject(*object);
+			object = new Object(program);
+			string name = GetNextLine(remaining);
+			object->SetName(name);
 
+		}
 		line = GetNextLine(remaining);
 
-		if (true)
-		{
-			model.AddObject(object);
-		}
-	}*/
+		delete mesh;
+	}
+
+	model.AddObject(*object);
+	delete object;
 }
 
 char* BasicModelLoader::GetNextWord(char*& remaining)
@@ -190,4 +213,34 @@ char* BasicModelLoader::GetNextWord(char*& remaining)
 char* BasicModelLoader::GetNextLine(char*& remaining)
 {
 	return strtok_s(remaining, "\n", &remaining);
+}
+
+GLfloat BasicModelLoader::GetNextWordAsFloat(char*& remaining)
+{
+	return stof(GetNextWord(remaining));
+}
+
+GLfloat BasicModelLoader::GetNextLineAsFloat(char*& remaining)
+{
+	return stof(GetNextLine(remaining));
+}
+
+void BasicModelLoader::GetTexture(Texture& texture, std::string& line, std::string& folder)
+{
+	string texturePath = folder + line;// Combine the line data with the current folder to form a path
+
+	GLint width, height, nrChannels;
+	stbi_set_flip_vertically_on_load(true);
+	unsigned char* c_data = stbi_load(texturePath.c_str(), &width, &height, &nrChannels, 0);// Read in the texture file
+
+	if (!c_data)
+	{
+		//TODO Error handling
+	}
+
+	texture.SetPath(texturePath);
+	texture.SetWidth(width);
+	texture.SetHeight(height);
+	texture.SetNrChannels(nrChannels);
+	texture.SetData(c_data);
 }

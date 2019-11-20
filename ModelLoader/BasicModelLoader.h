@@ -12,6 +12,8 @@ public:
 	void GetModel(Model& model, std::string fileLocation, GLuint& program);
 	char* GetNextWord(char*& remaining);
 	char* GetNextLine(char*& remaining);
+	GLfloat GetNextWordAsFloat(char*& remaining);
+	GLfloat GetNextLineAsFloat(char*& remaining);
 
 private:
 	FileUtils fileUtils;
@@ -20,4 +22,6 @@ private:
 	char brokenBar = '¦';
 	char bar = '|';
 	char* empty = (char*)"";
+
+	void GetTexture(Texture& texture, std::string& line, std::string& folder);
 };
