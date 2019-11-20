@@ -10,28 +10,40 @@
 
 using namespace std;
 
-BasicModelLoader::BasicModelLoader(FileUtils& _fileUtils)
-	: fileUtils(_fileUtils)
+BasicModelLoader::BasicModelLoader(FileUtils& _fileUtils, ConsoleUtil& _consoleUtil)
+	: fileUtils(_fileUtils), consoleUtil(_consoleUtil)
 {
 }
 
 void BasicModelLoader::Export(Model& model)
 {
+	consoleUtil.ClearConsole();
+	string saveFileLocation = consoleUtil.GetInput("Enter a file name for the exported model");
+
 	ostringstream result;
 
 	vector<Material> materials = model.GetMaterials();
 
 	Material material;
-	for (size_t i = 0; i < materials.size(); i++)
+	for (size_t i = 0; i < materials.size(); i++)// For every material in the model
 	{
-		if (i != 0)
+		if (i != 0)// Assuming it's not the first one, add a new line
 		{
 			result << endl;
 		}
 
 		material = materials[i];
 
-		result << material.name
+		string alphaPath = material.alphaTextureMap.GetPath();
+		alphaPath = alphaPath.size() == 0 ? noPNG : fileUtils.GetFileName(alphaPath);
+
+		string ambientPath = material.ambientTextureMap.GetPath();
+		ambientPath = ambientPath.size() == 0 ? noPNG : fileUtils.GetFileName(ambientPath);
+
+		string diffusePath = material.diffuseTextureMap.GetPath();
+		diffusePath = diffusePath.size() == 0 ? noPNG : fileUtils.GetFileName(diffusePath);
+
+		result << material.name// Print every value from the material to the output stream
 			<< space << material.ambientColour.r
 			<< space << material.ambientColour.g
 			<< space << material.ambientColour.b
@@ -44,18 +56,18 @@ void BasicModelLoader::Export(Model& model)
 			<< space << material.specularColourWeight
 			<< space << material.dissolve
 			<< space << material.illuminationModel
-			<< endl << (material.alphaTextureMap.GetPath().size() != 0 ? material.alphaTextureMap.GetPath() : "no.png")
-			<< endl << (material.ambientTextureMap.GetPath().size() != 0 ? material.ambientTextureMap.GetPath() : "no.png")
-			<< endl << (material.diffuseTextureMap.GetPath().size() != 0 ? material.diffuseTextureMap.GetPath() : "no.png");
+			<< endl << alphaPath
+			<< endl << ambientPath
+			<< endl << diffusePath;
 	}
 
 	vector<Object> objects = model.GetObjects();
-	for (size_t i = 0; i < objects.size(); i++)
+	for (size_t i = 0; i < objects.size(); i++)// For every object in the model
 	{
 		result << endl << endl << objects[i].GetName();
 
 		vector<Mesh> meshes = objects[i].GetMeshes();
-		for (size_t ii = 0; ii < meshes.size(); ii++)
+		for (size_t ii = 0; ii < meshes.size(); ii++)// For every mesh in the model
 		{
 			Mesh& mesh = meshes[ii];
 			result << endl << mesh.GetMaterial().name;
@@ -63,20 +75,16 @@ void BasicModelLoader::Export(Model& model)
 			vector<Vertex> vertices = mesh.GetVertices();
 			vector<GLuint> indices = mesh.GetIndicies();
 
-			for (size_t iii = 0; iii < indices.size(); iii++)
+			for (size_t iii = 0; iii < indices.size(); iii++)// For every index
 			{
 				Vertex vertex = vertices[indices[iii]];
 
-				result << space << vertex.position.x;
+				result << space << vertex.position.x;// Print out every value from the related vertex
 				result << space << vertex.position.y;
 				result << space << vertex.position.z;
 				result << space << vertex.normal.x;
 				result << space << vertex.normal.y;
 				result << space << vertex.normal.z;
-				result << space << vertex.colour.r;
-				result << space << vertex.colour.g;
-				result << space << vertex.colour.b;
-				result << space << vertex.colour.a;
 				result << space << vertex.texture.x;
 				result << space << vertex.texture.y;
 			}
@@ -87,9 +95,9 @@ void BasicModelLoader::Export(Model& model)
 
 	stringstream stringStream;
 	stringStream << time(nullptr);
-	string saveFileLocation = "C:/Exports/" + stringStream.str() + ".basic";
 
 	fileUtils.SaveFile(data, saveFileLocation);
+	consoleUtil.ClearConsole();
 }
 
 void BasicModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& program)
@@ -100,13 +108,13 @@ void BasicModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& 
 	vector<Vertex> vertices = vector<Vertex>();
 	vector<GLuint> indices = vector<GLuint>();
 
-	char* word = (char*)"";
+	char* word = empty;
 	char* remaining = (char*)fileData.c_str();
 
 	GLuint counter = 0;
 	word = GetNextWord(remaining);
 
-	while (word != "")
+	while (word != empty)
 	{
 		Material material = Material();
 		material.name = word;
@@ -133,7 +141,7 @@ void BasicModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& 
 		GetTexture(material.diffuseTextureMap, textureLine, folder);
 
 		model.AddMaterial(material);
-		word = remaining[0] == '\n' ? empty : GetNextWord(remaining);
+		word = remaining[0] == newLine ? empty : GetNextWord(remaining);
 	}
 
 	word = GetNextLine(remaining);
@@ -151,32 +159,36 @@ void BasicModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& 
 		mesh = new Mesh(program);
 		vertices = vector<Vertex>();
 		indices = vector<GLuint>();
+		counter = 0;
 		string materialName = GetNextWord(line);
-		mesh->SetMaterial(model.GetMaterial(materialName));
+		Material material = model.GetMaterial(materialName);
+		mesh->SetMaterial(material);
 
-		while (strcmp(line, "") != 0)
+		while (strcmp(line, empty) != 0)
 		{
 			Vertex vertex = Vertex();
 
-			vertex.SetPosition(
-				GetNextWordAsFloat(line),
-				GetNextWordAsFloat(line),
-				GetNextWordAsFloat(line));
+			GLfloat posX = GetNextWordAsFloat(line);
+			GLfloat posY = GetNextWordAsFloat(line);
+			GLfloat posZ = GetNextWordAsFloat(line);
 
-			vertex.SetNormal(
-				GetNextWordAsFloat(line),
-				GetNextWordAsFloat(line),
-				GetNextWordAsFloat(line));
+			vertex.SetPosition(posX, posY, posZ);
 
-			vertex.SetColour(
-				GetNextWordAsFloat(line),
-				GetNextWordAsFloat(line),
-				GetNextWordAsFloat(line),
-				GetNextWordAsFloat(line));
+			GLfloat normX = GetNextWordAsFloat(line);
+			GLfloat normY = GetNextWordAsFloat(line);
+			GLfloat normZ = GetNextWordAsFloat(line);
 
-			vertex.SetTexture(
-				GetNextWordAsFloat(line),
-				GetNextWordAsFloat(line));
+			vertex.SetNormal(normX, normY, normZ);
+
+			vertex.SetColour(material.diffuseColour.r,
+				material.diffuseColour.g,
+				material.diffuseColour.b,
+				material.dissolve);
+
+			GLfloat texX = GetNextWordAsFloat(line);
+			GLfloat texY = GetNextWordAsFloat(line);
+
+			vertex.SetTexture(texX, texY);
 
 			vertices.push_back(vertex);
 			indices.push_back(counter);
@@ -188,7 +200,7 @@ void BasicModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& 
 
 		object->AddMesh(*mesh);
 		
-		if (remaining[0] == '\n')
+		if (remaining[0] == newLine)
 		{
 			model.AddObject(*object);
 			object = new Object(program);

@@ -29,7 +29,7 @@ IModelLoader& ModelLoaderFactory::GetLoaderForFile(std::string fileLocation)
 	}
 	else if (fileExtension == "basic")// If this file extension is for a .basic file
 	{
-		static BasicModelLoader basicModelLoader = BasicModelLoader(fileUtils);
+		static BasicModelLoader basicModelLoader = BasicModelLoader(fileUtils, consoleUtil);
 		return basicModelLoader;// Create and return a BasicModelLoader
 	}
 	else

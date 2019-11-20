@@ -29,7 +29,7 @@ int main(int argc, char** argv)
 	ModelLoaderFactory modelLoaderFactory = ModelLoaderFactory(fileUtils, consoleUtil);
 	GLFWUtil glfwUtil = GLFWUtil(configUtil, inputManager);
 	GLEWUtil glewUtil = GLEWUtil();
-	BasicModelLoader basicModelLoader = BasicModelLoader(fileUtils);
+	BasicModelLoader basicModelLoader = BasicModelLoader(fileUtils, consoleUtil);
 
 	RunScene(fileUtils, consoleUtil, configUtil, inputManager, modelLoaderFactory, glfwUtil, glewUtil, basicModelLoader);// Run a scene
 }

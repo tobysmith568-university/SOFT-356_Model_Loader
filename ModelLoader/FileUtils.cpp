@@ -63,6 +63,28 @@ std::string FileUtils::GetName(std::string& fileLocation)
 	return result;
 }
 
+std::string FileUtils::GetFileName(std::string& fileLocation)
+{
+	if (fileLocation.size() < 1)
+	{
+		throw invalid_argument("An empty file path was given");
+	}
+
+	string result = "";
+
+	for (size_t i = fileLocation.size(); i > 0; i--)// Works through the path from back-to-front
+	{
+		if (fileLocation[i - 1] == '/' || fileLocation[i - 1] == '\\')// If the char is a \ or / then stop
+		{
+			return result;
+		}
+
+		result = fileLocation[i - 1] + result;// Otherwise, build up a result back-to-front
+	}
+
+	return result;
+}
+
 // Returns a file path with the file name and the .extension removed
 std::string FileUtils::GetFolder(std::string& fileLocation)
 {

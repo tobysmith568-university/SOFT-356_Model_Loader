@@ -3,11 +3,12 @@
 #include "IModelLoader.h"
 #include "Model.h"
 #include "FileUtils.h"
+#include "ConsoleUtil.h"
 
 class BasicModelLoader : public IModelLoader
 {
 public:
-	BasicModelLoader(FileUtils& _fileUtils);
+	BasicModelLoader(FileUtils& _fileUtils, ConsoleUtil& _consoleUtil);
 	void Export(Model& model);
 	void GetModel(Model& model, std::string fileLocation, GLuint& program);
 	char* GetNextWord(char*& remaining);
@@ -17,11 +18,12 @@ public:
 
 private:
 	FileUtils fileUtils;
+	ConsoleUtil consoleUtil;
 
 	char space = ' ';
-	char brokenBar = '¦';
-	char bar = '|';
+	char newLine = '\n';
 	char* empty = (char*)"";
+	std::string noPNG = "no.png";
 
 	void GetTexture(Texture& texture, std::string& line, std::string& folder);
 };
