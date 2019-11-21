@@ -29,7 +29,7 @@ string ConsoleUtil::GetInput(string question)
 	cout << endl << question << endl << "--> ";
 
 	string result;
-	cin >> result;
+	getline(cin, result);
 
 	return result;
 }
