@@ -31,13 +31,15 @@ All of the key bindings within the config file begin with the prefix `KeyBinding
 
 ### Functionality
 
-When the program opens you should see an empty window showing only the configured background colour, by default this is a pale blue. To add a model you need to press the `NewModel (N)` key. This will take the context away from the OpenGL window and back to the console window where it will prompt you for a file path to a model; the path can be absolute or relative to the .exe. On pressing enter, the context will then return to the OpenGL window. If the model is larger in size then the program will lock up while it loads in the new model. On a modern machine, files like [creeper.obj](ModelLoader/media/Creeper.obj) should instantly, files like [low_poly_boat.obj](ModelLoader/media/low_poly_boat.obj) should take around 10 seconds, and files like [low_poly_boat.dae](ModelLoader/media/low_poly_boat.dae) should take just over 2 minutes.
+When the program opens you should see an empty window showing only the configured background colour, by default this is a pale blue. To add a model you need to press the `NewModel (N)` key. This will take the context away from the OpenGL window and back to the console window where it will prompt you for a file path to a model; the path can be absolute or relative to the .exe. On pressing enter, the context will then return to the OpenGL window. If the model is larger in size then the program will lock up while it loads in the new model. On a modern machine, files like [creeper.obj](ModelLoader/Obj/Creeper.obj) should instantly, files like [low_poly_boat.obj](ModelLoader/Obj/low_poly_boat.obj) should take around 10 seconds, and files like [low_poly_boat.dae](ModelLoader/Dae/low_poly_boat.dae) should take just over 2 minutes.
 
 Any model which is loaded into the scene can be manipulated while it is the current active model. The `FirstModel (1)`, `SecondModel (2)` etc., keybindings can be used to swap the active model. Those 9 key bindings reprent the first 9 models which are loaded into the scene, should there be more than 9 models loaded into the scene at a single time then any aditional models past the 9th cannot be manipulated.
 
 The `DeleteModel (Delete)` key binding can be used to remove models from the scene. It will always remove the model which was most recenly added, not the currently active model.
 
 The `Reset (R)` key binding can be used to reset the position, rotation, and scale of the currently active model.
+
+The `SaveModelAsBasic (F1)` key binding can be used to export the currently active model into a file format I have developed called a `.basic`. Pressing this key binding will switch the context to the console window where it will ask you to enter a file loction for where the model should be saved to; this path can be absolute or relative to the exe. Please note that exporting will overwrite any existing file with the same name without warning. The file location you supply needs to contain the `.basic` file extension. Once a file has been exported it can be re-inported like any other `.obj` or .dae`.
 
 ## Code Structure
 
