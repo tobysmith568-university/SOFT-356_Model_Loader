@@ -1,6 +1,7 @@
 #include "DaeModelLoader.h"
 #include <regex>
 #include "stb_image.h"
+#include "InvalidModelFileException.h"
 
 using namespace std;
 
@@ -21,7 +22,7 @@ void DaeModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& pr
 	vector<Vertex> vertices = vector<Vertex>();
 	Material material = Material();
 
-	ParseSources(sources, fileData);// Parse the file for the data
+	ParseSources(sources, fileData, fileLocation);// Parse the file for the data
 	ParseVertexInput(vertexID, vertexSource, fileData);
 	ParseTriangleInputs(inputs, materialName, fileData);
 
@@ -35,7 +36,7 @@ void DaeModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& pr
 
 	PairInputsAndSources(inputs, sources);
 
-	ParseFaceData(faceData, fileData);
+	ParseFaceData(faceData, fileData, fileLocation);
 	ParseMaterial(material, fileData, folder);
 
 	OrderInputsByOffset(inputs);// Sort the data and create the model
@@ -44,21 +45,16 @@ void DaeModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& pr
 }
 
 // Reads in all the source tags from the file
-void DaeModelLoader::ParseSources(std::map<std::string, Source>& sources, std::string fileData)
+void DaeModelLoader::ParseSources(map<string, Source>& sources, string fileData, string& fileLocation)
 {
 	const regex sourceRegex("<source [\\s\\S]*?id=\"([A-Za-z0-9-_]+?)\"[\\s\\S]*?>[\\s\\S]*?<float_array[\\s\\S]*?>([\\d -.e]+)?<\\/float_array>[\\s\\S]*?<technique_common>[\\s\\S]*?<accessor [\\s\\S]*?stride=\"(\\d+)\">");
 	smatch sm;
 
 	while (regex_search(fileData, sm, sourceRegex))// While regex matches are found in the file
 	{
-		if (sm.size() != 4)// Ensure there are 4 matches
+		if (sm.size() != 4 ||!sm[0].matched || !sm[1].matched || !sm[2].matched || !sm[3].matched)// Ensure all 4 matches found something
 		{
-			continue;
-		}
-
-		if (!sm[0].matched || !sm[1].matched || !sm[2].matched || !sm[3].matched)// Ensure all 4 matches found something
-		{
-			continue;
+			throw InvalidModelFileException(fileLocation, "There is no valid data in one of the source tags");
 		}
 
 		string values = sm[2];
@@ -130,25 +126,24 @@ void DaeModelLoader::ParseTriangleInputs(std::vector<Input>& inputs, std::string
 }
 
 // Reads in a p tag from a triangle tag from the file
-void DaeModelLoader::ParseFaceData(vector<GLfloat>& faceData, std::string fileData)
+void DaeModelLoader::ParseFaceData(vector<GLfloat>& faceData, string fileData, string& fileLocation)
 {
 	const regex sourceRegex("<triangles [\\s\\S]*?>[\\s\\S]+?<p>([\\d ]+?)<\\/p>[\\s\\S]*?<\\/triangles>");
 	smatch sm;
 
-	if (regex_search(fileData, sm, sourceRegex))// If a regex match is found in the file
+	regex_search(fileData, sm, sourceRegex);// Run a regex search in the file
+	
+	if (sm.size() != 2 || !sm[0].matched || !sm[1].matched)// Ensure both matches found something
 	{
-		if (sm.size() != 2)// Ensure there are 2 matches
-		{
-			return;
-		}
+		throw InvalidModelFileException(fileLocation, "There is no valid Face data in the <triangles>...<p></p>...</triangles> tag");
+	}
 
-		if (!sm[0].matched || !sm[1].matched)// Ensure both matches found something
-		{
-			return;
-		}
+	string data = sm[1];
+	ReadSpaceSepFloats(faceData, data);
 
-		string data = sm[1];
-		ReadSpaceSepFloats(faceData, data);
+	if (faceData.size() == 0)
+	{
+		throw InvalidModelFileException(fileLocation, "There is no valid Face data in the <triangles>...<p></p>...</triangles> tag");
 	}
 }
 
@@ -305,28 +300,28 @@ void DaeModelLoader::CreateVertices(std::vector<Vertex>& vertices, std::vector<I
 		for (size_t ii = 0; ii < inputs.size(); ii++)// For every specific type of data
 		{
 			if (inputs[ii].GetSemantic() == "VERTEX")// Add data based on the current type
-			{// Which chunk of data plus the specific type within that--V     V--The stride of the type of data
-				newVertex.position.x = inputs[ii].GetData()[indices[i + ii] * 3];//V--The offset within the stride
-				newVertex.position.y = inputs[ii].GetData()[indices[i + ii] * 3 + 1];
-				newVertex.position.z = inputs[ii].GetData()[indices[i + ii] * 3 + 2];
+			{//  Which chunk of data plus the specific type within that--V       V--The stride of the type of data
+				newVertex.position.x = inputs.at(ii).GetData().at(indices.at(i + ii) * 3);//V--The offset within the stride
+				newVertex.position.y = inputs.at(ii).GetData().at(indices.at(i + ii) * 3 + 1);
+				newVertex.position.z = inputs.at(ii).GetData().at(indices.at(i + ii) * 3 + 2);
 			}
 			else if (inputs[ii].GetSemantic() == "NORMAL")
 			{
-				newVertex.normal.x = inputs[ii].GetData()[indices[i + ii] * 3];
-				newVertex.normal.y = inputs[ii].GetData()[indices[i + ii] * 3 + 1];
-				newVertex.normal.z = inputs[ii].GetData()[indices[i + ii] * 3 + 2];
+				newVertex.normal.x = inputs.at(ii).GetData().at(indices.at(i + ii) * 3);
+				newVertex.normal.y = inputs.at(ii).GetData().at(indices.at(i + ii) * 3 + 1);
+				newVertex.normal.z = inputs.at(ii).GetData().at(indices.at(i + ii) * 3 + 2);
 			}
 			else if (inputs[ii].GetSemantic() == "TEXCOORD")
 			{
-				newVertex.texture.x = inputs[ii].GetData()[indices[i + ii] * 2];
-				newVertex.texture.y = inputs[ii].GetData()[indices[i + ii] * 2 + 1];
+				newVertex.texture.x = inputs.at(ii).GetData().at(indices.at(i + ii) * 2);
+				newVertex.texture.y = inputs.at(ii).GetData().at(indices.at(i + ii) * 2 + 1);
 			}
 			else if (inputs[ii].GetSemantic() == "COLOR")
 			{
-				newVertex.colour.r = inputs[ii].GetData()[indices[i + ii] * 4];
-				newVertex.colour.g = inputs[ii].GetData()[indices[i + ii] * 4 + 1];
-				newVertex.colour.b = inputs[ii].GetData()[indices[i + ii] * 4 + 2];
-				newVertex.colour.a = inputs[ii].GetData()[indices[i + ii] * 4 + 3];
+				newVertex.colour.r = inputs.at(ii).GetData().at(indices.at(i + ii) * 4);
+				newVertex.colour.g = inputs.at(ii).GetData().at(indices.at(i + ii) * 4 + 1);
+				newVertex.colour.b = inputs.at(ii).GetData().at(indices.at(i + ii) * 4 + 2);
+				newVertex.colour.a = inputs.at(ii).GetData().at(indices.at(i + ii) * 4 + 3);
 			}
 		}
 

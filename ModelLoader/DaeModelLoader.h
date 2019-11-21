@@ -16,10 +16,10 @@ public:
 private:
 	FileUtils& fileUtils;
 
-	void ParseSources(std::map<std::string, Source>& sources, std::string fileData);
+	void ParseSources(std::map<std::string, Source>& sources, std::string fileData, std::string& fileLocation);
 	void ParseVertexInput(std::string& vertexID, std::string& vertexSource, std::string fileData);
 	void ParseTriangleInputs(std::vector<Input>& inputs, std::string& material, std::string fileData);
-	void ParseFaceData(std::vector<GLfloat>& faceData, std::string fileData);
+	void ParseFaceData(std::vector<GLfloat>& faceData, std::string fileData, std::string& fileLocation);
 	void ParseMaterial(Material& material, std::string fileData, std::string folder);
 
 	void ReadInputs(std::vector<Input>& inputs, std::string inputData);
