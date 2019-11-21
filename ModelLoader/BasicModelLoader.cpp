@@ -6,6 +6,7 @@
 
 #include <sstream>
 #include <iostream>
+#include "InvalidModelFileException.cpp"
 
 using namespace std;
 
@@ -248,7 +249,7 @@ void BasicModelLoader::GetTexture(Texture& texture, std::string& line, std::stri
 
 	if (!c_data)
 	{
-		//TODO Error handling
+		throw InvalidModelFileException(texturePath, "The file could not be opened/read");
 	}
 
 	texture.SetPath(texturePath);

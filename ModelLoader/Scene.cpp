@@ -25,10 +25,19 @@ Scene::Scene(ConfigUtil& _configUtil, FileUtils& _fileUtils, InputManager& _inpu
 	backfaceCull = configUtil.GetBool(BoolSetting::BackfaceCull);// Get some config data
 	autoRotate = configUtil.GetBool(BoolSetting::AutoRotate);
 
-	SetGlobalState();
-	BindMovements();
-	CreateAndBindShaderProgram();
-	BindBackgroundColours();
+	try
+	{
+		SetGlobalState();
+		BindMovements();
+		CreateAndBindShaderProgram();
+		BindBackgroundColours();
+	}
+	catch (exception ex)
+	{
+		consoleUtil.Print("\n\nThe scene could not be properly configured\n\n");
+		consoleUtil.Print(ex.what());
+		exit(-1);
+	}
 }
 
 // To be run each game tick

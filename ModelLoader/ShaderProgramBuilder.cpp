@@ -1,4 +1,5 @@
 #include "ShaderProgramBuilder.h"
+#include "InvalidModelFileException.h"
 
 using namespace std;
 
@@ -31,7 +32,7 @@ GLuint* ShaderProgramBuilder::BuildAndUse()
 
 	if (!linked)
 	{
-		//TODO: Error checking
+		throw exception("The shader program could not be linked");
 	}
 
 	glUseProgram(program);
@@ -45,7 +46,10 @@ void ShaderProgramBuilder::AddShader(string fileLocation, int shaderType)
 	string source = fileUtils.ReadFile(&fileLocation[0]);
 	const GLchar* c_source = source.c_str();
 
-	//TODO: Error checking
+	if (source.size() == 0)
+	{
+		throw exception(("The file " + fileLocation +" could not be opened/read, or was empty").c_str());
+	}
 
 	GLuint shader = glCreateShader(shaderType);
 	glShaderSource(shader, 1, &c_source, NULL);
@@ -57,7 +61,7 @@ void ShaderProgramBuilder::AddShader(string fileLocation, int shaderType)
 
 	if (!compiled)
 	{
-		//TODO: Error checking
+		throw exception("The shader could not be compiled");
 	}
 
 	glAttachShader(program, shader);

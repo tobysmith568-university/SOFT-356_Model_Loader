@@ -1,6 +1,7 @@
 #include "MtlLoader.h"
 
 #include <vector>
+#include "InvalidModelFileException.h"
 
 using namespace std;
 using namespace glm;
@@ -146,7 +147,7 @@ void MtlLoader::GetTexture(Texture& texture, std::string& line, std::string& fol
 
 	if (!c_data)
 	{
-		//TODO Error handling
+		throw InvalidModelFileException(texturePath, "The file could not be opened/read");
 	}
 
 	texture.SetPath(texturePath);
