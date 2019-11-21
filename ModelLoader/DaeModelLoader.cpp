@@ -15,6 +15,7 @@ void DaeModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& pr
 	string folder = fileUtils.GetFolder(fileLocation);
 	string fileData = fileUtils.ReadFile(fileLocation);// Reads the file into memory
 
+	string objectName;
 	map<string, Source> sources = map<string, Source>();// Create empty data to be populated
 	string vertexID, vertexSource, materialName;
 	vector<Input> inputs = vector<Input>();
@@ -22,6 +23,7 @@ void DaeModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& pr
 	vector<Vertex> vertices = vector<Vertex>();
 	Material material = Material();
 
+	ParseObjectName(objectName, fileData);
 	ParseSources(sources, fileData, fileLocation);// Parse the file for the data
 	ParseVertexInput(vertexID, vertexSource, fileData);
 	ParseTriangleInputs(inputs, materialName, fileData);
@@ -41,7 +43,24 @@ void DaeModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& pr
 
 	OrderInputsByOffset(inputs);// Sort the data and create the model
 	CreateVertices(vertices, inputs, faceData);
-	BuildModel(model, material, vertices, program);
+	BuildModel(model, objectName, material, vertices, program);
+}
+
+// Reads in an object name
+void DaeModelLoader::ParseObjectName(std::string& objectName, std::string fileData)
+{
+	const regex geometryRegex("<geometry [\\s\\S]*?name=\"([\\s\\S]+?)\">");
+	smatch sm;
+
+	// If the regex is able to find a full match
+	if (regex_search(fileData, sm, geometryRegex) && sm.size() == 2 && sm[0].matched && sm[1].matched)
+	{
+		objectName = sm[1];
+	}
+	else
+	{
+		objectName = "Object1";
+	}
 }
 
 // Reads in all the source tags from the file
@@ -150,32 +169,38 @@ void DaeModelLoader::ParseFaceData(vector<GLfloat>& faceData, string fileData, s
 // Reads in a texture name from the file and wraps it in a material
 void DaeModelLoader::ParseMaterial(Material& material, string fileData, string folder)
 {
-	const regex sourceRegex("<library_images>[\\s\\S]*?<image [\\s\\S]+?>[\\s\\S]+?<init_from>([A-z.]+?)<\\/init_from>[\\s\\S]*?<\\/image>[\\s\\S]*?<\\/library_images>");
+	const regex sourceRegex("<library_images>[\\s\\S]*?<image [\\s\\S]*?(?:name=\"([\\s\\S]+?)\"[\\s\\S]*?)?>[\\s\\S]+?<init_from>([A-z.]+?)<\\/init_from>[\\s\\S]*?<\\/image>[\\s\\S]*?<\\/library_images>");
 	smatch sm;
 
-	if (regex_search(fileData, sm, sourceRegex))// If a regex match is found in the file
+	regex_search(fileData, sm, sourceRegex);// Perform a regex search in the file
+	
+	if (sm.size() != 3 || !sm[0].matched || !sm[2].matched)// Ensure the data match found something
 	{
-		if (sm.size() != 2)// Ensure there are 2 matches
-		{
-			return;
-		}
+		return;
+	}
 
-		if (!sm[0].matched || !sm[1].matched)// Ensure both matches found something
-		{
-			return;
-		}
+	string fileLocation = folder;
+	fileLocation += sm[2];// Create the full file path
 
-		string fileLocation = folder;
-		fileLocation += sm[1];// Create the full file path
+	if (!fileUtils.DoesFileExist(fileLocation))
+	{
+		return;
+	}
 
-		if (!fileUtils.DoesFileExist(fileLocation))
-		{
-			return;
-		}
-
-		Texture texture = Texture();// Load in a texture using that file path and set it to the diffuse texture
-		GetTexture(texture, sm[1], fileLocation);
-		material.diffuseTextureMap = texture;
+	Texture texture = Texture();// Load in a texture using that file path and set it to the diffuse texture
+	GetTexture(texture, sm[2], fileLocation);
+	material.diffuseTextureMap = texture;
+	material.diffuseColour = vec4(1.0f);
+	material.alphaTextureMap = texture;
+	
+	if (sm[1].matched)
+	{
+		string name = sm[1];
+		material.name = name;
+	}
+	else
+	{
+		material.name = "Material";
 	}
 }
 
@@ -330,7 +355,7 @@ void DaeModelLoader::CreateVertices(std::vector<Vertex>& vertices, std::vector<I
 }
 
 // Builds a model. This adds vertices, indices, a material, and the shader program
-void DaeModelLoader::BuildModel(Model& model, Material material, std::vector<Vertex>& vertices, GLuint& program)
+void DaeModelLoader::BuildModel(Model& model, string objectName, Material material, std::vector<Vertex>& vertices, GLuint& program)
 {
 	Mesh mesh = Mesh(program);// Create a new mesh and add the vertices
 	mesh.SetVertices(vertices);
@@ -346,6 +371,7 @@ void DaeModelLoader::BuildModel(Model& model, Material material, std::vector<Ver
 	mesh.SetMaterial(material);// Set the material (or nothing if one was not found)
 
 	Object object = Object(program);
+	object.SetName(objectName);
 	object.AddMesh(mesh);
 
 	model.AddMaterial(material);

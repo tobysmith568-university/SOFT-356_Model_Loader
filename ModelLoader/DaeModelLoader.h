@@ -16,6 +16,7 @@ public:
 private:
 	FileUtils& fileUtils;
 
+	void ParseObjectName(std::string& objectName, std::string fileData);
 	void ParseSources(std::map<std::string, Source>& sources, std::string fileData, std::string& fileLocation);
 	void ParseVertexInput(std::string& vertexID, std::string& vertexSource, std::string fileData);
 	void ParseTriangleInputs(std::vector<Input>& inputs, std::string& material, std::string fileData);
@@ -31,6 +32,6 @@ private:
 	void OrderInputsByOffset(std::vector<Input>& inputs);
 	void CreateVertices(std::vector<Vertex>& vertices, std::vector<Input>& inputs, std::vector<GLfloat>& indices);
 
-	void BuildModel(Model& model, Material material, std::vector<Vertex>& vertices, GLuint& program);
+	void BuildModel(Model& model, std::string objectName, Material material, std::vector<Vertex>& vertices, GLuint& program);
 	void GetTexture(Texture& texture, std::string textureName, std::string texturePath);
 };
