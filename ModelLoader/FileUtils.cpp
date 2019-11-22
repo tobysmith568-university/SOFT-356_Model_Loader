@@ -1,4 +1,5 @@
 #include "FileUtils.h"
+#include <direct.h>
 
 using namespace std;
 
@@ -117,13 +118,31 @@ std::string FileUtils::GetFolder(std::string& fileLocation)
 	return result;
 }
 
+// Ensures a folder exists, creating it if it does not
+void FileUtils::EnsureFolderExists(std::string& folderLocation)
+{
+	struct stat info;
+
+	if (stat(folderLocation.c_str(), &info) != 0 || !(info.st_mode & S_IFDIR))
+	{
+		_mkdir(folderLocation.c_str());
+	}
+}
+
 // Reads in a whole file into a single string result
 string FileUtils::ReadFile(string fileLocation)
 {
-	ifstream stream(fileLocation);
-	string content = string(istreambuf_iterator<char>(stream), istreambuf_iterator<char>());
+	try
+	{
+		ifstream stream(fileLocation);
+		string content = string(istreambuf_iterator<char>(stream), istreambuf_iterator<char>());
 
-	return content;
+		return content;
+	}
+	catch (...)
+	{
+		throw runtime_error("Could not open the file[" + fileLocation + "].It is either missing, locked, corrupt, or empty.");
+	}
 }
 
 // Reads in a whole file into a vector of lines
@@ -134,7 +153,7 @@ vector<string> FileUtils::ReadFileAsLines(string fileLocation)
 	ifstream file(fileLocation);
 	if (!file.is_open())
 	{
-		throw runtime_error("Could not open the given file");
+		throw runtime_error("Could not open the file [" + fileLocation + "]. It is either missing, locked, corrupt, or empty.");
 	}
 
 	string readLine;
@@ -154,7 +173,7 @@ void FileUtils::SaveFile(std::string& data, std::string& fileLocation)
 
 	if (!file.is_open())
 	{
-		throw runtime_error("Could not open the given file");
+		throw runtime_error("Could not open the file [" + fileLocation + "]");
 	}
 
 	file << data;

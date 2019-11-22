@@ -5,36 +5,15 @@ using namespace std;
 
 ConfigUtil::ConfigUtil(FileUtils& _fileUtils) : fileUtils(_fileUtils)
 {
-	config = map<string, string>();
-
-	vector<string> configFile = fileUtils.ReadFileAsLines("media/config.dat");// Read in the config file into lines
-
-	for (int i = 0; i < configFile.size(); i++)// For every line in the file
+	try
 	{
-		string line = configFile.at(i);
-
-		string key = "";
-		string value = "";
-		bool atEquals = false;
-
-		for (char& c : line)// For every character in the line
-		{
-			if (c == '=' && !atEquals)// If it is an equals
-			{
-				atEquals = true;// Declare that an equals has been found and continue the loop
-				continue;
-			}
-
-			if (!atEquals)// Otherwise, either add it to the key
-			{
-				key += c;
-				continue;
-			}
-
-			value += c;// Or the value
-		}
-
-		config[key] = value;
+		fileUtils.EnsureFolderExists(configFileFolder);
+		GetConfigData();
+	}
+	catch (runtime_error ex)
+	{
+		CreateDefaultConfigData();
+		GetConfigData();
 	}
 }
 
@@ -71,6 +50,48 @@ int ConfigUtil::GetKeyBinding(KeyBinding keybinding)
 {
 	string stringValue = config[GetKeyBindingValue(keybinding)];
 	return stoi(stringValue);
+}
+
+// Loads in the config data from file
+void ConfigUtil::GetConfigData()
+{
+	config = map<string, string>();
+
+	vector<string> configFile = fileUtils.ReadFileAsLines(configFileLocation);// Read in the config file into lines
+
+	for (int i = 0; i < configFile.size(); i++)// For every line in the file
+	{
+		string line = configFile.at(i);
+
+		string key = "";
+		string value = "";
+		bool atEquals = false;
+
+		for (char& c : line)// For every character in the line
+		{
+			if (c == '=' && !atEquals)// If it is an equals
+			{
+				atEquals = true;// Declare that an equals has been found and continue the loop
+				continue;
+			}
+
+			if (!atEquals)// Otherwise, either add it to the key
+			{
+				key += c;
+				continue;
+			}
+
+			value += c;// Or the value
+		}
+
+		config[key] = value;
+	}
+}
+
+// Creates the config file with the default config
+void ConfigUtil::CreateDefaultConfigData()
+{
+	fileUtils.SaveFile(defaultFileData, configFileLocation);
 }
 
 // Returns the matching key in the config file for the passed in bool setting enum

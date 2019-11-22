@@ -17,6 +17,7 @@ public:
 	std::string GetFileName(std::string& fileLocation);
 	std::string GetFolder(std::string& fileLocation);
 
+	void EnsureFolderExists(std::string& folderLocation);
 	std::string ReadFile(std::string fileLocation);
 	std::vector<std::string> ReadFileAsLines(std::string fileLocation);
 

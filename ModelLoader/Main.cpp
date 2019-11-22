@@ -22,16 +22,30 @@ void RunScene(FileUtils& fileUtils, ConsoleUtil& consoleUtil, ConfigUtil& config
 // Main method
 int main(int argc, char** argv)
 {
-	FileUtils fileUtils = FileUtils();// Init dependencies
-	ConsoleUtil consoleUtil = ConsoleUtil(fileUtils);
-	ConfigUtil configUtil = ConfigUtil(fileUtils);
-	InputManager inputManager = InputManager(configUtil);
-	ModelLoaderFactory modelLoaderFactory = ModelLoaderFactory(fileUtils, consoleUtil);
-	GLFWUtil glfwUtil = GLFWUtil(configUtil, inputManager);
-	GLEWUtil glewUtil = GLEWUtil();
-	BasicModelLoader basicModelLoader = BasicModelLoader(fileUtils, consoleUtil);
+	try
+	{
+		FileUtils fileUtils = FileUtils();// Init dependencies
+		ConsoleUtil consoleUtil = ConsoleUtil(fileUtils);
+		ConfigUtil configUtil = ConfigUtil(fileUtils);
+		InputManager inputManager = InputManager(configUtil);
+		ModelLoaderFactory modelLoaderFactory = ModelLoaderFactory(fileUtils, consoleUtil);
+		GLFWUtil glfwUtil = GLFWUtil(configUtil, inputManager);
+		GLEWUtil glewUtil = GLEWUtil();
+		BasicModelLoader basicModelLoader = BasicModelLoader(fileUtils, consoleUtil);
 
-	RunScene(fileUtils, consoleUtil, configUtil, inputManager, modelLoaderFactory, glfwUtil, glewUtil, basicModelLoader);// Run a scene
+		RunScene(fileUtils, consoleUtil, configUtil, inputManager, modelLoaderFactory, glfwUtil, glewUtil, basicModelLoader);// Run a scene
+	}
+	catch (exception ex)
+	{
+		cout << "There was an unknown error:"
+			<< endl
+			<< endl
+			<< ex.what();
+	}
+	catch (...)
+	{
+		cout << "There was an unknown error!";
+	}
 }
 
 void RunScene(FileUtils& fileUtils, ConsoleUtil& consoleUtil, ConfigUtil& configUtil, InputManager& inputManager,

@@ -3,10 +3,10 @@
 #include "Vertex.h"
 #include "Base64.h"
 #include "stb_image.h"
+#include "InvalidModelFileException.h"
 
 #include <sstream>
 #include <iostream>
-#include "InvalidModelFileException.cpp"
 
 using namespace std;
 
