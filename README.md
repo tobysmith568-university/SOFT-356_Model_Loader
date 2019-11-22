@@ -19,7 +19,7 @@ The `.exe` can be run by double-clicking it, but should any errors occur and the
 
 ### Config
 
-All the functionality of this software is configurable via the [config.dat file](ModelLoader/media/config.dat) located in the `/media` folder next to the `.exe`. Should the folder or file not exist then the program will attempt to create them on startup. If the program has to create the `config.dat` file then it will also create the default shaders along side it.  
+All the functionality of this software is configurable via the [config.dat file](ModelLoader/media/config.dat) located in the `/media` folder next to the `.exe`. Should the folder or file not exist then the program will attempt to create them on startup. If the program has to create the `config.dat` file then it will also create the default shaders alongside it.  
 Config within that file is a list of key/value pairs and sits in the following categories:
 - Window options
 - Background colour
@@ -48,7 +48,7 @@ The `DeleteModel (Delete)` key binding can be used to remove models from the sce
 
 The `Reset (R)` key binding can be used to reset the position, rotation, and scale of the currently active model.
 
-The `SaveModelAsBasic (F1)` key binding can be used to export the currently active model into a file format I have developed called a `.basic`. Pressing this key binding will switch the context to the console window where it will ask you to enter a file location for where the model should be saved to; this path can be absolute or relative to the `.exe`. Please note that exporting will overwrite any existing file with the same name without warning. The file location you supply needs to contain the `.basic` file extension. Once a file has been exported it can be re-imported like any other `.obj` or .dae`.
+The `SaveModelAsBasic (F1)` key binding can be used to export the currently active model into a file format I have developed called a `.basic`. Pressing this key binding will switch the context to the console window where it will ask you to enter a file location for where the model should be saved to; this path can be absolute or relative to the `.exe`. Please note that exporting will overwrite any existing file with the same name without warning. The file location you supply needs to contain the `.basic` file extension. Once a file has been exported it can be re-imported like any other `.obj` or `.dae`.
 
 ## Code Structure
 
