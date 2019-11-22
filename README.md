@@ -9,9 +9,18 @@
 
 ## Usage
 
+#### Compilation
+
+The only setup for compiling this solution is to restore the NuGet packages. This software has only been written with Windows in mind.
+
+#### Execution
+
+The `.exe` can be run by double-clicking it, but should any errors occur and the program shut down then you will not be able to see the error message. As such, it is recommended that you open a command prompt, navigate to the directory of the `.exe` and run it from within that prompt. This will keep the window open when the program closes and any error messages can be read. 
+
 ### Config
 
-All the functionality is configurable via the [config.dat file](ModelLoader/media/config.dat) in the media folder. Config within that file is a list of key/value pairs and sits in the following categories:
+All the functionality of this software is configurable via the [config.dat file](ModelLoader/media/config.dat) located in the `/media` folder next to the `.exe`. Should the folder or file not exist then the program will attempt to create them on startup. If the program has to create the `config.dat` file then it will also create the default shaders along side it.  
+Config within that file is a list of key/value pairs and sits in the following categories:
 - Window options
 - Background colour
 - Render options
@@ -31,21 +40,21 @@ All of the key bindings within the config file begin with the prefix `KeyBinding
 
 ### Functionality
 
-When the program opens you should see an empty window showing only the configured background colour, by default this is a pale blue. To add a model you need to press the `NewModel (N)` key. This will take the context away from the OpenGL window and back to the console window where it will prompt you for a file path to a model; the path can be absolute or relative to the .exe. On pressing enter, the context will then return to the OpenGL window. If the model is larger in size then the program will lock up while it loads in the new model. On a modern machine, files like [creeper.obj](ModelLoader/Obj/Creeper.obj) should instantly, files like [low_poly_boat.obj](ModelLoader/Obj/low_poly_boat.obj) should take around 10 seconds, and files like [low_poly_boat.dae](ModelLoader/Dae/low_poly_boat.dae) should take just over 2 minutes.
+When the program opens you should see an empty window showing only the configured background colour, by default, this is a pale blue. To add a model you need to press the `NewModel (N)` key. This will take the context away from the OpenGL window and back to the console window where it will prompt you for a file path to a model; the path can be absolute or relative to the `.exe`. On pressing enter, the context will then return to the OpenGL window. If the model is large then the program will lock up while it loads in the new model. On a modern machine, files like [creeper.obj](ModelLoader/Obj/Creeper.obj) should instantly, files like [low_poly_boat.obj](ModelLoader/Obj/low_poly_boat.obj) should take around 10 seconds, and files like [low_poly_boat.dae](ModelLoader/Dae/low_poly_boat.dae) should take just over 2 minutes.
 
-Any model which is loaded into the scene can be manipulated while it is the current active model. The `FirstModel (1)`, `SecondModel (2)` etc., keybindings can be used to swap the active model. Those 9 key bindings reprent the first 9 models which are loaded into the scene, should there be more than 9 models loaded into the scene at a single time then any aditional models past the 9th cannot be manipulated.
+Any model which is loaded into the scene can be manipulated while it is the currently active model. The `FirstModel (1)`, `SecondModel (2)` etc., keybindings can be used to swap the active model. Those 9 key bindings represent the first 9 models which are loaded into the scene, should there be more than 9 models loaded into the scene at a single time then any additional models past the 9th cannot be manipulated.
 
-The `DeleteModel (Delete)` key binding can be used to remove models from the scene. It will always remove the model which was most recenly added, not the currently active model.
+The `DeleteModel (Delete)` key binding can be used to remove models from the scene. It will always remove the model which was most recently added, not the currently active model.
 
 The `Reset (R)` key binding can be used to reset the position, rotation, and scale of the currently active model.
 
-The `SaveModelAsBasic (F1)` key binding can be used to export the currently active model into a file format I have developed called a `.basic`. Pressing this key binding will switch the context to the console window where it will ask you to enter a file loction for where the model should be saved to; this path can be absolute or relative to the exe. Please note that exporting will overwrite any existing file with the same name without warning. The file location you supply needs to contain the `.basic` file extension. Once a file has been exported it can be re-inported like any other `.obj` or .dae`.
+The `SaveModelAsBasic (F1)` key binding can be used to export the currently active model into a file format I have developed called a `.basic`. Pressing this key binding will switch the context to the console window where it will ask you to enter a file location for where the model should be saved to; this path can be absolute or relative to the `.exe`. Please note that exporting will overwrite any existing file with the same name without warning. The file location you supply needs to contain the `.basic` file extension. Once a file has been exported it can be re-imported like any other `.obj` or .dae`.
 
 ## Code Structure
 
 ### Utilities
 
-Large amounts of funtionality within the program is broken down and encapulated within stateless utility classes:
+Large amounts of functionality within the program is broken down and encapsulated within stateless utility classes:
 - `ConfigUtil` - used to read from the config.dat file
 - `ConsoleUtil` - used to read from and write to the console window
 - `FileUtils` - many different actions for interacting with files, folder, and file paths
@@ -58,11 +67,11 @@ These utility classes are all instantiated once within the main method are they 
 
 ### Model Loading
 
-Each model loader class within the progam extends the abstract class `IModelLoader`. When the `ModelLoaderFactory` is handed a file path, it returns an instance of the `IModelLoader` which is designed to handle the file in that path. Currently there are three implementations:
+Each model loader class within the program extends the abstract class `IModelLoader`. When the `ModelLoaderFactory` is handed a file path, it returns an instance of the `IModelLoader` which is designed to handle the file in that path. Currently, there are three implementations:
 
 - .obj (and .mtl and .png)
 - .dae (and .png)
-- .basic
+- .basic (and .png)
 
 ### Core
 
@@ -86,7 +95,7 @@ Details:
 - There is a single `Scene` within the program, this represents what the user sees
 - The `Shader Program` sits at the `Scene` level and remains constant after init
 - The different `Model`s all sit within the `Scene`. Once per game tick, when the `Scene` is updated it must also call an update method on all of the `Model`s
-- A `Model` holds all the different `Material`s that any of it's child objects might use
+- A `Model` holds all the different `Material`s that any of its child objects might use
 - A `Model` has an MVP and it sets this as the current one each game tick before it then calls an update method on all of it's `Objects`
 - `Objects` only act as a container for `Mesh`es. They exist to mirror the structure found within different model file types. When an `Object` is updated it must update all of it's `Mesh`es
 - A `Mesh` contains the data required for OpenGL to render something. It also has references to a single `Material` and the `Shader program`
