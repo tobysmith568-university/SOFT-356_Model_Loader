@@ -12,8 +12,8 @@ useWireframes=0
 backfaceCull=0
 autoRotate=0
 
-vertexShader=media/triangles.vert
-fragmentShader=media/triangles.frag
+vertexShader=media/shader.vert
+fragmentShader=media/shader.frag
 
 
 

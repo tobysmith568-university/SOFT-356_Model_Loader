@@ -12,6 +12,7 @@ ConfigUtil::ConfigUtil(FileUtils& _fileUtils) : fileUtils(_fileUtils)
 	}
 	catch (runtime_error ex)
 	{
+		fileUtils.EnsureFolderExists(configFileFolder);
 		CreateDefaultConfigData();
 		GetConfigData();
 	}
@@ -91,7 +92,20 @@ void ConfigUtil::GetConfigData()
 // Creates the config file with the default config
 void ConfigUtil::CreateDefaultConfigData()
 {
-	fileUtils.SaveFile(defaultFileData, configFileLocation);
+	if (!fileUtils.DoesFileExist(configFileLocation))
+	{
+		fileUtils.SaveFile(defaultFileData, configFileLocation);
+	}
+
+	if (!fileUtils.DoesFileExist(vertexShaderLocation))
+	{
+		fileUtils.SaveFile(defaultVertexShaderData, vertexShaderLocation);
+	}
+
+	if (!fileUtils.DoesFileExist(fragmentShaderLocation))
+	{
+		fileUtils.SaveFile(defaultFragmentShaderData, fragmentShaderLocation);
+	}
 }
 
 // Returns the matching key in the config file for the passed in bool setting enum

@@ -103,8 +103,8 @@ useWireframes=0\n\
 backfaceCull=0\n\
 autoRotate=0\n\
 \n\
-vertexShader=media/triangles.vert\n\
-fragmentShader=media/triangles.frag\n\
+vertexShader=media/shader.vert\n\
+fragmentShader=media/shader.frag\n\
 \n\
 \n\
 \n\
@@ -140,4 +140,40 @@ KeyBinding_EighthModel=56\n\
 KeyBinding_NinthModel=57\n\
 \n\
 KeyBinding_SaveModelAsBasic=290";
+
+	std::string vertexShaderLocation = "media/shader.vert";
+	std::string defaultVertexShaderData =
+"#version 400 core\n\
+\n\
+layout(location = 0) in vec3 vPosition;\n\
+layout(location = 1) in vec4 vColour;\n\
+layout(location = 2) in vec2 aTexCoord;\n\
+uniform mat4 mvp;\n\
+	\n\
+out vec4 fragColour;\n\
+out vec2 TexCoord;\n\
+void\n\
+	main()\n\
+{\n\
+	gl_Position = mvp * vec4(vPosition, 1.0);\n\
+	fragColour = vColour;\n\
+	TexCoord = aTexCoord;\n\
+}\n\
+";
+
+	std::string fragmentShaderLocation = "media/shader.frag";
+	std::string defaultFragmentShaderData =
+"#version 450 core\n\
+\n\
+out vec4 fColor;\n\
+in vec4 fragColour;\n\
+in vec2 TexCoord;\n\
+\n\
+uniform sampler2D ourTexture;\n\
+\n\
+void main()\n\
+{\n\
+	fColor = texture(ourTexture, TexCoord) * fragColour;\n\
+}\n\
+";
 };
