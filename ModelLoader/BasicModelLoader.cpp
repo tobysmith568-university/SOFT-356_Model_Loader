@@ -131,13 +131,22 @@ void BasicModelLoader::GetModel(Model& model, std::string fileLocation, GLuint& 
 		material.illuminationModel = GetNextLineAsFloat(remaining);
 
 		string textureLine = GetNextLine(remaining);// Load in texture paths from their own lines
-		GetTexture(material.alphaTextureMap, textureLine, folder);
+		if (textureLine != noPNG)
+		{
+			GetTexture(material.alphaTextureMap, textureLine, folder);
+		}
 
 		textureLine = GetNextLine(remaining);
-		GetTexture(material.ambientTextureMap, textureLine, folder);
+		if (textureLine != noPNG)
+		{
+			GetTexture(material.ambientTextureMap, textureLine, folder);
+		}
 
 		textureLine = GetNextLine(remaining);
-		GetTexture(material.diffuseTextureMap, textureLine, folder);
+		if (textureLine != noPNG)
+		{
+			GetTexture(material.diffuseTextureMap, textureLine, folder);
+		}
 
 		model.AddMaterial(material);
 		word = remaining[0] == newLine ? empty : GetNextWord(remaining);
