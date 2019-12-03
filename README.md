@@ -48,7 +48,7 @@ The `DeleteModel (Delete)` key binding can be used to remove models from the sce
 
 The `Reset (R)` key binding can be used to reset the position, rotation, and scale of the currently active model.
 
-The `SaveModelAsBasic (F1)` key binding can be used to export the currently active model into a file format I have developed called a `.basic`. Pressing this key binding will switch the context to the console window where it will ask you to enter a file location for where the model should be saved to; this path can be absolute or relative to the `.exe`. Please note that exporting will overwrite any existing file with the same name without warning. The file location you supply needs to contain the `.basic` file extension. Once a file has been exported it can be re-imported like any other `.obj` or `.dae`.
+The `SaveModelAsBasic (F1)` key binding can be used to export the currently active model into a file format I have developed called a `.basic`. Pressing this key binding will switch the context to the console window where it will ask you to enter a file location for where the model should be saved to; this path can be absolute or relative to the `.exe`. Please note that exporting will overwrite any existing file with the same name without warning. The file location you supply needs to contain the `.basic` file extension. Once a file has been exported it can be re-imported like any other `.obj` or `.dae`. It should be noted that the exported `.basic` requires the same texture images as the `.obj` or `.dae` it was created from - the export process will not duplicate the texture image file. If you export to a different folder, or do not copy the image file yourself, the new `.basic` will not be able to load in.
 
 ## Code Structure
 
