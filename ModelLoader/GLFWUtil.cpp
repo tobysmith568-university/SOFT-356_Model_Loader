@@ -43,12 +43,6 @@ void GLFWUtil::Update()
 	glfwPollEvents();
 }
 
-// Sets the polygon mode to only use wireframes
-void GLFWUtil::WireFrameOnly()
-{
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-}
-
 // Returns if the window has been told to close or not
 bool GLFWUtil::GetShouldClose()
 {

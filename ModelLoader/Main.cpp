@@ -59,14 +59,8 @@ void RunScene(FileUtils& fileUtils, ConsoleUtil& consoleUtil, ConfigUtil& config
 	
 	Scene scene = Scene(configUtil, fileUtils, inputManager, consoleUtil, modelLoaderFactory, basicModelLoader);
 
-	bool wireframesOnly = configUtil.GetBool(BoolSetting::UseWireframes);
 	while (!glfwUtil.GetShouldClose())// Loop while the window has not been told to close
 	{
-		if (wireframesOnly)
-		{
-			glfwUtil.WireFrameOnly();
-		}
-
 		scene.Update();// Update the scene
 		glfwUtil.Update();// Update the window
 	}

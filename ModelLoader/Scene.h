@@ -31,6 +31,7 @@ private:
 
 	bool autoRotate;
 	bool backfaceCull;
+	bool isWireframesOnly;
 
 	std::vector<Model> models;
 	GLuint activeModel;
@@ -42,6 +43,7 @@ private:
 	void BindBackgroundColours();
 	float NormalizeColour(float colour);
 	void CreateAndBindShaderProgram();
+	void UpdatePolygonMode();
 	void AddModel();
 	void DeleteModel();
 };

@@ -69,6 +69,9 @@ void Scene::SetGlobalState()
 		glCullFace(GL_BACK);
 		glEnable(GL_CULL_FACE);
 	}
+
+	isWireframesOnly = configUtil.GetBool(BoolSetting::UseWireframes);
+	UpdatePolygonMode();
 }
 
 // Binds the default clear colour for the scene
@@ -108,6 +111,12 @@ void Scene::CreateAndBindShaderProgram()
 		.AddVertexShader(vertexShaderLocation)
 		.AddFragmentShader(fragmentShaderLocation)
 		.BuildAndUse();
+}
+
+// Sets if only lines should be drawn or not
+void Scene::UpdatePolygonMode()
+{
+	glPolygonMode(GL_FRONT_AND_BACK, isWireframesOnly ? GL_LINE : GL_FILL);
 }
 
 // Adds a new model to the scene from a file

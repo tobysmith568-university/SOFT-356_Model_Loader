@@ -206,6 +206,8 @@ string ConfigUtil::GetKeyBindingValue(KeyBinding keyBinding)
 	case KeyBinding::ScaleDown:
 		return "KeyBinding_ScaleDown";
 
+	case KeyBinding::PolygonMode:
+		return "KeyBinding_PolygonMode";
 	case KeyBinding::NewModel:
 		return "KeyBinding_NewModel";
 	case KeyBinding::DeleteModel:

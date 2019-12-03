@@ -47,6 +47,7 @@ enum class KeyBinding
 	MoveRight,
 	ScaleUp,
 	ScaleDown,
+	PolygonMode,
 	NewModel,
 	DeleteModel,
 	Reset,

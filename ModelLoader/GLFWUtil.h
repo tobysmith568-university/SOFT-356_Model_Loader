@@ -11,7 +11,6 @@ public:
 	GLFWUtil(ConfigUtil& _configUtil, InputManager& _inputManager);
 	void Init();
 	void Update();
-	void WireFrameOnly();
 	bool GetShouldClose();
 	void SetShouldClose(bool shouldClose);
 	void Exit();

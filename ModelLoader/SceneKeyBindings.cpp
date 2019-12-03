@@ -91,6 +91,11 @@ void Scene::BindMovements()
 			models[activeModel].GetMVPBuilder().AddScale(0.99f, 0.99f, 0.99f);
 		}
 	});
+	inputManager.RegisterKeyPress(KeyBinding::PolygonMode, [&]()// Callback for changing the current polygon mode
+	{
+		isWireframesOnly = !isWireframesOnly;
+		UpdatePolygonMode();
+	});
 	inputManager.RegisterKeyPress(KeyBinding::NewModel, [&]()// Callback for adding a new model into the scene
 	{
 		AddModel();
