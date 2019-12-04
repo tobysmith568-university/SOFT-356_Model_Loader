@@ -1,6 +1,8 @@
 # SOFT-356_Model_Loader
 
-> .obj and .dae model loader and renderer with basic controls 
+`.obj` and `.dae` model loader and renderer with basic controls 
+
+Repository is at https://github.com/tobysmith568/SOFT-356_Model_Loader
 
 ## Software and Libraries
 - Visual Studio 2019 v16.3.9
