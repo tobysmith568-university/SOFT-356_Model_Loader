@@ -69,7 +69,7 @@ Large amounts of functionality within the program is broken down and encapsulate
 - `InputManager` - used to register keyboard interactions and execute callback functions when those actions occur. (Note that this class is not stateless like the others as it stores the keyboard interactions to be executed)
 - `ModelLoaderFactory` - used to return a model loader based on the file path it is given
 
-These utility classes are all instantiated once within the main method are they then passed around wherever they are needed via constructor injection. Many of these classes rely on others.
+These utility classes are all instantiated once within the main method and are then passed around wherever they are needed via constructor injection. Many of these classes rely on each other.
 
 ### Model Loading
 
