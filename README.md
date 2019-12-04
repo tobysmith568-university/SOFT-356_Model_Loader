@@ -13,7 +13,7 @@ Repository is at https://github.com/tobysmith568/SOFT-356_Model_Loader
 
 #### Compilation
 
-The only setup for compiling this solution is to restore the NuGet packages. This software has only been written with Windows in mind.
+The only setup for compiling this solution is to restore the NuGet packages. This software has been written only with Windows in mind.
 
 #### Execution
 
